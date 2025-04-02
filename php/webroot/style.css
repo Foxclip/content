@@ -1,10 +1,90 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+}
+
+#recentPosts {
+    width: 800px;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
+
+#recentPostsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#recentPostsTitle {
+    font-size: 40px;
+    width: 100%;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+}
+
+#noPostsPlaceholder {
+    color: rgb(160, 160, 160);
+    font-size: 30px;
+}
+
+#recentPostsList {
+    width: 100%;
+}
+
+.post {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+.postTopPanel {
+    display: flex;
+    gap: 20px;
+}
+
+.postDate {
+    color: rgb(120, 120, 120);
+}
+
+.postTitleContainer {
+    margin-top: 0.8em;
+    margin-bottom: 1.3em;
+}
+
+.postTitle {
+    font-size: 25px;
+    margin: 0;
+}
+
+.postTags {
+    display: flex;
+    gap: 10px;
+}
+
+.postTag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(200, 255, 150);
+    height: 30px;
+    border-radius: 15px;
+}
+
+.postContent {
+    margin-bottom: 0.83em;
 }
