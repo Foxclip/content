@@ -1,0 +1,23 @@
+version: '3'
+services:
+    php-apache:
+        build: ./php
+        depends_on:
+            - mysql
+        volumes:
+            - ./php/webroot:/var/www/html/
+        ports:
+            - 8000:80
+    mysql:
+        build: ./mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: content
+        ports:
+            - "9906:3306"
+    phpmyadmin:
+        image: phpmyadmin
+        environment:
+            PMA_HOST: mysql
+        ports:
+            - 8081:80
