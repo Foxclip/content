@@ -34,12 +34,21 @@ body {
 }
 
 #searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 300px;
     height: 40px;
-    background-color: rgb(40, 40, 40);
+    background-color: rgb(240, 240, 240);
     color: rgb(255, 255, 255);
     border-radius: 9999px;
     overflow: hidden;
+}
+
+#searchBarIcon {
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
 }
 
 #searchBarInput {
