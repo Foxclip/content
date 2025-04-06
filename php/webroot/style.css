@@ -99,6 +99,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding-bottom: 20px;
 }
 
 #recentPostsTitle {
@@ -182,4 +183,32 @@ body {
 .postLikesHeart {
     width: 25px;
     height: 25px;
+}
+
+#footer {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+}
+
+#footerLeftSection {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+#footerCenterSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+}
+
+#footerRightSection {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
