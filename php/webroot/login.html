@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Вход/Регистрация</title>
+    <title>Вход</title>
     <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-    <div id="loginContainer">
-        <h1 id="loginTitle">Вход</h1>
-        <form id="loginForm" action="login.php" method="post">
-            <input id="loginInput" type="text" placeholder="Логин" />
+    <div id="formContainer">
+        <h1 id="formTitle">Вход</h1>
+        <form id="form" action="login.php" method="post">
+            <input id="loginInput" class="formInput" type="text" placeholder="Логин" />
             <div id="passwordContainer">
-                <input id="passwordInput" type="password" placeholder="Пароль" />
+                <input id="passwordInput" class="formInput" type="password" placeholder="Пароль" />
                 <a id="forgotPasswordButton" href="forgot-password.html">Забыли пароль?</a>
             </div>
-            <div id="loginButtonContainer">
-                <button id="loginButton" type="submit">Войти</button>
-                <a id="registerButton" href="register.html">Зарегистрироваться</a>
+            <div id="submitButtonContainer">
+                <button id="submitButton" type="submit">Войти</button>
+                <a id="alternativeButton" href="register.html">Зарегистрироваться</a>
             </div>
         </form>
     </div>
