@@ -25,6 +25,6 @@ echoHead('Вход', ['common.css', 'login.css']);
     <?php
     echoFooter();
     ?>
-    <script src="login.js" type="module"></script>
+    <script src="js/login.js" type="module"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 function echoHead(string $title, array $styles): void {
     $css_links = "";
     foreach ($styles as $style) {
-        $css_links .= "    <link rel=\"stylesheet\" href=\"{$style}\" />\n";
+        $css_links .= "    <link rel=\"stylesheet\" href=\"css/{$style}\" />\n";
     }
     echo <<<EOD
 <!DOCTYPE html>

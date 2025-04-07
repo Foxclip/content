@@ -96,6 +96,6 @@
     <?php
         echoFooter();
     ?>
-    <script src="main.js" type="module"></script>
+    <script src="js/main.js" type="module"></script>
 </body>
 </html>

@@ -24,6 +24,6 @@ echoHead('Регистрация', ['common.css', 'login.css']);
     <?php
     echoFooter();
     ?>
-    <script src="register.js" type="module"></script>
+    <script src="js/register.js" type="module"></script>
 </body>
 </html>
