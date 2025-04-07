@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    echoHead('Главная', 'style.css');
+    echoHead('Главная', ['common.css', 'index.css']);
 ?>
 <body>
     <header id="header">

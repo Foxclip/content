@@ -1,13 +1,17 @@
 <?php
 
-function echoHead(string $title, string $css): void {
+function echoHead(string $title, array $styles): void {
+    $css_links = "";
+    foreach ($styles as $style) {
+        $css_links .= "    <link rel=\"stylesheet\" href=\"{$style}\" />\n";
+    }
     echo <<<EOD
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{$title}</title>
-    <link rel="stylesheet" href="{$css}" />
+    {$css_links}
 </head>
 EOD;
 }

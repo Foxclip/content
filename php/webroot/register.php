@@ -5,14 +5,8 @@ require_once('page_elements.php');
 <!DOCTYPE html>
 <html>
 <?php
-echoHead('Регистрация', 'login.css');
+echoHead('Регистрация', ['common.css', 'login.css']);
 ?>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Регистрация</title>
-    <link rel="stylesheet" href="login.css" />
-</head>
 <body>
     <div id="formContainer">
         <h1 id="formTitle">Регистрация</h1>

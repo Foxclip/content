@@ -5,7 +5,7 @@ require_once('page_elements.php');
 <!DOCTYPE html>
 <html>
 <?php
-echoHead('Вход', 'login.css');
+echoHead('Вход', ['common.css', 'login.css']);
 ?>
 <body>
     <div id="formContainer">
