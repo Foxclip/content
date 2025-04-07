@@ -10,10 +10,10 @@ echoHead('Регистрация', ['common.css', 'login.css']);
 <body>
     <div id="formContainer">
         <h1 id="formTitle">Регистрация</h1>
-        <form id="form" action="/register" method="post">
-            <input id="loginInput" class="formInput" type="text" placeholder="Логин" />
-            <input id="emailInput" class="formInput" type="email" placeholder="Электронная почта" />
-            <input id="passwordInput1" class="formInput" type="password" placeholder="Пароль" />
+        <form id="form" action="/do_register" method="post">
+            <input id="loginInput" class="formInput" type="text" name="login" placeholder="Логин" />
+            <input id="emailInput" class="formInput" type="email" name="email" placeholder="Электронная почта" />
+            <input id="passwordInput1" class="formInput" type="password" name="password" placeholder="Пароль" />
             <input id="passwordInput2" class="formInput" type="password" placeholder="Повторите пароль" />
             <div id="submitButtonContainer">
                 <button id="submitButton" type="submit">Зарегистрироваться</button>

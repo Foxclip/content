@@ -17,6 +17,8 @@ services:
             - "9906:3306"
     phpmyadmin:
         image: phpmyadmin
+        depends_on:
+            - mysql
         environment:
             PMA_HOST: mysql
         ports:
