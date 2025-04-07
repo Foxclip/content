@@ -1,11 +1,12 @@
+<?php
+    require_once('page_elements.php');
+?>
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Game</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
+<?php
+    echoHead('Главная', 'style.css');
+?>
 <body>
     <header id="header">
         <div id="headerLeftSection"></div>
@@ -92,13 +93,9 @@
             </div>
         </div>
     </div>
-    <footer id="footer">
-        <div id="footerLeftSection">
-            <span>&copy; 2025</span>
-        </div>
-        <div id="footerCenterSection"></div>
-        <div id="footerRightSection"></div>
-    </footer>
+    <?php
+        echoFooter();
+    ?>
     <script src="main.js" type="module"></script>
 </body>
 </html>

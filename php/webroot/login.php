@@ -1,15 +1,16 @@
+<?php
+require_once('page_elements.php');
+?>
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Вход</title>
-    <link rel="stylesheet" href="login.css" />
-</head>
+<?php
+echoHead('Вход', 'login.css');
+?>
 <body>
     <div id="formContainer">
         <h1 id="formTitle">Вход</h1>
-        <form id="form" action="login.php" method="post">
+        <form id="form" action="/login" method="post">
             <input id="loginInput" class="formInput" type="text" placeholder="Логин" />
             <div id="passwordContainer">
                 <input id="passwordInput" class="formInput" type="password" placeholder="Пароль" />
@@ -21,6 +22,9 @@
             </div>
         </form>
     </div>
+    <?php
+    echoFooter();
+    ?>
     <script src="login.js" type="module"></script>
 </body>
 </html>
