@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+
+require_once "session.php";
 require_once "pdo.php";
 require_once "utils.php";
 
@@ -31,6 +34,8 @@ if (password_verify($password, $user['password'])) {
             'password' => $newHash,
         ]);
     }
+    login($user);
+    header('Location: /');
     echo 'Пользователь ' . $login . ' успешно авторизован';
 } else {
     echo 'Неправильный пароль';

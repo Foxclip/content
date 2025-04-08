@@ -1,4 +1,5 @@
 <?php
+    require_once('session.php');
     require_once('utils.php');
 ?>
 
@@ -16,7 +17,15 @@
                     <input id="searchBarInput" type="text" placeholder="Поиск">
                 </div>
             </div>
-        <div id="headerRightSection"><a id="loginButton" href="/login">Войти</a></div>
+        <div id="headerRightSection">
+            <?php
+            if (is_logged_in()) {
+                echo '<div id="username">'. get_user()['username'] .'</div>';
+            } else {
+                echo '<a id="loginButton" href="/login">Войти</a>';
+            }
+            ?>
+        </div>
     </header>
     <div id="recentPosts">
         <h1 id="recentPostsTitle">Последние посты</h1>
