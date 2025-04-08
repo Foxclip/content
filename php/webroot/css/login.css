@@ -61,6 +61,14 @@ body {
     gap: 1px;
 }
 
+#belowPasswordContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1px;
+    width: 100%;
+}
+
 #forgotPasswordButton {
     font-size: 12px;
     text-decoration: none;
