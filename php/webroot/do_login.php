@@ -6,7 +6,6 @@ require_once "utils.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkPostVariables(['login', 'password']);
 } else {
-    header('Location: /login');
     exit();
 }
 

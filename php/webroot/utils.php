@@ -11,7 +11,7 @@ function checkPostVariables(array $names): void {
             echo "Переменная $name не установлена";
             exit();
         }
-        if (empty($_POST[$name])) {
+        if (empty(trim($_POST[$name]))) {
             echo "Переменная $name пустая";
             exit();
         }
