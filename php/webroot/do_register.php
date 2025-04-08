@@ -1,15 +1,7 @@
 <?php
 
 require_once "pdo.php";
-
-function checkPostVariables(array $names): void {
-    foreach ($names as $name) {
-        if (!isset($_POST[$name])) {
-            echo "Переменная $name не установлена";
-            exit();
-        }
-    }
-}
+require_once "utils.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkPostVariables(['login', 'email', 'password']);

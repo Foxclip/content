@@ -9,4 +9,5 @@ COPY php.ini-development /usr/local/etc/php/php.ini
 # Чтобы сервер не перенаправлял папку /var/www/html/icons
 COPY alias.conf /etc/apache2/mods-available/
 
+COPY apache2.conf /etc/apache2/
 COPY 000-default.conf /etc/apache2/sites-available/
