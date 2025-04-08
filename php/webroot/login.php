@@ -10,10 +10,10 @@ echoHead('Вход', ['common.css', 'login.css']);
 <body>
     <div id="formContainer">
         <h1 id="formTitle">Вход</h1>
-        <form id="form" action="/login" method="post">
-            <input id="loginInput" class="formInput" type="text" placeholder="Логин" />
+        <form id="form" action="/do_login" method="post">
+            <input id="loginInput" class="formInput" type="text" name="login" placeholder="Логин" />
             <div id="passwordContainer">
-                <input id="passwordInput" class="formInput" type="password" placeholder="Пароль" />
+                <input id="passwordInput" class="formInput" type="password" name="password" placeholder="Пароль" />
                 <a id="forgotPasswordButton" href="/forgot-password">Забыли пароль?</a>
             </div>
             <div id="submitButtonContainer">
