@@ -1,5 +1,7 @@
 <?php
 
+require_once "pdo.php";
+
 function checkPostVariables(array $names): void {
     foreach ($names as $name) {
         if (!isset($_POST[$name])) {
@@ -16,21 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-const host = 'mysql';
-const user = 'root';
-const password = 'root';
-const dbname = 'content';
-
-$dsn = "mysql:dbname=".dbname.";host=".host."";
-try {
-    $pdo = new PDO($dsn, user, password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);   
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-    exit();
-}
-
 // проверяем существует ли пользователь с таким логином
+$pdo = pdo_connect_mysql();
 $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
 $stmt->execute(['username' => $_POST['login']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
