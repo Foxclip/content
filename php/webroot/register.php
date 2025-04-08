@@ -1,11 +1,11 @@
 <?php
-require_once('page_elements.php');
+    require_once('utils.php');
 ?>
 
 <!DOCTYPE html>
 <html>
 <?php
-echoHead('Регистрация', ['common.css', 'login.css']);
+    includeFile('head.php', ['title' => 'Регистрация', 'styles' => ['common.css', 'login.css']]);
 ?>
 <body>
     <div id="formContainer">
@@ -35,9 +35,7 @@ echoHead('Регистрация', ['common.css', 'login.css']);
             </div>
         </form>
     </div>
-    <?php
-    echoFooter();
-    ?>
+    <?php includeFile('footer.php'); ?>
     <script src="js/register.js" type="module"></script>
 </body>
 </html>

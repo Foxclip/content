@@ -1,11 +1,11 @@
 <?php
-    require_once('page_elements.php');
+    require_once('utils.php');
 ?>
 
 <!DOCTYPE html>
 <html>
 <?php
-    echoHead('Главная', ['common.css', 'index.css']);
+    includeFile('head.php', ['title' => 'Главная', 'styles' => ['common.css', 'index.css']]);
 ?>
 <body>
     <header id="header">
@@ -94,7 +94,7 @@
         </div>
     </div>
     <?php
-        echoFooter();
+        includeFile('footer.php');
     ?>
     <script src="js/main.js" type="module"></script>
 </body>
