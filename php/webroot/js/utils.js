@@ -38,4 +38,8 @@ export class Utils {
         const interpolatedB = Math.round(b1 + (b2 - b1) * fraction);
         return `rgb(${interpolatedR}, ${interpolatedG}, ${interpolatedB})`;
     }
+
+    static getCssVariable(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name);
+    }
 }

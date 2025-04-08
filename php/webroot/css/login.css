@@ -89,11 +89,6 @@ body {
     font-size: 12px;
 }
 
-.inputContainer:last-child .inputError {
-    display: block;
-    visibility: hidden;
-}
-
 #submitButtonContainer {
     display: flex;
     flex-direction: column;
