@@ -26,16 +26,21 @@ function validateForm() {
     let result = true;
     for (let input of inputs) {
         setInputErrorState(input, true);
+        input.value = input.value.trim();
     }
-    if (loginInput.value.trim().length < 4 || loginInput.value.trim().length > 20) {
+    if (loginInput.value.length < 4 || loginInput.value.length > 20) {
         setInputErrorState(loginInput, false, "Логин должен содержать от 4 до 20 символов");
+        result = false;
+    }
+    if (!loginInput.value.match(/^\w+$/)) {
+        setInputErrorState(loginInput, false, "Логин должен содержать только латинские буквы, цифры и нижнее подчеркивание");
         result = false;
     }
     if (!emailInput.value.match(/^\S+@\S+$/)) {
         setInputErrorState(emailInput, false, "Некорректный email");
         result = false;
     }
-    if (passwordInput1.value.trim().length < 6 || passwordInput1.value.trim().length > 20) {
+    if (passwordInput1.value.length < 6 || passwordInput1.value.length > 20) {
         setInputErrorState(passwordInput1, false, "Пароль должен содержать от 6 до 20 символов");
         result = false;
     }
