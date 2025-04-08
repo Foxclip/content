@@ -71,6 +71,11 @@ body {
     width: 100%;
 }
 
+#belowPasswordContainer .inputError {
+    display: block;
+    visibility: hidden;
+}
+
 #forgotPasswordButton {
     font-size: 12px;
     text-decoration: none;
