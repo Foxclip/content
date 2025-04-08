@@ -96,6 +96,6 @@
     <?php
         includeFile('footer.php');
     ?>
-    <script src="js/main.js" type="module"></script>
+    <script src="js/index.js" type="module"></script>
 </body>
 </html>
