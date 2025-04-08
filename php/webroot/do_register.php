@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkPostVariables(['login', 'email', 'password']);
     $login = trim($_POST['login']);
     $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
+    $password = $_POST['password'];
 
     if (strlen($login) < 4 || strlen($login) > 20) {
         echo "Логин должен содержать от 4 до 20 символов";

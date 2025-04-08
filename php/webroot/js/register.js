@@ -26,7 +26,9 @@ function validateForm() {
     let result = true;
     for (let input of inputs) {
         setInputErrorState(input, true);
-        input.value = input.value.trim();
+        if (input.type !== "password") {
+            input.value = input.value.trim();
+        }
     }
     if (loginInput.value.length < 4 || loginInput.value.length > 20) {
         setInputErrorState(loginInput, false, "Логин должен содержать от 4 до 20 символов");
