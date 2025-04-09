@@ -20,7 +20,7 @@
         <div id="headerRightSection">
             <?php
             if (is_logged_in()) {
-                echo '<div id="username">'. get_user()['username'] .'</div>';
+                includeFile('user_button.php');
             } else {
                 echo '<a id="loginButton" href="/login">Войти</a>';
             }
