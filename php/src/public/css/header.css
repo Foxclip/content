@@ -11,6 +11,12 @@
     width: 100%;
 }
 
+#headerLogo {
+    width: 120px;
+    height: 40px;
+    background-color: rgb(240, 240, 240);
+}
+
 #headerCenterSection {
     display: flex;
     justify-content: center;

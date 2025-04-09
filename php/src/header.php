@@ -1,5 +1,7 @@
 <header id="header">
-    <div id="headerLeftSection"></div>
+    <div id="headerLeftSection">
+        <a id="headerLogoLink" href="/"><div id="headerLogo"></div></a>
+    </div>
     <div id="headerCenterSection">
         <div id="searchBar">
             <img id="searchBarIcon" src="icons/search.png">
