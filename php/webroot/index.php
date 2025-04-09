@@ -26,6 +26,7 @@
             }
             ?>
         </div>
+        <script src="js/header.js" type="module"></script>
     </header>
     <div id="recentPosts">
         <h1 id="recentPostsTitle">Последние посты</h1>

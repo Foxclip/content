@@ -116,10 +116,6 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-#alternativeButton {
-    color: rgb(0, 0, 0);
-}
-
 button[type="submit"]:hover {
     background-color: rgb(0, 0, 0);
 }

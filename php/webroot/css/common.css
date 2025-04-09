@@ -2,6 +2,50 @@
     box-sizing: border-box;
 }
 
+a {
+    color: rgb(0, 0, 0);
+}
+
+#userMenuContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    position: relative;
+}
+
+#userMenuButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: fit-content;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 10px 0 10px;
+    background-color: rgb(240, 240, 240);
+    border-radius: 9999px;
+    user-select: none;
+    cursor: pointer;
+}
+
+#userMenuPopup {
+    display: none;
+    width: 200px;
+    height: 300px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#logoutButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
 #footer {
     display: flex;
     width: 100%;
