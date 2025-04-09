@@ -29,7 +29,14 @@
         <script src="js/header.js" type="module"></script>
     </header>
     <div id="recentPosts">
-        <h1 id="recentPostsTitle">Последние посты</h1>
+        <div id="recentPostsTitleContainer">
+            <h1 id="recentPostsTitle">Последние посты</h1>
+            <?php
+            if (is_logged_in()) {
+                includeFile('../create_post_button.php');
+            }
+            ?>
+        </div>
         <!-- <div id="noPostsPlaceholder">Пока нет постов</div> -->
         <div id="recentPostsList">
             <div class="post">

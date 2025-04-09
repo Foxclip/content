@@ -91,11 +91,11 @@ body {
     color: rgb(0, 0, 0);
 }
 
-#recentPostsList {
+#recentPostsTitleContainer {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 #recentPostsTitle {
@@ -103,6 +103,13 @@ body {
     width: 100%;
     margin-top: 25px;
     margin-bottom: 25px;
+}
+
+#recentPostsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
 }
 
 #noPostsPlaceholder {
