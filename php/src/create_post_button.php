@@ -1,6 +1,8 @@
 <a href="/create_post">
-    <div class="iconButton">
-        <img src="icons/pencil.png" width="20" height="20">
-        <span>Написать</span>
-    </div>
+    <?php
+    includeFile('../icon_button.php', [
+        'icon' => 'icons/pencil.png',
+        'text' => 'Написать'
+    ]);
+    ?>
 </a>
