@@ -6,7 +6,14 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile("../head.php", ['title' => 'Вход', 'styles' => ['common.css', 'login.css']]);
+    includeFile("../head.php", [
+        'title' => 'Вход',
+        'styles' => [
+            'common.css',
+            'footer.css',
+            'login.css'
+        ]
+    ]);
 ?>
 <body>
     <div id="formContainer">

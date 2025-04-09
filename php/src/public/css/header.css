@@ -1,0 +1,99 @@
+#header {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    padding: 20px;
+}
+
+#headerLeftSection {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+#headerCenterSection {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 40px;
+    background-color: rgb(240, 240, 240);
+    color: rgb(255, 255, 255);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+#searchBarIcon {
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+    filter: contrast(0);
+}
+
+#searchBarInput {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: rgb(240, 240, 240);
+    color: rgb(0, 0, 0);
+    border: none;
+    outline: none;
+}
+
+#searchBarInput::placeholder {
+    color: rgb(160, 160, 160);
+}
+
+#headerRightSection {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+#loginButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    padding: 0 10px 0 10px;
+    background-color: rgb(40, 40, 40);
+    color: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 9999px;
+}
+
+#loginButton:hover {
+    background-color: rgb(0, 0, 0);
+}
+
+#userMenuContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    position: relative;
+}
+
+#userMenuPopup {
+    display: none;
+    width: 200px;
+    height: 300px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.1);
+}
+
+#logoutButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}

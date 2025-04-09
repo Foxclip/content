@@ -5,7 +5,14 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../head.php', ['title' => 'Регистрация', 'styles' => ['common.css', 'login.css']]);
+    includeFile('../head.php', [
+        'title' => 'Регистрация',
+        'styles' => [
+            'common.css',
+            'footer.css',
+            'login.css'
+        ]
+    ]);
 ?>
 <body>
     <div id="formContainer">
