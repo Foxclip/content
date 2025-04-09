@@ -3,7 +3,7 @@ $user = get_user();
 ?>
 
 <div id="userMenuContainer">
-    <div id="userMenuButton">
+    <div id="userMenuButton" class="iconButton">
         <img id="iserIcon" src="icons/user.png" width="20" height="20">
         <div id="username"><?= $user['username'] ?></div>
     </div>

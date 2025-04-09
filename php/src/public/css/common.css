@@ -14,21 +14,6 @@ a {
     position: relative;
 }
 
-#userMenuButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    width: fit-content;
-    height: 40px;
-    min-height: 40px;
-    padding: 0 10px 0 10px;
-    background-color: rgb(240, 240, 240);
-    border-radius: 9999px;
-    user-select: none;
-    cursor: pointer;
-}
-
 #userMenuPopup {
     display: none;
     width: 200px;
@@ -75,7 +60,7 @@ a {
     width: 100%;
 }
 
-.createPostButton {
+.iconButton {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,4 +73,8 @@ a {
     border-radius: 9999px;
     user-select: none;
     cursor: pointer;
+}
+
+.iconButton:hover {
+    background-color: rgb(220, 220, 220);
 }
