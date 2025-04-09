@@ -14,6 +14,14 @@ function login(array $user): void {
     ]);
 }
 
+function logout(): void {
+    $pdo = pdo_connect_mysql();
+    $stmt = $pdo->prepare('UPDATE sessions SET logout = TRUE WHERE token = :token');
+    $stmt->execute([
+        'token' => session_id(),
+    ]);
+}
+
 function is_logged_in(): bool {
 
     static $logged_in = null;
@@ -21,21 +29,29 @@ function is_logged_in(): bool {
         return $logged_in;
     }
 
-    $sessionInfo = get_session_info();
-    if (!$sessionInfo) {
-        $logged_in = false;
-        return false;
+    function check_logged_in(): bool {
+
+        $sessionInfo = get_session_info();
+        if (!$sessionInfo) {
+            return false;
+        }
+
+        if ($sessionInfo['logout']) {
+            return false;
+        }
+
+        $last_activity = new DateTime($sessionInfo['last_activity']);
+        $now = new DateTime();
+        if ($now->getTimestamp() - $last_activity->getTimestamp() > logout_after) {
+            return false;
+        }
+
+        return true;
+
     }
 
-    $last_activity = new DateTime($sessionInfo['last_activity']);
-    $now = new DateTime();
-    if ($now->getTimestamp() - $last_activity->getTimestamp() > logout_after) {
-        $logged_in = false;
-        return false;
-    }
-
-    $logged_in = true;
-    return true;
+    $logged_in = check_logged_in();
+    return $logged_in;
 
 }
 
@@ -47,7 +63,7 @@ function get_session_info(): ?array {
     }
 
     $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('SELECT * FROM sessions WHERE token = :token');
+    $stmt = $pdo->prepare('SELECT * FROM sessions WHERE token = :token AND logout = FALSE');
     $stmt->execute([
         'token' => session_id(),
     ]);
