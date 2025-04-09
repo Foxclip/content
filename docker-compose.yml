@@ -5,7 +5,7 @@ services:
         depends_on:
             - mysql
         volumes:
-            - ./php/webroot:/var/www/html/
+            - ./php/src:/var/www/html/
         ports:
             - 8000:80
     mysql:

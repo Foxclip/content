@@ -1,12 +1,12 @@
 <?php
-    require_once('session.php');
-    require_once('utils.php');
+    require_once('../session.php');
+    require_once('../utils.php');
 ?>
 
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile("head.php", ['title' => 'Вход', 'styles' => ['common.css', 'login.css']]);
+    includeFile("../head.php", ['title' => 'Вход', 'styles' => ['common.css', 'login.css']]);
 ?>
 <body>
     <div id="formContainer">
@@ -31,7 +31,7 @@
             </div>
         </form>
     </div>
-    <?php includeFile('footer.php'); ?>
+    <?php includeFile('../footer.php'); ?>
     <script src="js/login.js" type="module"></script>
 </body>
 </html>

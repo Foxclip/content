@@ -2,9 +2,9 @@
 
 session_start();
 
-require_once "session.php";
-require_once "pdo.php";
-require_once "utils.php";
+require_once "../session.php";
+require_once "../pdo.php";
+require_once "../utils.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     checkPostVariables(['login', 'password']);
