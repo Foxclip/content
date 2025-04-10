@@ -1,6 +1,10 @@
 <?php
     require_once('../session.php');
     require_once('../utils.php');
+    if (!is_logged_in()) {
+        redirect_to_login_page(true);
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>

@@ -35,7 +35,12 @@ if (password_verify($password, $user['password'])) {
         ]);
     }
     login($user);
-    header('Location: /');
+    if (isset($_SESSION['login_redirect'])) {
+        header('Location: ' . $_SESSION['login_redirect']);
+        unset($_SESSION['login_redirect']);
+    } else {
+        header('Location: /');
+    }
     echo 'Пользователь ' . $login . ' успешно авторизован';
 } else {
     echo 'Неправильный пароль';

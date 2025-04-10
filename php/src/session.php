@@ -15,6 +15,9 @@ function login(array $user): void {
 }
 
 function logout(): void {
+    if (!is_logged_in()) {
+        return;
+    }
     $pdo = pdo_connect_mysql();
     $stmt = $pdo->prepare('UPDATE sessions SET logout = TRUE WHERE token = :token');
     $stmt->execute([
@@ -110,9 +113,19 @@ function update_last_activity(): void {
     ]);
 }
 
+function redirect_to_login_page($redirect_back_after_login = false): void {
+    if ($redirect_back_after_login) {
+        $_SESSION['login_redirect'] = $_SERVER['REQUEST_URI'];
+    }
+    header('Location: /login');
+}
+
 session_start();
 if (is_logged_in()) {
     update_last_activity();
+}
+if (isset($_SESSION['login_redirect']) && !in_array($_SERVER['REQUEST_URI'], ['/login', '/do_login'])) {
+    unset($_SESSION['login_redirect']);
 }
 
 ?>
