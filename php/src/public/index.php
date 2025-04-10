@@ -17,7 +17,7 @@
     ]);
 ?>
 <body>
-    <?= includeFile('../header.php'); ?>
+    <?= includeFile('../header.php', ['includeSearchBar' => true]); ?>
     <main>
         <div id="recentPosts">
             <div id="recentPostsTitleContainer">

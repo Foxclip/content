@@ -3,10 +3,11 @@
         <a id="headerLogoLink" href="/"><div id="headerLogo"></div></a>
     </div>
     <div id="headerCenterSection">
-        <div id="searchBar">
-            <img id="searchBarIcon" src="icons/search.png">
-            <input id="searchBarInput" type="text" placeholder="Поиск">
-        </div>
+        <?php
+        if (isset($includeSearchBar) && $includeSearchBar) {
+            includeFile('../searchbar.php');
+        }
+        ?>
     </div>
     <div id="headerRightSection">
         <?php
