@@ -12,13 +12,6 @@
     width: 100%;
 }
 
-#recentPostsTitle {
-    font-size: 40px;
-    width: 100%;
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
-
 #recentPostsList {
     display: flex;
     flex-direction: column;

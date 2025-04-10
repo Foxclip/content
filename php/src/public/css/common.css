@@ -27,6 +27,13 @@ a {
     color: rgb(0, 0, 0);
 }
 
+h1 {
+    font-size: 40px;
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
 input {
     outline: none;
 }
