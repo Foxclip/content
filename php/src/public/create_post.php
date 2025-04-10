@@ -22,14 +22,16 @@
 ?>
 <body>
     <?= includeFile('../header.php'); ?>
-    <div id="createPostContainer">
-        <h1 id="createPostTitle">Создать пост</h1>
-        <form id="createPostForm" action="/do_create_post" method="post">
-            <input id="titleInput" class="formInput" type="text" name="title" placeholder="Заголовок" required />
-            <input id="contentInput" class="formInput" type="text" name="content" placeholder="Текст" required />
-            <button id="createPostButton" type="submit">Отправить</button>
-        </form>
-    </div>
+    <main>
+        <div id="createPostContainer">
+            <h1 id="createPostTitle">Создать пост</h1>
+            <form id="createPostForm" action="/do_create_post" method="post">
+                <input id="titleInput" type="text" name="title" placeholder="Заголовок" required />
+                <textarea id="contentInput" name="content" placeholder="Текст" required></textarea>
+                <?php includeFile('../submit_button.php', ['text' => 'Отправить']); ?>
+            </form>
+        </div>
+    </main>
     <?= includeFile('../footer.php'); ?>
     <script src="js/create_post.js" type="module"></script>
 </body>
