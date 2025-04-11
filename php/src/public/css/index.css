@@ -108,6 +108,10 @@
     cursor: pointer;
 }
 
+.postLikes:not(.active):hover {
+    background-color: rgba(200, 255, 150, 0.5);
+}
+
 .postLikesHeart {
     width: 25px;
     height: 25px;
