@@ -4,6 +4,9 @@ export class Utils {
     }
 
     static formatUTCDateToLocal(utcDateString) {
+        if (!utcDateString.endsWith('Z')) {
+            utcDateString += 'Z';
+        }
         const utcDate = new Date(utcDateString);
         const options = {
             year: 'numeric',

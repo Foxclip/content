@@ -1,3 +1,4 @@
+import { postDatetimesToLocalTime } from './post.js';
 import { Utils } from './utils.js';
 
 let likeButtons = document.querySelectorAll(".postLikes");
@@ -17,3 +18,5 @@ likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (
         console.log("Кнопка лайка: ошибка: " + response.statusText);
     }
 }));
+
+postDatetimesToLocalTime();

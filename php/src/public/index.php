@@ -39,7 +39,7 @@
                     includeFile('../post.php', [
                         'postId' => $post['id'],
                         'postAuthor' => $post['username'],
-                        'postDate' => $post['created_at'],
+                        'postDatetime' => $post['created_at'],
                         'postTitle' => $post['title'],
                         'postContent' => $post['content'],
                         'postLikes' => $post['like_count'],

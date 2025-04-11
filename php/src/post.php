@@ -1,7 +1,7 @@
 <div class="post" data-post-id="<?=$postId?>">
 <div class="postTopPanel">
     <span class="postAuthor"><?=$postAuthor?></span>
-    <span class="postDate"><?=$postDate?></span>
+    <span class="postDatetime"><?=$postDatetime?></span>
 </div>
 <div class="postTitleContainer">
     <h2 class="postTitle"><?=$postTitle?></h2>
