@@ -28,6 +28,23 @@ if (!is_logged_in()) {
     <main>
         <div id="profileContainer">
             <h1 id="profileTitle">Профиль</h1>
+            <div id="profileContent">
+                <div id="profileTabList">
+                    <div class="profileTab active">Главное</div>
+                </div>
+                <div id="profileMainTab" class="profileTabBody">
+                    <table id="profileTable">
+                        <tr>
+                            <td>Логин:</td>
+                            <td><?= get_user()['username'] ?></td>
+                        </tr>
+                        <tr>
+                            <td>Почта:</td>
+                            <td><?= get_user()['email'] ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
     <?= includeFile('../ui/footer.php'); ?>

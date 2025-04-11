@@ -38,6 +38,11 @@ input {
     outline: none;
 }
 
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
 textarea {
     outline: none;
     resize: none;
