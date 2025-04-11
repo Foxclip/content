@@ -1,7 +1,7 @@
 <a href="/create_post">
     <?php
     includeFile('../icon_button.php', [
-        'icon' => 'icons/pencil.png',
+        'icon' => 'icons/plus.png',
         'text' => 'Написать'
     ]);
     ?>
