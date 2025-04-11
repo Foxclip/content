@@ -5,19 +5,14 @@ SELECT
     posts.content,
     posts.created_at,
     COUNT(likes.id) AS like_count,
-    CASE WHEN EXISTS(
-        SELECT
-            1
-        FROM
-            likes AS likes2
-        WHERE
-            likes2.post_id = posts.id AND likes2.user_id = :userId
-    ) THEN TRUE ELSE FALSE
-	END AS liked_by_user
+    MAX(user_likes.id IS NOT NULL) AS liked_by_user
 FROM
     posts
 JOIN users ON posts.user_id = users.id
 LEFT JOIN likes ON posts.id = likes.post_id
+LEFT JOIN likes AS user_likes
+ON
+    posts.id = user_likes.post_id AND user_likes.user_id = :userId
 GROUP BY
     posts.id
 ORDER BY
