@@ -42,7 +42,7 @@
                         'postDate' => $post['created_at'],
                         'postTitle' => $post['title'],
                         'postContent' => $post['content'],
-                        'postLikes' => 0
+                        'postLikes' => $post['like_count']
                     ]);
                 }
                 ?>
