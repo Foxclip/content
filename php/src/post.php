@@ -1,4 +1,4 @@
-<div class="post">
+<div class="post" data-post-id="<?=$postId?>">
 <div class="postTopPanel">
     <span class="postAuthor"><?=$postAuthor?></span>
     <span class="postDate"><?=$postDate?></span>
@@ -12,8 +12,9 @@
 </div>
 <div class="postContent"><?=$postContent?></div>
 <div class="bottomPanel">
-    <div class="postLikes">
-        <img class="postLikesHeart" src="icons/heart.png">
+    <div class="postLikes" data-post-id="<?=$postId?>">
+        <div class="postLikesHeart"></div>
+        <div class="postLikesHeartFull"></div>
         <span class="postLikesCount"><?=$postLikes?></span>
     </div>
 </div>

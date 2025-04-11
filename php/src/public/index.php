@@ -37,6 +37,7 @@
                 }
                 foreach ($posts as $post) {
                     includeFile('../post.php', [
+                        'postId' => $post['id'],
                         'postAuthor' => $post['username'],
                         'postDate' => $post['created_at'],
                         'postTitle' => $post['title'],
