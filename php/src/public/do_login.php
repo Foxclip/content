@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once "../session.php";
 require_once "../pdo.php";
 require_once "../utils.php";
