@@ -4,7 +4,16 @@ SELECT
     posts.title,
     posts.content,
     posts.created_at,
-    COUNT(likes.id) AS like_count
+    COUNT(likes.id) AS like_count,
+    CASE WHEN EXISTS(
+        SELECT
+            1
+        FROM
+            likes AS likes2
+        WHERE
+            likes2.post_id = posts.id AND likes2.user_id = :userId
+    ) THEN TRUE ELSE FALSE
+	END AS liked_by_user
 FROM
     posts
 JOIN users ON posts.user_id = users.id

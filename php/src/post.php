@@ -12,7 +12,7 @@
 </div>
 <div class="postContent"><?=$postContent?></div>
 <div class="bottomPanel">
-    <div class="postLikes" data-post-id="<?=$postId?>">
+    <div class="postLikes <?= $postLikedByUser ? 'active' : '' ?>" data-post-id="<?=$postId?>">
         <div class="postLikesHeart"></div>
         <div class="postLikesHeartFull"></div>
         <span class="postLikesCount"><?=$postLikes?></span>

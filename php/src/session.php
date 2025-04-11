@@ -104,6 +104,14 @@ function get_user(): ?array {
 
 }
 
+function get_user_id(): ?int {
+    $user = get_user();
+    if (!$user) {
+        return 0;
+    }
+    return $user['id'];
+}
+
 function update_last_activity(): void {
     $pdo = pdo_connect_mysql();
     $stmt = $pdo->prepare('UPDATE sessions SET last_activity = :last_activity WHERE token = :token');

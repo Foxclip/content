@@ -6,7 +6,9 @@ function get_recent_posts() {
     $pdo = pdo_connect_mysql();
     $sql = file_get_contents(__DIR__ . '/sql/get_recent_posts.sql');
     $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    $stmt->execute([
+        'userId' => get_user_id()
+    ]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
