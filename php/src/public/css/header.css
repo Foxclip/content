@@ -88,6 +88,8 @@
 
 #userMenuPopup {
     display: none;
+    flex-direction: column;
+    align-items: center;
     width: 200px;
     height: 300px;
     background-color: rgb(255, 255, 255);
@@ -97,9 +99,10 @@
     box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.1);
 }
 
-#logoutButton {
+.userMenuItem {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    width: fit-content;
 }

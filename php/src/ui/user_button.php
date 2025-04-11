@@ -11,9 +11,9 @@ $user = get_user();
     ]);
     ?>
     <div id="userMenuPopup">
-        <div id="logoutButton">
+        <a class="userMenuItem" href="/logout">
             <img src="icons/logout.png" width="20" height="20">
-            <a href="/logout">Выйти</a>
-        </div>
+            <span>Выйти</span>
+        </a>
     </div>
 </div>
