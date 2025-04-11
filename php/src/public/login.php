@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile("../head.php", [
+    includeFile("../ui/head.php", [
         'title' => 'Вход',
         'styles' => [
             'common.css',
@@ -38,7 +38,7 @@
             </div>
         </form>
     </div>
-    <?php includeFile('../footer.php'); ?>
+    <?php includeFile('../ui/footer.php'); ?>
     <script src="js/login.js" type="module"></script>
 </body>
 </html>

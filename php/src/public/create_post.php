@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../head.php', [
+    includeFile('../ui/head.php', [
         'title' => 'Создать пост',
         'styles' => [
             'common.css',
@@ -21,18 +21,18 @@
     ]);
 ?>
 <body>
-    <?= includeFile('../header.php'); ?>
+    <?= includeFile('../ui/header.php'); ?>
     <main>
         <div id="createPostContainer">
             <h1 id="createPostTitle">Создать пост</h1>
             <form id="createPostForm" action="/do_create_post" method="post">
                 <input id="titleInput" type="text" name="title" placeholder="Заголовок" required />
                 <textarea id="contentInput" name="content" placeholder="Текст" required></textarea>
-                <?php includeFile('../submit_button.php', ['text' => 'Отправить']); ?>
+                <?php includeFile('../ui/submit_button.php', ['text' => 'Отправить']); ?>
             </form>
         </div>
     </main>
-    <?= includeFile('../footer.php'); ?>
+    <?= includeFile('../ui/footer.php'); ?>
     <script src="js/create_post.js" type="module"></script>
 </body>
 </html>

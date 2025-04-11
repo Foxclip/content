@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../head.php', [
+    includeFile('../ui/head.php', [
         'title' => 'Главная',
         'styles' => [
             'common.css',
@@ -18,14 +18,14 @@
     ]);
 ?>
 <body>
-    <?= includeFile('../header.php', ['includeSearchBar' => true]); ?>
+    <?= includeFile('../ui/header.php', ['includeSearchBar' => true]); ?>
     <main>
         <div id="recentPosts">
             <div id="recentPostsTitleContainer">
                 <h1 id="recentPostsTitle">Последние посты</h1>
                 <?php
                 if (is_logged_in()) {
-                    includeFile('../create_post_button.php');
+                    includeFile('../ui/create_post_button.php');
                 }
                 ?>
             </div>
@@ -36,7 +36,7 @@
                     echo '<div id="noPostsPlaceholder">Пока нет постов</div>';
                 }
                 foreach ($posts as $post) {
-                    includeFile('../post.php', [
+                    includeFile('../ui/post.php', [
                         'postId' => $post['id'],
                         'postAuthor' => $post['username'],
                         'postDatetime' => $post['created_at'],
@@ -50,7 +50,7 @@
             </div>
         </div>
     </main>
-    <?= includeFile('../footer.php'); ?>
+    <?= includeFile('../ui/footer.php'); ?>
     <script src="js/index.js" type="module"></script>
 </body>
 </html>

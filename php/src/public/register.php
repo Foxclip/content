@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../head.php', [
+    includeFile('../ui/head.php', [
         'title' => 'Регистрация',
         'styles' => [
             'common.css',
@@ -42,7 +42,7 @@
             </div>
         </form>
     </div>
-    <?php includeFile('../footer.php'); ?>
+    <?php includeFile('../ui/footer.php'); ?>
     <script src="js/register.js" type="module"></script>
 </body>
 </html>

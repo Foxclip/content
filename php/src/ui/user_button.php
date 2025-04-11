@@ -4,7 +4,7 @@ $user = get_user();
 
 <div id="userMenuContainer">
     <?php
-    includeFile('../icon_button.php', [
+    includeFile('../ui/icon_button.php', [
         'id' => 'userMenuButton',
         'icon' => 'icons/user.png',
         'text' => $user['username']
