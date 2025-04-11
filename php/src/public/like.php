@@ -3,6 +3,7 @@
 require_once('../session.php');
 
 if (!is_logged_in()) {
+    http_response_code(403);
     exit();
 }
 
@@ -26,5 +27,12 @@ if ($data['action'] == 'like') {
         'user_id' => get_user()['id'],
     ]);
 }
+
+$stmt = $pdo->prepare('SELECT COUNT(id) AS like_count FROM likes WHERE post_id = :post_id');
+$stmt->execute([
+    'post_id' => $data['postId'],
+]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+echo json_encode($result);
 
 ?>

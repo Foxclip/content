@@ -1,7 +1,7 @@
 import { Utils } from './utils.js';
 
 let likeButtons = document.querySelectorAll(".postLikes");
-likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async () => {
+likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (event) => {
     likeButton.classList.toggle("active");
     const response = await fetch("/like", {
         method: "POST",
@@ -10,5 +10,10 @@ likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (
             action: likeButton.classList.contains("active") ? "like" : "unlike"
         })
     });
-    const responseText = await response.text();
+    if (response.ok) {
+        const responseObj = await response.json();
+        likeButton.querySelector(".postLikesCount").textContent = responseObj.like_count;
+    } else {
+        console.log("Кнопка лайка: ошибка: " + response.statusText);
+    }
 }));
