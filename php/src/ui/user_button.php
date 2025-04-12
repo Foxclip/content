@@ -4,7 +4,7 @@ $user = get_user();
 
 <div id="userMenuContainer">
     <div id="userMenuButton">
-        <img src="<?=get_user_avatar_url()?>" width="30" height="30">
+        <img class="avatarImage" src="<?=get_user_avatar_url()?>" width="30" height="30">
         <span><?=$user['username']?></span>
     </div>
     <div id="userMenuPopup">

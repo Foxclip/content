@@ -46,7 +46,7 @@ if (!is_logged_in()) {
                             <td>Аватар:</td>
                             <td>
                                 <div id="avatarContainer">
-                                    <img id="avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
+                                    <img id="avatarImage" class="avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
                                 </div>
                             </td>
                             <td>

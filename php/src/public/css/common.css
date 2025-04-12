@@ -109,3 +109,8 @@ button {
     pointer-events: none;
     z-index: -1;
 }
+
+.avatarImage {
+    border-radius: 9999px;
+    overflow: hidden;
+}
