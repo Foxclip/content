@@ -1,5 +1,6 @@
 SELECT
-    posts.id,
+    posts.id AS post_id,
+    users.id AS user_id,
     users.username,
     posts.title,
     posts.content,

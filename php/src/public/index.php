@@ -37,7 +37,8 @@
                 }
                 foreach ($posts as $post) {
                     includeFile('../ui/post.php', [
-                        'postId' => $post['id'],
+                        'postId' => $post['post_id'],
+                        'postAuthorAvatarUrl' => get_user_avatar_url($post['user_id']),
                         'postAuthor' => $post['username'],
                         'postDatetime' => $post['created_at'],
                         'postTitle' => $post['title'],

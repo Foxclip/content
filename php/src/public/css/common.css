@@ -114,3 +114,9 @@ button {
     border-radius: 9999px;
     overflow: hidden;
 }
+
+.userNameWithAvatar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

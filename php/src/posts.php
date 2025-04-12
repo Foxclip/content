@@ -9,7 +9,8 @@ function get_recent_posts() {
     $stmt->execute([
         'userId' => get_user_id()
     ]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
 }
 
 ?>

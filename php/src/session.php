@@ -112,8 +112,11 @@ function get_user_id(): ?int {
     return $user['id'];
 }
 
-function get_user_avatar_url(): string {
+function get_user_avatar_url($id = null): string {
     $userId = get_user_id();
+    if ($id) {
+        $userId = $id;
+    }
     if (!file_exists("avatars/$userId.png")) {
         return '/avatars/default.png';
     }
