@@ -3,6 +3,8 @@
     require_once('../utils.php');
     require_once("../posts.php");
 
+    const max_posts_per_page = 10;
+
     function write_posts($posts) {
         if (empty($posts)) {
             echo '<div id="noPostsPlaceholder">Пока нет постов</div>';
@@ -26,15 +28,24 @@
         case MyPosts;
     }
 
-    if ($_SERVER['REQUEST_URI'] === '/') {
-        $pageType = PageType::RecentPosts;
-        $posts = get_recent_posts();
-        $title = 'Все посты';
-    } else if (isset($_GET['my_posts'])) {
-        $pageType = PageType::MyPosts;
-        $posts = get_user_posts();
-        $title = 'Мои посты';
+    $page = 1;
+    if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+        $page = intval($_GET['page']);
     }
+    $offset = ($page - 1) * max_posts_per_page;
+    if (!isset($_GET['type'])) {
+        $pageType = PageType::RecentPosts;
+        $posts = get_recent_posts($offset, max_posts_per_page);
+        $title = 'Все посты';
+        $postCount = get_all_post_count();
+    } else if (isset($_GET['type']) && $_GET['type'] === 'my_posts') {
+        $pageType = PageType::MyPosts;
+        $posts = get_user_posts(get_user_id(), $offset, max_posts_per_page);
+        $title = 'Мои посты';
+        $postCount = get_user_post_count();
+    }
+    $pageCount = ceil($postCount / max_posts_per_page);
+
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +76,7 @@
             <div id="tabContainer">
                 <div class="tabButtonList">
                     <a href="/"><div class="tabButton <?= $pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
-                    <a href="/?my_posts"><div class="tabButton <?= $pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
+                    <a href="/?type=my_posts"><div class="tabButton <?= $pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
                 </div>
                 <div class="tabBodyList">
                     <?php
@@ -91,6 +102,22 @@
                     endif;
                     ?>
                 </div>
+            </div>
+            <div class="paginationContainer">
+                <?php
+                if ($pageCount > 1) {
+                    $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
+                    for ($i = 1; $i <= $pageCount; $i++) {
+                        $isActive = $page === $i;
+                        $get_parameters = [
+                            'type' => $pageTypeParamStr,
+                            'page' => $i
+                        ];
+                        $queryStr = http_build_query($get_parameters);
+                        echo '<a href="/?' . $queryStr . '"><div class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</div></a>';
+                    }
+                }
+                ?>
             </div>
         </div>
     </main>

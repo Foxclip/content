@@ -21,4 +21,4 @@ GROUP BY
 ORDER BY
     created_at
 DESC
-LIMIT 10
+LIMIT :offset, :count

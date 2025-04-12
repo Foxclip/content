@@ -2,22 +2,56 @@
 
 require_once "../pdo.php";
 
-function get_recent_posts() {
-    $result = execute_sql_query('get_recent_posts.sql', [
-        'userId' => get_user_id()
-    ]);
+function get_recent_posts(int $offset, int $count) {
+    $result = execute_sql_script('get_recent_posts.sql',
+        [
+            'currentUserId' => get_user_id(),
+            'offset' => $offset,
+            'count' => $count
+        ],
+        [
+            'currentUserId' => PDO::PARAM_INT,
+            'offset' => PDO::PARAM_INT,
+            'count' => PDO::PARAM_INT
+        ]
+    );
     return $result;
 }
 
-function get_user_posts(int|null $id = null): array {
+function get_user_posts(int|null $id, int $offset, int $count): array {
+    $userId = $id;
+    $result = execute_sql_script('get_user_posts.sql',
+        [
+            'currentUserId' => get_user_id(),
+            'queryUserId' => $userId,
+            'offset' => $offset,
+            'count' => $count
+        ],
+        [
+            'currentUserId' => PDO::PARAM_INT,
+            'queryUserId' => PDO::PARAM_INT,
+            'offset' => PDO::PARAM_INT,
+            'count' => PDO::PARAM_INT
+        ]
+    );
+    return $result;
+}
+
+function get_all_post_count(): int {
+    $rows = execute_sql_query('SELECT COUNT(*) AS count FROM posts');
+    $result = $rows[0]['count'];
+    return $result;
+}
+
+function get_user_post_count(int|null $id = null): int {
     if (!$id) {
         $id = get_user_id();
     }
     $userId = $id;
-    $result = execute_sql_query('get_user_posts.sql', [
-        'currentUserId' => get_user_id(),
-        'queryUserId' => $userId
+    $rows = execute_sql_query('SELECT COUNT(*) AS count FROM posts WHERE user_id = :userId', [
+        'userId' => $userId
     ]);
+    $result = $rows[0]['count'];
     return $result;
 }
 

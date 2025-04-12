@@ -155,3 +155,34 @@ button {
 .tabBody:not(.active) {
     display: none;
 }
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.paginationButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0px 10px;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid black;
+    border-radius: 9999px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.paginationButton.active {
+    background-color: rgb(200, 255, 150);
+}
+
+.paginationButton:not(.active):hover {
+    background-color: rgba(200, 255, 150, 0.5);
+}
