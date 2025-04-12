@@ -42,6 +42,26 @@ if (!is_logged_in()) {
                             <td>Почта:</td>
                             <td><?= get_user()['email'] ?></td>
                         </tr>
+                        <tr>
+                            <td>Аватар:</td>
+                            <td>
+                                <div id="avatarContainer">
+                                    <img id="avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
+                                </div>
+                            </td>
+                            <td>
+                                <?php
+                                includeFile('../ui/icon_button.php', [
+                                    'id' => 'changeAvatarButton',
+                                    'icon' => 'icons/pencil.png',
+                                    'text' => 'Изменить'
+                                ]);
+                                ?>
+                                <form id="changeAvatarForm" action="/change_avatar" method="post">
+                                    <input id="avatarHiddenInput" type="file" accept="image/jpeg, image/png">
+                                </form>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>

@@ -112,6 +112,14 @@ function get_user_id(): ?int {
     return $user['id'];
 }
 
+function get_user_avatar_url(): string {
+    $userId = get_user_id();
+    if (!file_exists("avatars/$userId.png")) {
+        return '/avatars/default.png';
+    }
+    return "/avatars/$userId.png";
+}
+
 function update_last_activity(): void {
     $pdo = pdo_connect_mysql();
     $stmt = $pdo->prepare('UPDATE sessions SET last_activity = :last_activity WHERE token = :token');

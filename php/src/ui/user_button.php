@@ -3,13 +3,10 @@ $user = get_user();
 ?>
 
 <div id="userMenuContainer">
-    <?php
-    includeFile('../ui/icon_button.php', [
-        'id' => 'userMenuButton',
-        'icon' => 'icons/user.png',
-        'text' => $user['username']
-    ]);
-    ?>
+    <div id="userMenuButton">
+        <img src="<?=get_user_avatar_url()?>" width="30" height="30">
+        <span><?=$user['username']?></span>
+    </div>
     <div id="userMenuPopup">
         <a class="userMenuItem" href="/profile">
             <img src="icons/user_pen.png" width="20" height="20">
