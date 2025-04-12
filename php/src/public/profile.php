@@ -29,8 +29,8 @@ if (!is_logged_in()) {
         <div id="profileContainer">
             <h1 id="profileTitle">Профиль</h1>
             <div id="profileContent">
-                <div id="profileTabList">
-                    <div class="profileTab active">Главное</div>
+                <div id="profileTabList" class="tabButtonList">
+                    <div class="tabButton active">Главное</div>
                 </div>
                 <div id="profileMainTab" class="profileTabBody">
                     <table id="profileTable">

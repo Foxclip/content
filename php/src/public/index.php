@@ -2,6 +2,24 @@
     require_once('../session.php');
     require_once('../utils.php');
     require_once("../posts.php");
+
+    function write_posts($posts) {
+        if (empty($posts)) {
+            echo '<div id="noPostsPlaceholder">Пока нет постов</div>';
+        }
+        foreach ($posts as $post) {
+            includeFile('../ui/post.php', [
+                'postId' => $post['post_id'],
+                'postAuthorAvatarUrl' => get_user_avatar_url($post['user_id']),
+                'postAuthor' => $post['username'],
+                'postDatetime' => $post['created_at'],
+                'postTitle' => $post['title'],
+                'postContent' => $post['content'],
+                'postLikes' => $post['like_count'],
+                'postLikedByUser' => $post['liked_by_user']
+            ]);
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -29,25 +47,25 @@
                 }
                 ?>
             </div>
-            <div id="recentPostsList">
-                <?php
-                $posts = get_recent_posts();
-                if (empty($posts)) {
-                    echo '<div id="noPostsPlaceholder">Пока нет постов</div>';
-                }
-                foreach ($posts as $post) {
-                    includeFile('../ui/post.php', [
-                        'postId' => $post['post_id'],
-                        'postAuthorAvatarUrl' => get_user_avatar_url($post['user_id']),
-                        'postAuthor' => $post['username'],
-                        'postDatetime' => $post['created_at'],
-                        'postTitle' => $post['title'],
-                        'postContent' => $post['content'],
-                        'postLikes' => $post['like_count'],
-                        'postLikedByUser' => $post['liked_by_user']
-                    ]);
-                }
-                ?>
+            <div id="recentPostsTabListContainer">
+                <div class="tabButtonList">
+                    <div class="tabButton active">Все</div>
+                    <div class="tabButton">Мои</div>
+                </div>
+                <div class="tabBodyList">
+                    <div id="recentPostsList" class="postList tabBody active">
+                        <?php
+                        $posts = get_recent_posts();
+                        write_posts($posts);
+                        ?>
+                    </div>
+                    <div id="myPostsList" class="postList tabBody">
+                        <?php
+                        $posts = get_user_posts();
+                        write_posts($posts);
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

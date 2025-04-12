@@ -5,6 +5,13 @@
     color: rgb(0, 0, 0);
 }
 
+#recentPostsTabListContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
 #recentPostsTitleContainer {
     display: flex;
     justify-content: space-between;
@@ -12,20 +19,17 @@
     width: 100%;
 }
 
-#recentPostsList {
+.postList {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
     padding-bottom: 20px;
 }
 
 #noPostsPlaceholder {
     color: rgb(160, 160, 160);
     font-size: 30px;
-}
-
-#recentPostsList {
-    width: 100%;
 }
 
 .post {

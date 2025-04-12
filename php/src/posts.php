@@ -3,13 +3,21 @@
 require_once "../pdo.php";
 
 function get_recent_posts() {
-    $pdo = pdo_connect_mysql();
-    $sql = file_get_contents(__DIR__ . '/sql/get_recent_posts.sql');
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
+    $result = execute_sql_query('get_recent_posts.sql', [
         'userId' => get_user_id()
     ]);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function get_user_posts(int|null $id = null): array {
+    if (!$id) {
+        $id = get_user_id();
+    }
+    $userId = $id;
+    $result = execute_sql_query('get_user_posts.sql', [
+        'currentUserId' => get_user_id(),
+        'queryUserId' => $userId
+    ]);
     return $result;
 }
 

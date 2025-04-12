@@ -120,3 +120,38 @@ button {
     align-items: center;
     gap: 10px;
 }
+
+.tabButtonList {
+    display: flex;
+    gap: 10px;
+}
+
+.tabButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 60px;
+    height: 40px;
+    padding: 0px 10px;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid black;
+    border-radius: 9999px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.tabBodyList {
+    width: 100%;
+}
+
+.tabButton.active {
+    background-color: rgb(200, 255, 150);
+}
+
+.tabButton:not(.active):hover {
+    background-color: rgba(200, 255, 150, 0.5);
+}
+
+.tabBody:not(.active) {
+    display: none;
+}

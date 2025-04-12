@@ -13,7 +13,9 @@ JOIN users ON posts.user_id = users.id
 LEFT JOIN likes ON posts.id = likes.post_id
 LEFT JOIN likes AS user_likes
 ON
-    posts.id = user_likes.post_id AND user_likes.user_id = :userId
+    posts.id = user_likes.post_id AND user_likes.user_id = :currentUserId
+WHERE 
+    posts.user_id = :queryUserId
 GROUP BY
     posts.id
 ORDER BY
