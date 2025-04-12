@@ -58,7 +58,7 @@ if (!is_logged_in()) {
                                 ]);
                                 ?>
                                 <form id="changeAvatarForm" action="/change_avatar" method="post">
-                                    <input id="avatarHiddenInput" type="file" accept="image/jpeg, image/png">
+                                    <input id="avatarHiddenInput" class="hiddenFileInput" type="file" accept="image/jpeg, image/png">
                                 </form>
                             </td>
                         </tr>

@@ -99,3 +99,13 @@ button {
 .submitButton:hover {
     background-color: rgb(0, 150, 225);
 }
+
+.hiddenFileInput {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
