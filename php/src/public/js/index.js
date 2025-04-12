@@ -1,21 +1,6 @@
 import { postDatetimesToLocalTime } from './post.js';
 import { Utils } from './utils.js';
 
-let tabButtonList = document.querySelector(".tabButtonList");
-let tabButtons = tabButtonList.querySelectorAll(".tabButton");
-let tabBodyList = document.querySelector(".tabBodyList");
-let tabBodies = tabBodyList.querySelectorAll(".tabBody");
-for (let i = 0; i < tabButtons.length; i++) {
-    let tabButton = tabButtons[i];
-    tabButton.addEventListener("click", () => {
-        tabButtonList.querySelector(".active").classList.remove("active");
-        tabButton.classList.add("active");
-        let tabBody = tabBodyList.children[i];
-        tabBodies.forEach((tabBody) => tabBody.classList.remove("active"));
-        tabBody.classList.add("active");
-    });
-}
-
 let likeButtons = document.querySelectorAll(".postLikes");
 likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (event) => {
     likeButton.classList.toggle("active");

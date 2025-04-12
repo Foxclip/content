@@ -20,6 +20,21 @@
             ]);
         }
     }
+
+    enum PageType {
+        case RecentPosts;
+        case MyPosts;
+    }
+
+    if ($_SERVER['REQUEST_URI'] === '/') {
+        $pageType = PageType::RecentPosts;
+        $posts = get_recent_posts();
+        $title = 'Все посты';
+    } else if (isset($_GET['my_posts'])) {
+        $pageType = PageType::MyPosts;
+        $posts = get_user_posts();
+        $title = 'Мои посты';
+    }
 ?>
 
 <!DOCTYPE html>
@@ -40,31 +55,41 @@
     <main>
         <div id="recentPosts">
             <div id="recentPostsTitleContainer">
-                <h1 id="recentPostsTitle">Последние посты</h1>
+                <h1 id="recentPostsTitle"><?= $title ?></h1>
                 <?php
                 if (is_logged_in()) {
                     includeFile('../ui/create_post_button.php');
                 }
                 ?>
             </div>
-            <div id="recentPostsTabListContainer">
+            <div id="tabContainer">
                 <div class="tabButtonList">
-                    <div class="tabButton active">Все</div>
-                    <div class="tabButton">Мои</div>
+                    <a href="/"><div class="tabButton <?= $pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
+                    <a href="/?my_posts"><div class="tabButton <?= $pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
                 </div>
                 <div class="tabBodyList">
-                    <div id="recentPostsList" class="postList tabBody active">
+                    <?php
+                    if ($pageType === PageType::RecentPosts):
+                    ?>
+                    <divb class="postList tabBody active">
                         <?php
-                        $posts = get_recent_posts();
                         write_posts($posts);
                         ?>
                     </div>
-                    <div id="myPostsList" class="postList tabBody">
+                    <?php
+                    endif;
+                    ?>
+                    <?php
+                    if ($pageType === PageType::MyPosts):
+                    ?>
+                    <div class="postList tabBody active">
                         <?php
-                        $posts = get_user_posts();
                         write_posts($posts);
                         ?>
                     </div>
+                    <?php
+                    endif;
+                    ?>
                 </div>
             </div>
         </div>
