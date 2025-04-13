@@ -66,7 +66,7 @@ function includeSaveButton(): void {
                                 <input class="profileTextInput hidden" type="email" name="email">
                             </td>
                             <td>
-                                <div class="saveCancelContainer">
+                                <div class="profileEditButtonsContainer">
                                     <?php
                                     includeEditButton();
                                     includeSaveButton();
@@ -80,10 +80,12 @@ function includeSaveButton(): void {
                                 <img class="profileDisplayImage avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
                             </td>
                             <td>
-                                <?php
-                                includeEditButton('changeAvatarButton');
-                                ?>
-                                <input class="profileHiddenFileInput hidden" type="file" accept="image/jpeg, image/png">
+                                <div class="profileEditButtonsContainer">
+                                    <?php
+                                    includeEditButton();
+                                    ?>
+                                    <input class="profileHiddenFileInput hidden" type="file" accept="image/jpeg, image/png">
+                                </div>
                             </td>
                         </tr>
                     </table>

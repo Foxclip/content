@@ -24,7 +24,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
     let tableRow = document.getElementById(tableRowId);
     let displayText = tableRow.querySelector(".profileDisplayText");
     let textInput = tableRow.querySelector(".profileTextInput");
-    let saveCancelContainer = tableRow.querySelector(".saveCancelContainer");
+    let editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
     let changeButton = tableRow.querySelector(".profileEditButton");
     let saveButton = tableRow.querySelector(".profileSaveButton");
     let cancelButton = tableRow.querySelector(".profileCancelButton");
@@ -50,7 +50,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
     saveButton.addEventListener("click", async () => {
 
         let spinner = createSpinner();
-        saveCancelContainer.appendChild(spinner);
+        editButtonsContainer.appendChild(spinner);
         saveButton.classList.add("hidden");
         cancelButton.classList.add("hidden");
 
@@ -77,6 +77,7 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
 
     let tableRow = document.getElementById(tableRowId);
     let displayImage = tableRow.querySelector(".profileDisplayImage");
+    let editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
     let changeButton = tableRow.querySelector(".profileEditButton");
     let imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
 
@@ -90,15 +91,23 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
         }
         const formData = new FormData();
         formData.append("image", imageFile);
+
+        let spinner = createSpinner();
+        editButtonsContainer.appendChild(spinner);
+        changeButton.classList.add("hidden");
+
         const response = await fetch(fetchUrl, {
             method: "POST",
             body: formData
         });
 
+        spinner.remove();
+        changeButton.classList.remove("hidden");
+
         handleResponse(response, (responseJson) => {
             displayImage.src = responseJson.image_url;
         }, errorPrefix);
-        
+
     });
 
 }
