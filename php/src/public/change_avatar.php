@@ -12,7 +12,7 @@ require_once('../session.php');
 require_once('../utils.php');
 
 if (!is_logged_in()) {
-    redirect_to_login_page(true);
+    echo json_encode(['success' => false, 'message' => 'User is not logged in']);
     exit();
 }
 

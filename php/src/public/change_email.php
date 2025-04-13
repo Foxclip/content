@@ -13,7 +13,7 @@ require_once('../utils.php');
 require_once('../validation.php');
 
 if (!is_logged_in()) {
-    redirect_to_login_page(true);
+    echo json_encode(['success' => false, 'message' => 'User is not logged in']);
     exit();
 }
 
