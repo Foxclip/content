@@ -1,28 +1,28 @@
 import { createSpinner } from "./ui.js";
 
-let userEmail = document.getElementById("userEmail");
-let changeEmailForm = document.getElementById("changeEmailForm");
-let emailInput = document.getElementById("emailInput");
-let emailSaveCancelContainer = document.getElementById("emailSaveCancelContainer");
-let changeEmailButton = document.getElementById("changeEmailButton");
-let saveEmailButton = document.getElementById("saveEmailButton");
-let saveEmailButtonCancel = document.getElementById("saveEmailButtonCancel");
+let emailRow = document.getElementById("emailRow");
+let userEmail = emailRow.querySelector(".profileDisplayText");
+let emailInput = emailRow.querySelector(".profileTextInput");
+let emailSaveCancelContainer = emailRow.querySelector(".saveCancelContainer");
+let changeEmailButton = emailRow.querySelector(".profileEditButton");
+let saveEmailButton = emailRow.querySelector(".profileSaveButton");
+let cancelEmailButton = emailRow.querySelector(".profileCancelButton");
 
 changeEmailButton.addEventListener("click", () => {
     emailInput.value = userEmail.textContent;
     userEmail.classList.add("hidden");
-    changeEmailForm.classList.remove("hidden");
+    emailInput.classList.remove("hidden");
     changeEmailButton.classList.add("hidden");
     saveEmailButton.classList.remove("hidden");
-    saveEmailButtonCancel.classList.remove("hidden");
+    cancelEmailButton.classList.remove("hidden");
     emailInput.focus();
 });
-saveEmailButtonCancel.addEventListener("click", () => {
+cancelEmailButton.addEventListener("click", () => {
     userEmail.classList.remove("hidden");
-    changeEmailForm.classList.add("hidden");
+    emailInput.classList.add("hidden");
     changeEmailButton.classList.remove("hidden");
     saveEmailButton.classList.add("hidden");
-    saveEmailButtonCancel.classList.add("hidden");
+    cancelEmailButton.classList.add("hidden");
 });
 
 saveEmailButton.addEventListener("click", async () => {
@@ -30,7 +30,7 @@ saveEmailButton.addEventListener("click", async () => {
     let spinner = createSpinner(5, "red");
     emailSaveCancelContainer.appendChild(spinner);
     saveEmailButton.classList.add("hidden");
-    saveEmailButtonCancel.classList.add("hidden");
+    cancelEmailButton.classList.add("hidden");
 
     const response = await fetch("/change_email", {
         method: "POST",
@@ -38,10 +38,10 @@ saveEmailButton.addEventListener("click", async () => {
             email: emailInput.value
         })
     });
-    
+
     spinner.remove();
     saveEmailButton.classList.remove("hidden");
-    saveEmailButtonCancel.classList.remove("hidden");
+    cancelEmailButton.classList.remove("hidden");
 
     if (response.ok) {
         let responseObj;
@@ -62,10 +62,10 @@ saveEmailButton.addEventListener("click", async () => {
 
 });
 
-let avatarImage = document.getElementById("avatarImage");
-let changeAvatarButton = document.getElementById("changeAvatarButton");
-let changeAvatarForm = document.getElementById("changeAvatarForm");
-let avatarHiddenInput = document.getElementById("avatarHiddenInput");
+let avatarRow = document.getElementById("avatarRow");
+let avatarImage = avatarRow.querySelector(".profileDisplayImage");
+let changeAvatarButton = avatarRow.querySelector(".profileEditButton");
+let avatarHiddenInput = avatarRow.querySelector(".profileHiddenFileInput");
 
 changeAvatarButton.addEventListener("click", () => avatarHiddenInput.click());
 avatarHiddenInput.addEventListener("change", async () => {

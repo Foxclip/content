@@ -8,26 +8,24 @@ if (!is_logged_in()) {
     exit();
 }
 
-function includeEditButton(string $id): void {
+function includeEditButton(): void {
     includeFile('../ui/icon_button.php', [
-        'id' => $id,
         'icon' => 'icons/pencil.png',
-        'text' => 'Изменить'
+        'text' => 'Изменить',
+        'classes' => ['profileEditButton']
     ]);
 }
 
-function includeSaveButton(string $id): void {
+function includeSaveButton(): void {
     includeFile('../ui/icon_button.php', [
-        'id' => $id,
         'icon' => 'icons/send.png',
         'text' => 'Сохранить',
-        'classes' => ['hidden']
+        'classes' => ['profileSaveButton', 'hidden']
     ]);
     includeFile('../ui/icon_button.php', [
-        'id' => $id . 'Cancel',
         'icon' => 'icons/cross.png',
         'text' => 'Отмена',
-        'classes' => ['hidden']
+        'classes' => ['profileCancelButton', 'hidden']
     ]);
 }
 
@@ -57,41 +55,35 @@ function includeSaveButton(string $id): void {
                 </div>
                 <div id="profileMainTab" class="profileTabBody">
                     <table id="profileTable">
-                        <tr>
+                        <tr id="usernameRow">
                             <td>Логин:</td>
                             <td><?= get_user()['username'] ?></td>
                         </tr>
-                        <tr>
+                        <tr id="emailRow">
                             <td>Почта:</td>
                             <td>
-                                <span id="userEmail"><?= get_user()['email'] ?></span>
-                                <form id="changeEmailForm" class="hidden" action="/change_email" method="post">
-                                    <input id="emailInput" class="profileInput" type="email" name="email" required>
-                                </form>
+                                <span class="profileDisplayText"><?= get_user()['email'] ?></span>
+                                <input class="profileTextInput hidden" type="email" name="email">
                             </td>
                             <td>
-                                <div id="emailSaveCancelContainer" class="saveCancelContainer">
+                                <div class="saveCancelContainer">
                                     <?php
-                                    includeEditButton('changeEmailButton');
-                                    includeSaveButton('saveEmailButton');
+                                    includeEditButton();
+                                    includeSaveButton();
                                     ?>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr id="avatarRow">
                             <td>Аватар:</td>
                             <td>
-                                <div id="avatarContainer">
-                                    <img id="avatarImage" class="avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
-                                </div>
+                                <img class="profileDisplayImage avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
                             </td>
                             <td>
                                 <?php
                                 includeEditButton('changeAvatarButton');
                                 ?>
-                                <form id="changeAvatarForm" action="/change_avatar" method="post">
-                                    <input id="avatarHiddenInput" class="hiddenFileInput" type="file" accept="image/jpeg, image/png">
-                                </form>
+                                <input class="profileHiddenFileInput hidden" type="file" accept="image/jpeg, image/png">
                             </td>
                         </tr>
                     </table>
