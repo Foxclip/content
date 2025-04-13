@@ -15,9 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-$pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('INSERT INTO posts (title, content, user_id) VALUES (:title, :content, :user_id)');
-$stmt->execute([
+execute_sql_query('INSERT INTO posts (title, content, user_id) VALUES (:title, :content, :user_id)', [
     'title' => $title,
     'content' => $content,
     'user_id' => get_user()['id'],
