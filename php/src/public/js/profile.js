@@ -1,27 +1,6 @@
 import { createSpinner } from "./ui.js";
 import { getUserAvatarElement } from "./header.js";
-
-async function handleResponse(response, onSuccess, onError, logPrefix) {
-    if (response.ok) {
-        let responseJson;
-        try {
-            responseJson = await response.json();
-        } catch (error) {
-            onError(error);
-            console.log(logPrefix + ": ошибка json: " + error);
-        }
-        if (responseJson.success) {
-            onSuccess(responseJson);
-            console.log(logPrefix + ": успешно");
-        } else {
-            onError(responseJson.message);
-            console.log(logPrefix + ": ошибка: " + responseJson.message);
-        }
-    } else {
-        onError(response.statusText);
-        console.log(logPrefix + ": ошибка http: " + response.statusText);
-    }
-}
+import { Utils } from "./utils.js";
 
 function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
 
@@ -81,7 +60,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         saveButton.classList.remove("hidden");
         cancelButton.classList.remove("hidden");
 
-        handleResponse(
+        Utils.handleResponse(
             response,
             (responseJson) => {
                 disableEditing(true);
@@ -130,7 +109,7 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
         spinner.remove();
         changeButton.classList.remove("hidden");
 
-        handleResponse(
+        Utils.handleResponse(
             response,
             (responseJson) => {
                 displayImage.src = responseJson.image_url;
