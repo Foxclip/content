@@ -1,21 +1,24 @@
 import { createSpinner } from "./ui.js";
 
-async function handleResponse(response, onSuccess, logPrefix) {
+async function handleResponse(response, onSuccess, onError, logPrefix) {
     if (response.ok) {
         let responseJson;
         try {
             responseJson = await response.json();
         } catch (error) {
-            console.log(logPrefix + ": ошибка: " + error);
+            onError(error);
+            console.log(logPrefix + ": ошибка json: " + error);
         }
         if (responseJson.success) {
             onSuccess(responseJson);
             console.log(logPrefix + ": успешно");
         } else {
+            onError(responseJson.message);
             console.log(logPrefix + ": ошибка: " + responseJson.message);
         }
     } else {
-        console.log(logPrefix + ": ошибка: " + response.statusText);
+        onError(response.statusText);
+        console.log(logPrefix + ": ошибка http: " + response.statusText);
     }
 }
 
@@ -28,6 +31,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
     let changeButton = tableRow.querySelector(".profileEditButton");
     let saveButton = tableRow.querySelector(".profileSaveButton");
     let cancelButton = tableRow.querySelector(".profileCancelButton");
+    let errorText = tableRow.querySelector(".profileErrorText");
 
     function enableEditing() {
         textInput.value = displayText.textContent;
@@ -48,6 +52,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         changeButton.classList.remove("hidden");
         saveButton.classList.add("hidden");
         cancelButton.classList.add("hidden");
+        errorText.classList.add("hidden");
     }
 
     changeButton.addEventListener("click", () => {
@@ -64,6 +69,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         editButtonsContainer.appendChild(spinner);
         saveButton.classList.add("hidden");
         cancelButton.classList.add("hidden");
+        errorText.classList.add("hidden");
 
         const response = await fetch(fetchUrl, {
             method: "POST",
@@ -74,9 +80,17 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         saveButton.classList.remove("hidden");
         cancelButton.classList.remove("hidden");
 
-        handleResponse(response, (responseJson) => {
-            disableEditing(true);
-        }, errorPrefix);
+        handleResponse(
+            response,
+            (responseJson) => {
+                disableEditing(true);
+            },
+            (errorMessage) => {
+                errorText.textContent = errorMessage;
+                errorText.classList.remove("hidden");
+            },
+            errorPrefix
+        );
 
     });
 
@@ -89,6 +103,7 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
     let editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
     let changeButton = tableRow.querySelector(".profileEditButton");
     let imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
+    let errorText = tableRow.querySelector(".profileErrorText");
 
     changeButton.addEventListener("click", () => imageHiddenInput.click());
 
@@ -104,6 +119,7 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
         let spinner = createSpinner();
         editButtonsContainer.appendChild(spinner);
         changeButton.classList.add("hidden");
+        errorText.classList.add("hidden");
 
         const response = await fetch(fetchUrl, {
             method: "POST",
@@ -113,9 +129,18 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
         spinner.remove();
         changeButton.classList.remove("hidden");
 
-        handleResponse(response, (responseJson) => {
-            displayImage.src = responseJson.image_url;
-        }, errorPrefix);
+        handleResponse(
+            response,
+            (responseJson) => {
+                displayImage.src = responseJson.image_url;
+                errorText.classList.add("hidden");
+            },
+            (errorMessage) => {
+                errorText.textContent = errorMessage;
+                errorText.classList.remove("hidden");
+            },
+            errorPrefix
+        );
 
     });
 

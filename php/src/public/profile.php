@@ -62,8 +62,11 @@ function includeSaveButton(): void {
                         <tr id="emailRow">
                             <td>Почта:</td>
                             <td>
-                                <span class="profileDisplayText"><?= get_user()['email'] ?></span>
-                                <input class="profileTextInput hidden" type="email" name="email">
+                                <div class="profileErrorContainer">
+                                    <span class="profileDisplayText"><?= get_user()['email'] ?></span>
+                                    <input class="profileTextInput hidden" type="email" name="email">
+                                    <span class="profileErrorText hidden"></span>
+                                </div>
                             </td>
                             <td>
                                 <div class="profileEditButtonsContainer">
@@ -80,11 +83,14 @@ function includeSaveButton(): void {
                                 <img class="profileDisplayImage avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
                             </td>
                             <td>
-                                <div class="profileEditButtonsContainer">
-                                    <?php
-                                    includeEditButton();
-                                    ?>
-                                    <input class="profileHiddenFileInput hidden" type="file" accept="image/jpeg, image/png">
+                                <div class="profileErrorContainer">
+                                    <div class="profileEditButtonsContainer">
+                                        <?php
+                                        includeEditButton();
+                                        ?>
+                                        <input class="profileHiddenFileInput hidden" type="file" accept="image/jpeg, image/png">
+                                    </div>
+                                    <span class="profileErrorText hidden"></span>
                                 </div>
                             </td>
                         </tr>

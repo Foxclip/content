@@ -25,6 +25,10 @@
     width: 20%;
 }
 
+.profileTabBody td:last-child {
+    vertical-align: top;
+}
+
 .profileTabBody td {
     padding: 10px;
     width: 40%;
@@ -44,4 +48,17 @@
     gap: 10px;
     align-items: center;
     width: fit-content;
+}
+
+.profileErrorContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    width: 100%;
+}
+
+.profileErrorText {
+    color: rgb(255, 0, 0);
+    font-size: 12px;
 }
