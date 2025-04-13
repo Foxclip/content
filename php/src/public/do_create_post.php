@@ -8,7 +8,11 @@ if (!is_logged_in()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    checkPostVariables(['title', 'content']);
+    $variableErr = checkVariables($_POST, ['title', 'content']);
+    if (!empty($variableErr)) {
+        echo $variableErr;
+        exit();
+    }
     $title = trim($_POST['title']);
     $content = $_POST['content'];
 } else {

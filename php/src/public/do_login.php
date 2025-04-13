@@ -5,7 +5,11 @@ require_once "../db.php";
 require_once "../utils.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    checkPostVariables(['login', 'password']);
+    $variableErr = checkVariables($_POST, ['login', 'password']);
+    if (!empty($variableErr)) {
+        echo $variableErr;
+        exit();
+    }
     $login = trim($_POST['login']);
     $password = $_POST['password'];
 } else {

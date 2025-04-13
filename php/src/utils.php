@@ -5,17 +5,16 @@ function includeFile(string $filePath, array $params = []): void {
     include($filePath);
 }
 
-function checkPostVariables(array $names): void {
+function checkVariables(array $array, array $names): string {
     foreach ($names as $name) {
-        if (!isset($_POST[$name])) {
-            echo "Переменная $name не установлена";
-            exit();
+        if (!isset($array[$name])) {
+            return "Переменная $name не установлена";
         }
-        if (empty(trim($_POST[$name]))) {
-            echo "Переменная $name пустая";
-            exit();
+        if (empty(trim($array[$name]))) {
+            return "Переменная $name пустая";
         }
     }
+    return "";
 }
 
 ?>
