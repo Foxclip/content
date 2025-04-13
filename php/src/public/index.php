@@ -1,9 +1,8 @@
 <?php
+    require_once('../config.php');
     require_once('../session.php');
     require_once('../utils.php');
     require_once("../posts.php");
-
-    const max_posts_per_page = 10;
 
     function write_posts($posts) {
         if (empty($posts)) {
@@ -32,19 +31,19 @@
     if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
         $page = intval($_GET['page']);
     }
-    $offset = ($page - 1) * max_posts_per_page;
+    $offset = ($page - 1) * \Config\max_posts_per_page;
     if (!isset($_GET['type'])) {
         $pageType = PageType::RecentPosts;
-        $posts = get_recent_posts($offset, max_posts_per_page);
+        $posts = get_recent_posts($offset, \Config\max_posts_per_page);
         $title = 'Все посты';
         $postCount = get_all_post_count();
     } else if (isset($_GET['type']) && $_GET['type'] === 'my_posts') {
         $pageType = PageType::MyPosts;
-        $posts = get_user_posts(get_user_id(), $offset, max_posts_per_page);
+        $posts = get_user_posts(get_user_id(), $offset, \Config\max_posts_per_page);
         $title = 'Мои посты';
         $postCount = get_user_post_count();
     }
-    $pageCount = ceil($postCount / max_posts_per_page);
+    $pageCount = ceil($postCount / \Config\max_posts_per_page);
 
 ?>
 

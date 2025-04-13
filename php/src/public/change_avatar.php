@@ -1,5 +1,7 @@
 <?php
 
+require_once('../config.php');
+
 ini_set('display_errors', 'Off');
 ini_set('display_startup_errors', 'Off');
 
@@ -23,11 +25,10 @@ if (!$_FILES[filename]["error"] == UPLOAD_ERR_OK) {
     exit();
 }
 
-const avatars_folder = "avatars/";
 try {
-    $name = avatars_folder . get_user_id() . '.png';
-    if (!file_exists(avatars_folder)) {
-        mkdir(avatars_folder);
+    $name = \Config\avatars_dir . get_user_id() . '.png';
+    if (!file_exists(\Config\avatars_dir)) {
+        mkdir(\Config\avatars_dir);
     }
     move_uploaded_file($_FILES[filename]["tmp_name"], $name);
 } catch (Exception $e) {

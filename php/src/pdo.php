@@ -1,11 +1,6 @@
 <?php
 
-const host = 'mysql';
-const user = 'root';
-const password = 'root';
-const dbname = 'content';
-
-const sql_dir = __DIR__ . '/sql/';
+require_once "config.php";
 
 function pdo_connect_mysql(): PDO {
 
@@ -14,8 +9,8 @@ function pdo_connect_mysql(): PDO {
         return $pdo;
     }
 
-    $dsn = "mysql:dbname=".dbname.";host=".host."";
-    $pdo = new PDO($dsn, user, password);
+    $dsn = "mysql:dbname=" . \Config\dbname . ";host=". \Config\host . "";
+    $pdo = new PDO($dsn, \Config\user, \Config\password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
     
@@ -38,7 +33,7 @@ function execute_sql_query(string $query, array $params = [], array $types = [])
 }
 
 function execute_sql_script(string $filename, array $params = [], array $types = []): array {
-    $sql = file_get_contents(sql_dir . $filename);
+    $sql = file_get_contents(\Config\sql_dir . $filename);
     $result = execute_sql_query($sql, $params, $types);
     return $result;
 }

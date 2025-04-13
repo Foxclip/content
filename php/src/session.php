@@ -1,8 +1,7 @@
 <?php
 
+require_once "config.php";
 require_once "pdo.php";
-
-const logout_after = 3600;
 
 function login(array $user): void {
     session_regenerate_id(true);
@@ -45,7 +44,7 @@ function is_logged_in(): bool {
 
         $last_activity = new DateTime($sessionInfo['last_activity']);
         $now = new DateTime();
-        if ($now->getTimestamp() - $last_activity->getTimestamp() > logout_after) {
+        if ($now->getTimestamp() - $last_activity->getTimestamp() > \Config\logout_after) {
             return false;
         }
 
