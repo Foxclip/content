@@ -10,7 +10,7 @@ if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once('../session.php');
 
 if (!is_logged_in()) {
-    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'User is not logged in']);
     exit();
 }
 
@@ -40,6 +40,6 @@ $stmt->execute([
     'post_id' => $data['postId'],
 ]);
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-echo json_encode($result);
+echo json_encode(['success' => true, 'like_count' => $result['like_count']]);
 
 ?>
