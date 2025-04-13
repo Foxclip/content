@@ -1,4 +1,5 @@
 import { createSpinner } from "./ui.js";
+import { getUserAvatarElement } from "./header.js";
 
 async function handleResponse(response, onSuccess, onError, logPrefix) {
     if (response.ok) {
@@ -133,6 +134,8 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
             response,
             (responseJson) => {
                 displayImage.src = responseJson.image_url;
+                let headerAvatar = getUserAvatarElement();
+                headerAvatar.src = responseJson.image_url;
                 errorText.classList.add("hidden");
             },
             (errorMessage) => {
