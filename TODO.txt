@@ -1,4 +1,3 @@
-config файл
 Рефакторинг pdo.php: не указывать тип для каждого параметра
 Рефакторинг session.php с функцией execute_sql_query
 CSRF проверка

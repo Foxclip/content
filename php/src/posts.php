@@ -9,11 +9,7 @@ function get_recent_posts(int $offset, int $count) {
             'offset' => $offset,
             'count' => $count
         ],
-        [
-            'currentUserId' => PDO::PARAM_INT,
-            'offset' => PDO::PARAM_INT,
-            'count' => PDO::PARAM_INT
-        ]
+        QueryParameterType::Integer
     );
     return $result;
 }
@@ -27,12 +23,7 @@ function get_user_posts(int|null $id, int $offset, int $count): array {
             'offset' => $offset,
             'count' => $count
         ],
-        [
-            'currentUserId' => PDO::PARAM_INT,
-            'queryUserId' => PDO::PARAM_INT,
-            'offset' => PDO::PARAM_INT,
-            'count' => PDO::PARAM_INT
-        ]
+        QueryParameterType::Integer
     );
     return $result;
 }
