@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // проверяем существует ли пользователь с таким логином
-$pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
-$stmt->execute(['username' => $login]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = execute_sql_query('SELECT * FROM users WHERE username = :username', [
+    'username' => $login,
+]);
+$user = $result[0];
 if (!$user) {
     echo 'Пользователь ' . $login . ' не зарегистрирован';
     exit();
@@ -26,8 +26,7 @@ if (!$user) {
 if (password_verify($password, $user['password'])) {
     if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
         $newHash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare('UPDATE users SET password = :password WHERE username = :username');
-        $stmt->execute([
+        execute_sql_query('UPDATE users SET password = :password WHERE username = :username', [
             'username' => $login,
             'password' => $newHash,
         ]);
