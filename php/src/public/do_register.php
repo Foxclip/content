@@ -29,28 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 
-// проверяем существует ли пользователь с таким логином
-$pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
-$stmt->execute(['username' => $login]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($user) {
+$result = execute_sql_query('SELECT * FROM users WHERE username = :username', [
+    'username' => $login,
+]);
+if ($result) {
     echo 'Пользователь ' . $login . ' уже существует';
     exit();
 }
 
-// проверяем существует ли пользователь с таким email
-$stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
-$stmt->execute(['email' => $email]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($user) {
+$result = execute_sql_query('SELECT * FROM users WHERE email = :email', [
+    'email' => $email,
+]);
+if ($result) {
     echo 'Email ' . $email . ' уже зарегистрирован';
     exit();
 }
 
-// добавляем пользователя в базу данных
-$stmt = $pdo->prepare('INSERT INTO users (username, password, email) VALUES (:username, :password, :email)');
-$stmt->execute([
+execute_sql_query('INSERT INTO users (username, password, email) VALUES (:username, :password, :email)', [
     'username' => $login,
     'password' => password_hash($password, PASSWORD_DEFAULT),
     'email' => $email,
