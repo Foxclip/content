@@ -1,5 +1,12 @@
 <?php
 
+ini_set('display_errors', 'Off');
+ini_set('display_startup_errors', 'Off');
+
+if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+    exit();
+}
+
 require_once('../session.php');
 
 if (!is_logged_in()) {
