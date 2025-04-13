@@ -5,9 +5,7 @@ require_once "db.php";
 
 function login(array $user): void {
     session_regenerate_id(true);
-    $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('INSERT INTO sessions (token, user_id) VALUES (:token, :user_id)');
-    $stmt->execute([
+    execute_sql_query('INSERT INTO sessions (token, user_id) VALUES (:token, :user_id)', [
         'token' => session_id(),
         'user_id' => $user['id'],
     ]);
@@ -17,9 +15,7 @@ function logout(): void {
     if (!is_logged_in()) {
         return;
     }
-    $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('UPDATE sessions SET logout = TRUE WHERE token = :token');
-    $stmt->execute([
+    execute_sql_query('UPDATE sessions SET logout = TRUE WHERE token = :token', [
         'token' => session_id(),
     ]);
 }
@@ -64,16 +60,13 @@ function get_session_info(): ?array {
         return $sessionInfo;
     }
 
-    $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('SELECT * FROM sessions WHERE token = :token AND logout = FALSE');
-    $stmt->execute([
+    $result = execute_sql_query('SELECT * FROM sessions WHERE token = :token AND logout = FALSE', [
         'token' => session_id(),
     ]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$row) {
+    if (!$result) {
         return null;
     }
-    $sessionInfo = $row;
+    $sessionInfo = $result[0];
     return $sessionInfo;
 }
 
@@ -89,16 +82,13 @@ function get_user(): ?array {
         return null;
     }
 
-    $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');
-    $stmt->execute([
+    $result = execute_sql_query('SELECT * FROM users WHERE id = :id', [
         'id' => $sessionInfo['user_id'],
     ]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$row) {
+    if (!$result) {
         return null;
     }
-    $user = $row;
+    $user = $result[0];
     return $user;
 
 }
@@ -123,9 +113,7 @@ function get_user_avatar_url($id = null): string {
 }
 
 function update_last_activity(): void {
-    $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('UPDATE sessions SET last_activity = :last_activity WHERE token = :token');
-    $stmt->execute([
+    execute_sql_query('UPDATE sessions SET last_activity = :last_activity WHERE token = :token', [
         'last_activity' => date('Y-m-d H:i:s'),
         'token' => session_id(),
     ]);
