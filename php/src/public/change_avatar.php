@@ -1,12 +1,16 @@
 <?php
 
-require_once('../config.php');
-
 ini_set('display_errors', 'Off');
 ini_set('display_startup_errors', 'Off');
 
+if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+    exit();
+}
+
+require_once('../config.php');
 require_once('../session.php');
 require_once('../utils.php');
+
 if (!is_logged_in()) {
     redirect_to_login_page(true);
     exit();
@@ -16,9 +20,6 @@ const parameter_name = 'image';
 
 try {
 
-    if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
-        exit();
-    }
     if (!$_FILES) {
         echo json_encode(['success' => false, 'message' => 'No file uploaded']);
         exit();
