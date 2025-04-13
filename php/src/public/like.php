@@ -23,29 +23,32 @@ if (!empty($variableErr)) {
     exit();
 }
 
-$pdo = pdo_connect_mysql();
 if ($data['action'] == 'like') {
-    $stmt = $pdo->prepare('INSERT INTO likes (post_id, user_id)
+    execute_sql_query(
+        'INSERT INTO likes (post_id, user_id)
         VALUES (:post_id, :user_id)
-        ON DUPLICATE KEY UPDATE created_at = NOW()'
-    );
-    $stmt->execute([
-        'post_id' => $data['postId'],
-        'user_id' => get_user()['id'],
-    ]);
+        ON DUPLICATE KEY UPDATE created_at = NOW()',
+        [
+            'post_id' => $data['postId'],
+            'user_id' => get_user_id(),
+        ]);
 } else {
-    $stmt = $pdo->prepare('DELETE FROM likes WHERE post_id = :post_id AND user_id = :user_id');
-    $stmt->execute([
-        'post_id' => $data['postId'],
-        'user_id' => get_user()['id'],
-    ]);
+    execute_sql_query(
+        'DELETE FROM likes WHERE post_id = :post_id AND user_id = :user_id',
+        [
+            'post_id' => $data['postId'],
+            'user_id' => get_user_id(),
+        ]
+    );
 }
 
-$stmt = $pdo->prepare('SELECT COUNT(id) AS like_count FROM likes WHERE post_id = :post_id');
-$stmt->execute([
-    'post_id' => $data['postId'],
-]);
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
-echo json_encode(['success' => true, 'like_count' => $result['like_count']]);
+$result = execute_sql_query(
+    'SELECT COUNT(id) AS like_count FROM likes WHERE post_id = :post_id',
+    [
+        'post_id' => $data['postId']
+    ]
+);
+$row = $result[0];
+echo json_encode(['success' => true, 'like_count' => $row['like_count']]);
 
 ?>
