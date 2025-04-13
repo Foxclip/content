@@ -1,6 +1,6 @@
 <?php
 
-require_once "../pdo.php";
+require_once "../db.php";
 
 function get_recent_posts(int $offset, int $count) {
     $result = execute_sql_script('get_recent_posts.sql',

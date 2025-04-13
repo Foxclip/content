@@ -1,6 +1,6 @@
 <?php
 
-require_once "../pdo.php";
+require_once "../db.php";
 require_once "../utils.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

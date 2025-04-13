@@ -1,7 +1,7 @@
 <?php
 
 require_once "config.php";
-require_once "pdo.php";
+require_once "db.php";
 
 function login(array $user): void {
     session_regenerate_id(true);
