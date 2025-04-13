@@ -8,6 +8,7 @@ if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 require_once('../session.php');
+require_once('../utils.php');
 
 if (!is_logged_in()) {
     echo json_encode(['success' => false, 'message' => 'User is not logged in']);
@@ -16,6 +17,11 @@ if (!is_logged_in()) {
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
+$variableErr = checkVariables($data, ['action', 'postId']);
+if (!empty($variableErr)) {
+    echo json_encode(['success' => false, 'message' => $variableErr]);
+    exit();
+}
 
 $pdo = pdo_connect_mysql();
 if ($data['action'] == 'like') {
