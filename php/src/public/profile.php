@@ -56,11 +56,11 @@ function includeSaveButton(): void {
                 <div id="profileMainTab" class="profileTabBody">
                     <table id="profileTable">
                         <tr id="usernameRow">
-                            <td>Логин:</td>
-                            <td><?= get_user()['username'] ?></td>
+                            <td><span class="profileLabelText">Логин:</span></td>
+                            <td><span class="profileDisplayText"><?= get_user()['username'] ?></span></td>
                         </tr>
                         <tr id="emailRow">
-                            <td>Почта:</td>
+                            <td><span class="profileLabelText">Email:</span></td>
                             <td>
                                 <div class="profileErrorContainer">
                                     <span class="profileDisplayText"><?= get_user()['email'] ?></span>
@@ -78,7 +78,7 @@ function includeSaveButton(): void {
                             </td>
                         </tr>
                         <tr id="avatarRow">
-                            <td>Аватар:</td>
+                            <td><span class="profileLabelText">Аватар:</span></td>
                             <td>
                                 <img class="profileDisplayImage avatarImage" src="<?= get_user_avatar_url() ?>" width="40" height="40">
                             </td>

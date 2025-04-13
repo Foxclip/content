@@ -27,12 +27,17 @@
 
 .profileTabBody td:first-child {
     width: 20%;
-    vertical-align: middle;
 }
 
 .profileTabBody td {
     padding: 10px;
     width: 40%;
+}
+
+.profileLabelText {
+    display: flex;
+    align-items: center;
+    height: 40px;
 }
 
 .profileTextInput {
