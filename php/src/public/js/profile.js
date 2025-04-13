@@ -12,7 +12,7 @@ async function handleResponse(response, onSuccess, logPrefix) {
             onSuccess(responseJson);
             console.log(logPrefix + ": успешно");
         } else {
-            console.log(logPrefix + ": ошибка: " + responseJson.error);
+            console.log(logPrefix + ": ошибка: " + responseJson.message);
         }
     } else {
         console.log(logPrefix + ": ошибка: " + response.statusText);
@@ -29,7 +29,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
     let saveButton = tableRow.querySelector(".profileSaveButton");
     let cancelButton = tableRow.querySelector(".profileCancelButton");
 
-    changeButton.addEventListener("click", () => {
+    function enableEditing() {
         textInput.value = displayText.textContent;
         displayText.classList.add("hidden");
         textInput.classList.remove("hidden");
@@ -37,14 +37,25 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         saveButton.classList.remove("hidden");
         cancelButton.classList.remove("hidden");
         textInput.focus();
-    });
+    }
 
-    cancelButton.addEventListener("click", () => {
+    function disableEditing(confirm) {
+        if (confirm) {
+            displayText.textContent = textInput.value;
+        }
         displayText.classList.remove("hidden");
         textInput.classList.add("hidden");
         changeButton.classList.remove("hidden");
         saveButton.classList.add("hidden");
         cancelButton.classList.add("hidden");
+    }
+
+    changeButton.addEventListener("click", () => {
+        enableEditing();
+    });
+
+    cancelButton.addEventListener("click", () => {
+        disableEditing(false);
     });
 
     saveButton.addEventListener("click", async () => {
@@ -56,9 +67,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
 
         const response = await fetch(fetchUrl, {
             method: "POST",
-            body: JSON.stringify({
-                value: textInput.value
-            })
+            body: textInput.value
         });
 
         spinner.remove();
@@ -66,7 +75,7 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
         cancelButton.classList.remove("hidden");
 
         handleResponse(response, (responseJson) => {
-            displayText.textContent = textInput.value;
+            disableEditing(true);
         }, errorPrefix);
 
     });

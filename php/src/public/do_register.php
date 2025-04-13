@@ -2,6 +2,7 @@
 
 require_once "../db.php";
 require_once "../utils.php";
+require_once "../validation.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -10,16 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    if (strlen($login) < 4 || strlen($login) > 20) {
-        echo "Логин должен содержать от 4 до 20 символов";
+    $validationErr = validate_username($login);
+    if (!empty($validationErr)) {
+        echo $validationErr;
         exit();
     }
-    if (!preg_match('/^\S+@\S+$/', $email)) {
-        echo "Некорректный email";
+    $validationErr = validate_email($email);
+    if (!empty($validationErr)) {
+        echo $validationErr;
         exit();
     }
-    if (strlen($password) < 6 || strlen($password) > 20) {
-        echo "Пароль должен содержать от 6 до 20 символов";
+    $validationErr = validate_password($password);
+    if (!empty($validationErr)) {
+        echo $validationErr;
         exit();
     }
 
