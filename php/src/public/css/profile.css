@@ -21,12 +21,13 @@
     table-layout: fixed;
 }
 
-.profileTabBody td:first-child {
-    width: 20%;
+.profileTabBody td {
+    vertical-align: top;
 }
 
-.profileTabBody td:last-child {
-    vertical-align: top;
+.profileTabBody td:first-child {
+    width: 20%;
+    vertical-align: middle;
 }
 
 .profileTabBody td {
@@ -56,6 +57,12 @@
     justify-content: center;
     gap: 1px;
     width: 100%;
+}
+
+.profileDisplayText {
+    display: flex;
+    align-items: center;
+    height: 40px;
 }
 
 .profileErrorText {
