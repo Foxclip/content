@@ -1,98 +1,107 @@
 import { createSpinner } from "./ui.js";
 
-let emailRow = document.getElementById("emailRow");
-let userEmail = emailRow.querySelector(".profileDisplayText");
-let emailInput = emailRow.querySelector(".profileTextInput");
-let emailSaveCancelContainer = emailRow.querySelector(".saveCancelContainer");
-let changeEmailButton = emailRow.querySelector(".profileEditButton");
-let saveEmailButton = emailRow.querySelector(".profileSaveButton");
-let cancelEmailButton = emailRow.querySelector(".profileCancelButton");
-
-changeEmailButton.addEventListener("click", () => {
-    emailInput.value = userEmail.textContent;
-    userEmail.classList.add("hidden");
-    emailInput.classList.remove("hidden");
-    changeEmailButton.classList.add("hidden");
-    saveEmailButton.classList.remove("hidden");
-    cancelEmailButton.classList.remove("hidden");
-    emailInput.focus();
-});
-cancelEmailButton.addEventListener("click", () => {
-    userEmail.classList.remove("hidden");
-    emailInput.classList.add("hidden");
-    changeEmailButton.classList.remove("hidden");
-    saveEmailButton.classList.add("hidden");
-    cancelEmailButton.classList.add("hidden");
-});
-
-saveEmailButton.addEventListener("click", async () => {
-
-    let spinner = createSpinner(5, "red");
-    emailSaveCancelContainer.appendChild(spinner);
-    saveEmailButton.classList.add("hidden");
-    cancelEmailButton.classList.add("hidden");
-
-    const response = await fetch("/change_email", {
-        method: "POST",
-        body: JSON.stringify({
-            email: emailInput.value
-        })
-    });
-
-    spinner.remove();
-    saveEmailButton.classList.remove("hidden");
-    cancelEmailButton.classList.remove("hidden");
-
+async function handleResponse(response, onSuccess, logPrefix) {
     if (response.ok) {
-        let responseObj;
+        let responseJson;
         try {
-            responseObj = await response.json();
+            responseJson = await response.json();
         } catch (error) {
-            console.log("Изменение email: ошибка: " + error);
+            console.log(logPrefix + ": ошибка: " + error);
         }
-        if (responseObj.success) {
-            userEmail.textContent = emailInput.value;
-            console.log("Изменение email: успешно");
+        if (responseJson.success) {
+            onSuccess(responseJson);
+            console.log(logPrefix + ": успешно");
         } else {
-            console.log("Изменение email: ошибка: " + responseObj.error);
+            console.log(logPrefix + ": ошибка: " + responseJson.error);
         }
     } else {
-        console.log("Изменение email: ошибка: " + response.statusText);
+        console.log(logPrefix + ": ошибка: " + response.statusText);
     }
+}
 
-});
+function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
 
-let avatarRow = document.getElementById("avatarRow");
-let avatarImage = avatarRow.querySelector(".profileDisplayImage");
-let changeAvatarButton = avatarRow.querySelector(".profileEditButton");
-let avatarHiddenInput = avatarRow.querySelector(".profileHiddenFileInput");
+    let tableRow = document.getElementById(tableRowId);
+    let displayText = tableRow.querySelector(".profileDisplayText");
+    let textInput = tableRow.querySelector(".profileTextInput");
+    let saveCancelContainer = tableRow.querySelector(".saveCancelContainer");
+    let changeButton = tableRow.querySelector(".profileEditButton");
+    let saveButton = tableRow.querySelector(".profileSaveButton");
+    let cancelButton = tableRow.querySelector(".profileCancelButton");
 
-changeAvatarButton.addEventListener("click", () => avatarHiddenInput.click());
-avatarHiddenInput.addEventListener("change", async () => {
-    const avatarFile = avatarHiddenInput.files[0];
-    if (!avatarFile) {
-        return;
-    }
-    const formData = new FormData();
-    formData.append("avatar", avatarFile);
-    const response = await fetch("/change_avatar", {
-        method: "POST",
-        body: formData
+    changeButton.addEventListener("click", () => {
+        textInput.value = displayText.textContent;
+        displayText.classList.add("hidden");
+        textInput.classList.remove("hidden");
+        changeButton.classList.add("hidden");
+        saveButton.classList.remove("hidden");
+        cancelButton.classList.remove("hidden");
+        textInput.focus();
     });
-    if (response.ok) {
-        let responseObj;
-        try {
-            responseObj = await response.json();
-        } catch (error) {
-            console.log("Изменение аватара: ошибка: " + error);
+
+    cancelButton.addEventListener("click", () => {
+        displayText.classList.remove("hidden");
+        textInput.classList.add("hidden");
+        changeButton.classList.remove("hidden");
+        saveButton.classList.add("hidden");
+        cancelButton.classList.add("hidden");
+    });
+
+    saveButton.addEventListener("click", async () => {
+
+        let spinner = createSpinner();
+        saveCancelContainer.appendChild(spinner);
+        saveButton.classList.add("hidden");
+        cancelButton.classList.add("hidden");
+
+        const response = await fetch(fetchUrl, {
+            method: "POST",
+            body: JSON.stringify({
+                value: textInput.value
+            })
+        });
+
+        spinner.remove();
+        saveButton.classList.remove("hidden");
+        cancelButton.classList.remove("hidden");
+
+        handleResponse(response, (responseJson) => {
+            displayText.textContent = textInput.value;
+        }, errorPrefix);
+
+    });
+
+}
+
+function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
+
+    let tableRow = document.getElementById(tableRowId);
+    let displayImage = tableRow.querySelector(".profileDisplayImage");
+    let changeButton = tableRow.querySelector(".profileEditButton");
+    let imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
+
+    changeButton.addEventListener("click", () => imageHiddenInput.click());
+
+    imageHiddenInput.addEventListener("change", async () => {
+
+        const imageFile = imageHiddenInput.files[0];
+        if (!imageFile) {
+            return;
         }
-        if (responseObj.success) {
-            avatarImage.src = responseObj.avatar_url;
-            console.log("Изменение аватара: успешно");
-        } else {
-            console.log("Изменение аватара: ошибка: " + responseObj.message);
-        }
-    } else {
-        console.log("Изменение аватара: ошибка: " + response.statusText);
-    }
-});
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        const response = await fetch(fetchUrl, {
+            method: "POST",
+            body: formData
+        });
+
+        handleResponse(response, (responseJson) => {
+            displayImage.src = responseJson.image_url;
+        }, errorPrefix);
+        
+    });
+
+}
+
+addTextEditListeners("emailRow", "/change_email", "Изменение email");
+addImageUploadListeners("avatarRow", "/change_avatar", "Изменение аватара");
