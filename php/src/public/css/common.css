@@ -188,3 +188,22 @@ button {
 .paginationButton:not(.active):hover {
     background-color: rgba(200, 255, 150, 0.5);
 }
+
+.hidden {
+    display: none;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    width: 40px;
+    height: 40px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

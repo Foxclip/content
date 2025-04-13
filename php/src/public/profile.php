@@ -8,6 +8,29 @@ if (!is_logged_in()) {
     exit();
 }
 
+function includeEditButton(string $id): void {
+    includeFile('../ui/icon_button.php', [
+        'id' => $id,
+        'icon' => 'icons/pencil.png',
+        'text' => 'Изменить'
+    ]);
+}
+
+function includeSaveButton(string $id): void {
+    includeFile('../ui/icon_button.php', [
+        'id' => $id,
+        'icon' => 'icons/send.png',
+        'text' => 'Сохранить',
+        'classes' => ['hidden']
+    ]);
+    includeFile('../ui/icon_button.php', [
+        'id' => $id . 'Cancel',
+        'icon' => 'icons/cross.png',
+        'text' => 'Отмена',
+        'classes' => ['hidden']
+    ]);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +63,20 @@ if (!is_logged_in()) {
                         </tr>
                         <tr>
                             <td>Почта:</td>
-                            <td><?= get_user()['email'] ?></td>
+                            <td>
+                                <span id="userEmail"><?= get_user()['email'] ?></span>
+                                <form id="changeEmailForm" class="hidden" action="/change_email" method="post">
+                                    <input id="emailInput" class="profileInput" type="email" name="email" required>
+                                </form>
+                            </td>
+                            <td>
+                                <div id="emailSaveCancelContainer" class="saveCancelContainer">
+                                    <?php
+                                    includeEditButton('changeEmailButton');
+                                    includeSaveButton('saveEmailButton');
+                                    ?>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Аватар:</td>
@@ -51,11 +87,7 @@ if (!is_logged_in()) {
                             </td>
                             <td>
                                 <?php
-                                includeFile('../ui/icon_button.php', [
-                                    'id' => 'changeAvatarButton',
-                                    'icon' => 'icons/pencil.png',
-                                    'text' => 'Изменить'
-                                ]);
+                                includeEditButton('changeAvatarButton');
                                 ?>
                                 <form id="changeAvatarForm" action="/change_avatar" method="post">
                                     <input id="avatarHiddenInput" class="hiddenFileInput" type="file" accept="image/jpeg, image/png">
