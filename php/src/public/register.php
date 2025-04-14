@@ -1,4 +1,5 @@
 <?php
+    require_once('../session.php');
     require_once('../utils.php');
 ?>
 
@@ -40,6 +41,7 @@
                 <button id="submitButton" type="submit">Зарегистрироваться</button>
                 <a id="alternativeButton" href="/login">Войти</a>
             </div>
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         </form>
     </div>
     <?php includeFile('../ui/footer.php'); ?>

@@ -1,10 +1,13 @@
 <?php
+
     require_once('../session.php');
     require_once('../utils.php');
+
     if (!is_logged_in()) {
         redirect_to_login_page(true);
         exit();
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +32,7 @@
                 <input id="titleInput" type="text" name="title" placeholder="Заголовок" required />
                 <textarea id="contentInput" name="content" placeholder="Текст" required></textarea>
                 <?php includeFile('../ui/submit_button.php', ['text' => 'Отправить']); ?>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             </form>
         </div>
     </main>

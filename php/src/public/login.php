@@ -36,6 +36,7 @@
                 <button id="submitButton" type="submit">Войти</button>
                 <a id="alternativeButton" href="/register">Зарегистрироваться</a>
             </div>
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         </form>
     </div>
     <?php includeFile('../ui/footer.php'); ?>

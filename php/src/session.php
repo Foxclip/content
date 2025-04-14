@@ -126,10 +126,20 @@ function redirect_to_login_page($redirect_back_after_login = false): void {
     header('Location: /login');
 }
 
+function set_csrf_token(): void {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+function check_csrf_token(): bool {
+    return (isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']);
+}
+
 session_start();
+
 if (is_logged_in()) {
     update_last_activity();
 }
+
 if (isset($_SESSION['login_redirect']) && !in_array($_SERVER['REQUEST_URI'], ['/login', '/do_login'])) {
     unset($_SESSION['login_redirect']);
 }
