@@ -47,26 +47,4 @@ export class Utils {
         return getComputedStyle(document.documentElement).getPropertyValue(name);
     }
 
-    static async handleResponse(response, onSuccess, onError, logPrefix) {
-        if (response.ok) {
-            let responseJson;
-            try {
-                responseJson = await response.json();
-            } catch (error) {
-                if (onError) onError(error);
-                console.log(logPrefix + ": ошибка json: " + error);
-            }
-            if (responseJson.success) {
-                if (onSuccess) onSuccess(responseJson);
-                console.log(logPrefix + ": успешно");
-            } else {
-                if (onError) onError(responseJson.message);
-                console.log(logPrefix + ": ошибка: " + responseJson.message);
-            }
-        } else {
-            if (onError) onError(response.statusText);
-            console.log(logPrefix + ": ошибка http: " + response.statusText);
-        }
-    }
-
 }
