@@ -35,14 +35,7 @@ if (!$user) {
 }
 
 // проверяем пароль
-if (password_verify($password, $user['password'])) {
-    if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
-        $newHash = password_hash($password, PASSWORD_DEFAULT);
-        execute_sql_query('UPDATE users SET password = :password WHERE username = :username', [
-            'username' => $login,
-            'password' => $newHash,
-        ]);
-    }
+if (check_password($user, $password)) {
     login($user);
     if (isset($_SESSION['login_redirect'])) {
         header('Location: ' . $_SESSION['login_redirect']);

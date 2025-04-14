@@ -101,7 +101,7 @@ function get_user_id(): ?int {
     return $user['id'];
 }
 
-function get_user_avatar_url($id = null): string {
+function get_user_avatar_url(?int $id = null): string {
     $userId = get_user_id();
     if ($id) {
         $userId = $id;
@@ -119,7 +119,7 @@ function update_last_activity(): void {
     ]);
 }
 
-function redirect_to_login_page($redirect_back_after_login = false): void {
+function redirect_to_login_page(bool $redirect_back_after_login = false): void {
     if ($redirect_back_after_login) {
         $_SESSION['login_redirect'] = $_SERVER['REQUEST_URI'];
     }
@@ -132,6 +132,21 @@ function set_csrf_token(): void {
 
 function check_csrf_token(): bool {
     return (isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']);
+}
+
+function check_password(array $user, string $password): bool {
+    if (password_verify($password, $user['password'])) {
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
+            $newHash = password_hash($password, PASSWORD_DEFAULT);
+            execute_sql_query('UPDATE users SET password = :password WHERE username = :username', [
+                'username' => $user['username'],
+                'password' => $newHash,
+            ]);
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
 session_start();
