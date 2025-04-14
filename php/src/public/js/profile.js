@@ -122,11 +122,9 @@ class TextField extends AbstractField {
     
             await this.performRequest({
                 buttonsToHide: [this.saveButton, this.cancelButton],
-                fetchUrl,
                 method: "POST",
                 body: request.body,
                 headers: request.headers,
-                errorPrefix,
                 onSuccess: () => this.disableEditing(true),
             });
         });
@@ -174,10 +172,8 @@ class ImageUploadField extends AbstractField {
 
             await this.performRequest({
                 buttonsToHide: [this.changeButton],
-                fetchUrl,
                 method: "POST",
                 body: formData,
-                errorPrefix,
                 onSuccess: (responseJson) => {
                     this.displayImage.src = responseJson.image_url;
                     getUserAvatarElement().src = responseJson.image_url;
