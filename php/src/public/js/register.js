@@ -30,8 +30,8 @@ function validateForm() {
             input.value = input.value.trim();
         }
     }
-    if (loginInput.value.length < 4 || loginInput.value.length > 20) {
-        setInputErrorState(loginInput, false, "Логин должен содержать от 4 до 20 символов");
+    if (loginInput.value.length < 3 || loginInput.value.length > 20) {
+        setInputErrorState(loginInput, false, "Логин должен содержать от 3 до 20 символов");
         result = false;
     }
     if (!loginInput.value.match(/^\w+$/)) {
