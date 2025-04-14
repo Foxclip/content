@@ -92,8 +92,8 @@ class TextField extends AbstractField {
         this.inputElements = inputSelectors.map(selector => tableRow.querySelector(selector));
         this.displayElement = tableRow.querySelector(".profileDisplayText");
 
-        this.changeButton.addEventListener("click", this.enableEditing.bind(this));
-        this.cancelButton.addEventListener("click", () => this.disableEditing.bind(this)(false));
+        this.changeButton.addEventListener("click", () => this.enableEditing());
+        this.cancelButton.addEventListener("click", () => this.disableEditing(false));
 
         this.saveButton.addEventListener("click", async () => {
             const inputValues = this.inputElements.map(input => input.value);
