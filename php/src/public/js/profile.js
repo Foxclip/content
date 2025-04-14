@@ -32,13 +32,14 @@ class AbstractField {
         try {
             response = await fetch(fetchUrl, { method, body, headers });
         } catch (error) {
-            this.errorText.textContent = `${errorPrefix}: Ошибка сети`;
+            this.errorText.textContent = `Ошибка сети: ${error}`;
             this.errorText.classList.remove("hidden");
+            return;
+        } finally {
+            spinner.remove();
+            buttonsToHide.forEach(button => button.classList.remove("hidden"));
+            if (onCleanup) onCleanup();
         }
-    
-        spinner.remove();
-        buttonsToHide.forEach(button => button.classList.remove("hidden"));
-        if (onCleanup) onCleanup();
     
         let onError = (errorMessage) => {
             this.errorText.textContent = errorMessage;
