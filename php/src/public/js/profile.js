@@ -49,19 +49,20 @@ class AbstractField {
             try {
                 responseJson = await response.json();
             } catch (error) {
-                onError(error);
-                console.log(`${this.errorPrefix}: ошибка json: ` + error);
+                onError(error.message);
+                console.log(`${this.errorPrefix}: ошибка json: ${error.message}`);
             }
             if (responseJson.success) {
                 if (onSuccess) onSuccess(responseJson);
                 console.log(`${this.errorPrefix}: успешно`);
             } else {
                 onError(responseJson.message);
-                console.log(`${this.errorPrefix}: ошибка: ` + responseJson.message);
+                console.log(`${this.errorPrefix}: ошибка: ${responseJson.message}`);
             }
         } else {
-            onError(response.statusText);
-            console.log(`${this.errorPrefix}: ошибка http: ` + response.statusText);
+            let message = `HTTP ${response.status} (${response.statusText})`;
+            onError(message);
+            console.log(`${this.errorPrefix}: ошибка: ${message}`);
         }
     }
 }
