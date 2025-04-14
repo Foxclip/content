@@ -1,6 +1,7 @@
 import { createSpinner } from "./ui.js";
 import { getUserAvatarElement } from "./header.js";
 import { Utils } from "./utils.js";
+import { validatePassword } from "./validation.js";
 
 function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
 
@@ -76,6 +77,97 @@ function addTextEditListeners(tableRowId, fetchUrl, errorPrefix)  {
 
 }
 
+function addPasswordEditListeners(tableRowId, fetchUrl, errorPrefix)  {
+
+    let tableRow = document.getElementById(tableRowId);
+    let displayText = tableRow.querySelector(".profileDisplayText");
+    let oldPasswordInput = tableRow.querySelector("input[name=old_password]");
+    let newPasswordInput = tableRow.querySelector("input[name=new_password]");
+    let editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
+    let changeButton = tableRow.querySelector(".profileEditButton");
+    let saveButton = tableRow.querySelector(".profileSaveButton");
+    let cancelButton = tableRow.querySelector(".profileCancelButton");
+    let errorText = tableRow.querySelector(".profileErrorText");
+
+    function enableEditing() {
+        displayText.classList.add("hidden");
+        oldPasswordInput.classList.remove("hidden");
+        newPasswordInput.classList.remove("hidden");
+        changeButton.classList.add("hidden");
+        saveButton.classList.remove("hidden");
+        cancelButton.classList.remove("hidden");
+        oldPasswordInput.focus();
+    }
+
+    function disableEditing(confirm) {
+        oldPasswordInput.value = "";
+        newPasswordInput.value = "";
+        displayText.classList.remove("hidden");
+        oldPasswordInput.classList.add("hidden");
+        newPasswordInput.classList.add("hidden");
+        changeButton.classList.remove("hidden");
+        saveButton.classList.add("hidden");
+        cancelButton.classList.add("hidden");
+        errorText.classList.add("hidden");
+    }
+
+    changeButton.addEventListener("click", () => {
+        enableEditing();
+    });
+
+    cancelButton.addEventListener("click", () => {
+        disableEditing(false);
+    });
+
+    saveButton.addEventListener("click", async () => {
+
+        let passwordError = validatePassword(newPasswordInput.value);
+        if (passwordError) {
+            errorText.textContent = passwordError;
+            errorText.classList.remove("hidden");
+            return;
+        }
+
+        if (newPasswordInput.value === oldPasswordInput.value) {
+            errorText.textContent = "Пароли совпадают";
+            errorText.classList.remove("hidden");
+            return;
+        }
+
+        let spinner = createSpinner();
+        editButtonsContainer.appendChild(spinner);
+        saveButton.classList.add("hidden");
+        cancelButton.classList.add("hidden");
+        errorText.classList.add("hidden");
+
+        const response = await fetch(fetchUrl, {
+            method: "POST",
+            body: JSON.stringify({
+                old_password: oldPasswordInput.value,
+                new_password: newPasswordInput.value
+            })
+        });
+
+        spinner.remove();
+        saveButton.classList.remove("hidden");
+        cancelButton.classList.remove("hidden");
+
+        Utils.handleResponse(
+            response,
+            (responseJson) => {
+                disableEditing(true);
+            },
+            (errorMessage) => {
+                errorText.textContent = errorMessage;
+                errorText.classList.remove("hidden");
+            },
+            errorPrefix
+        );
+
+    });
+
+}
+
 function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
 
     let tableRow = document.getElementById(tableRowId);
@@ -129,4 +221,5 @@ function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
 }
 
 addTextEditListeners("emailRow", "/change_email", "Изменение email");
+addPasswordEditListeners("passwordRow", "/change_password", "Изменение пароля");
 addImageUploadListeners("avatarRow", "/change_avatar", "Изменение аватара");

@@ -1,4 +1,5 @@
 import { Utils } from './utils.js';
+import { validatePassword } from './validation.js';
 
 let form = document.getElementById("form");
 let loginInput = document.getElementById("loginInput");
@@ -42,8 +43,9 @@ function validateForm() {
         setInputErrorState(emailInput, false, "Некорректный email");
         result = false;
     }
-    if (passwordInput1.value.length < 6 || passwordInput1.value.length > 20) {
-        setInputErrorState(passwordInput1, false, "Пароль должен содержать от 6 до 20 символов");
+    let passwordError = validatePassword(passwordInput1.value);
+    if (passwordError) {
+        setInputErrorState(passwordInput1, false, passwordError);
         result = false;
     }
     if (passwordInput1.value !== passwordInput2.value) {

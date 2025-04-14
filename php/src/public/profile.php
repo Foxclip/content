@@ -77,6 +77,25 @@ function includeSaveButton(): void {
                                 </div>
                             </td>
                         </tr>
+                        <tr id="passwordRow">
+                            <td><span class="profileLabelText">Пароль:</span></td>
+                            <td>
+                                <div class="profileErrorContainer">
+                                    <span class="profileDisplayText">******</span>
+                                    <input class="profileTextInput hidden" type="password" name="old_password" placeholder="Старый пароль">
+                                    <input class="profileTextInput hidden" type="password" name="new_password" placeholder="Новый пароль">
+                                    <span class="profileErrorText hidden"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="profileEditButtonsContainer">
+                                    <?php
+                                    includeEditButton();
+                                    includeSaveButton();
+                                    ?>
+                                </div>
+                            </td>
+                        </tr>
                         <tr id="avatarRow">
                             <td><span class="profileLabelText">Аватар:</span></td>
                             <td>
