@@ -62,7 +62,7 @@ class AbstractField {
             }
         } else {
             onError(response.statusText);
-            console.log(e`${errorPrefix}: ошибка http: ` + response.statusText);
+            console.log(`${errorPrefix}: ошибка http: ` + response.statusText);
         }
     }
 }
