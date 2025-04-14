@@ -7,10 +7,22 @@ class AbstractField {
     constructor(tableRowId, fetchUrl, errorPrefix) {
         this.fetchUrl = fetchUrl;
         this.errorPrefix = errorPrefix;
-        const tableRow = document.getElementById(tableRowId);
-        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
-        this.changeButton = tableRow.querySelector(".profileEditButton");
-        this.errorText = tableRow.querySelector(".profileErrorText");
+        const tableRow = this.getElementById(tableRowId);
+        this.editButtonsContainer = this.querySelector(tableRow, ".profileEditButtonsContainer");
+        this.changeButton = this.querySelector(tableRow, ".profileEditButton");
+        this.errorText = this.querySelector(tableRow, ".profileErrorText");
+    }
+
+    getElementById(id) {
+        const element = document.getElementById(id);
+        if (!element) throw new Error(`Элемент ${id} не найден`);
+        return element;
+    }
+
+    querySelector(parent, selector) {
+        const element = parent.querySelector(selector);
+        if (!element) throw new Error(`Элемент ${selector} не найден`);
+        return element;
     }
 
     async performRequest({
@@ -80,16 +92,16 @@ class TextField extends AbstractField {
     }) {
         super(tableRowId, fetchUrl, errorPrefix);
 
-        const tableRow = document.getElementById(tableRowId);
-        this.changeButton = tableRow.querySelector(".profileEditButton");
-        this.saveButton = tableRow.querySelector(".profileSaveButton");
-        this.cancelButton = tableRow.querySelector(".profileCancelButton");
+        const tableRow = this.getElementById(tableRowId);
+        this.changeButton = this.querySelector(tableRow, ".profileEditButton");
+        this.saveButton = this.querySelector(tableRow, ".profileSaveButton");
+        this.cancelButton = this.querySelector(tableRow, ".profileCancelButton");
 
         this.onEnable = onEnable;
         this.onDisable = onDisable;
 
-        this.inputElements = inputSelectors.map(selector => tableRow.querySelector(selector));
-        this.displayElement = tableRow.querySelector(".profileDisplayText");
+        this.inputElements = inputSelectors.map(selector => this.querySelector(tableRow, selector));
+        this.displayElement = this.querySelector(tableRow, ".profileDisplayText");
 
         this.changeButton.addEventListener("click", () => this.enableEditing());
         this.cancelButton.addEventListener("click", () => this.disableEditing(false));
@@ -147,9 +159,9 @@ class ImageUploadField extends AbstractField {
     constructor(tableRowId, fetchUrl, errorPrefix) {
         super(tableRowId, fetchUrl, errorPrefix);
 
-        const tableRow = document.getElementById(tableRowId);
-        this.displayImage = tableRow.querySelector(".profileDisplayImage");
-        this.imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
+        const tableRow = this.getElementById(tableRowId);
+        this.displayImage = this.querySelector(tableRow, ".profileDisplayImage");
+        this.imageHiddenInput = this.querySelector(tableRow, ".profileHiddenFileInput");
 
         this.changeButton.addEventListener("click", () => this.imageHiddenInput.click());
 
