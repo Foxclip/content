@@ -4,7 +4,6 @@ import { Utils } from "./utils.js";
 import { validatePassword } from "./validation.js";
 
 async function performRequest({
-    editButtonsContainer,
     buttonsToHide = [],
     errorText,
     fetchUrl,
@@ -102,7 +101,6 @@ class EditableField {
             const request = prepareRequest(...inputValues);
     
             await performRequest({
-                editButtonsContainer: this.editButtonsContainer,
                 buttonsToHide: [this.saveButton, this.cancelButton],
                 errorText: this.errorText,
                 fetchUrl,
@@ -158,7 +156,6 @@ class ImageUploadField {
             formData.append("image", imageFile);
 
             await performRequest({
-                editButtonsContainerthis: this.editButtonsContainer,
                 buttonsToHide: [this.changeButton],
                 errorText: this.errorText,
                 fetchUrl,
