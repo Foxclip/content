@@ -15,11 +15,9 @@ class AbstractField {
 
     async performRequest({
         buttonsToHide = [],
-        fetchUrl,
         method,
         body,
         headers = {},
-        errorPrefix,
         onSuccess,
         onCleanup
     }) {
@@ -30,7 +28,7 @@ class AbstractField {
     
         let response;
         try {
-            response = await fetch(fetchUrl, { method, body, headers });
+            response = await fetch(this.fetchUrl, { method, body, headers });
         } catch (error) {
             this.errorText.textContent = `Ошибка сети: ${error}`;
             this.errorText.classList.remove("hidden");
@@ -52,18 +50,18 @@ class AbstractField {
                 responseJson = await response.json();
             } catch (error) {
                 onError(error);
-                console.log(`${errorPrefix}: ошибка json: ` + error);
+                console.log(`${this.errorPrefix}: ошибка json: ` + error);
             }
             if (responseJson.success) {
                 if (onSuccess) onSuccess(responseJson);
-                console.log(`${errorPrefix}: успешно`);
+                console.log(`${this.errorPrefix}: успешно`);
             } else {
                 onError(responseJson.message);
-                console.log(`${errorPrefix}: ошибка: ` + responseJson.message);
+                console.log(`${this.errorPrefix}: ошибка: ` + responseJson.message);
             }
         } else {
             onError(response.statusText);
-            console.log(`${errorPrefix}: ошибка http: ` + response.statusText);
+            console.log(`${this.errorPrefix}: ошибка http: ` + response.statusText);
         }
     }
 }
