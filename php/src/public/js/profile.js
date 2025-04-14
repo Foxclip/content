@@ -58,7 +58,18 @@ async function performRequest({
     }
 }
 
-class EditableField {
+class AbstractField {
+    constructor(tableRowId, fetchUrl, errorPrefix) {
+        this.fetchUrl = fetchUrl;
+        this.errorPrefix = errorPrefix;
+        const tableRow = document.getElementById(tableRowId);
+        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
+        this.changeButton = tableRow.querySelector(".profileEditButton");
+        this.errorText = tableRow.querySelector(".profileErrorText");
+    }
+}
+
+class TextField extends AbstractField {
     constructor({
         tableRowId,
         fetchUrl,
@@ -70,12 +81,12 @@ class EditableField {
         onEnable,
         onDisable
     }) {
+        super(tableRowId, fetchUrl, errorPrefix);
+        
         const tableRow = document.getElementById(tableRowId);
-        this.errorText = tableRow.querySelector(".profileErrorText");
         this.changeButton = tableRow.querySelector(".profileEditButton");
         this.saveButton = tableRow.querySelector(".profileSaveButton");
         this.cancelButton = tableRow.querySelector(".profileCancelButton");
-        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
 
         this.onEnable = onEnable;
         this.onDisable = onDisable;
@@ -137,14 +148,13 @@ class EditableField {
     }
 }
 
-class ImageUploadField {
+class ImageUploadField extends AbstractField {
     constructor(tableRowId, fetchUrl, errorPrefix) {
+        super(tableRowId, fetchUrl, errorPrefix);
+
         const tableRow = document.getElementById(tableRowId);
         this.displayImage = tableRow.querySelector(".profileDisplayImage");
-        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
-        this.changeButton = tableRow.querySelector(".profileEditButton");
         this.imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
-        this.errorText = tableRow.querySelector(".profileErrorText");
 
         this.changeButton.addEventListener("click", () => this.imageHiddenInput.click());
 
@@ -173,7 +183,7 @@ class ImageUploadField {
     }
 }
 
-new EditableField({
+new TextField({
     tableRowId: "emailRow",
     fetchUrl: "/change_email",
     errorPrefix: "Изменение email",
@@ -189,7 +199,7 @@ new EditableField({
     }
 });
 
-new EditableField({
+new TextField({
     tableRowId: "passwordRow",
     fetchUrl: "/change_password",
     errorPrefix: "Изменение пароля",
