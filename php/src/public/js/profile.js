@@ -12,11 +12,12 @@ async function performRequest({
     body,
     headers = {},
     errorPrefix,
+    spinnerParent,
     onSuccess,
     onCleanup
 }) {
     const spinner = createSpinner();
-    editButtonsContainer.appendChild(spinner);
+    spinnerParent.appendChild(spinner);
     buttonsToHide.forEach(button => button.classList.add("hidden"));
     errorText.classList.add("hidden");
 
@@ -58,8 +59,8 @@ async function performRequest({
     }
 }
 
-function createEditableField(config) {
-    const {
+class EditableField {
+    constructor({
         tableRowId,
         fetchUrl,
         errorPrefix,
@@ -69,106 +70,113 @@ function createEditableField(config) {
         prepareRequest,
         onEnable,
         onDisable
-    } = config;
+    }) {
+        const tableRow = document.getElementById(tableRowId);
+        this.errorText = tableRow.querySelector(".profileErrorText");
+        this.changeButton = tableRow.querySelector(".profileEditButton");
+        this.saveButton = tableRow.querySelector(".profileSaveButton");
+        this.cancelButton = tableRow.querySelector(".profileCancelButton");
+        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
 
-    const tableRow = document.getElementById(tableRowId);
-    const errorText = tableRow.querySelector(".profileErrorText");
-    const changeButton = tableRow.querySelector(".profileEditButton");
-    const saveButton = tableRow.querySelector(".profileSaveButton");
-    const cancelButton = tableRow.querySelector(".profileCancelButton");
-    const editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
+        this.onEnable = onEnable;
+        this.onDisable = onDisable;
 
-    const inputElements = inputSelectors.map(selector => tableRow.querySelector(selector));
-    const displayElements = displaySelectors.map(selector => tableRow.querySelector(selector));
+        this.inputElements = inputSelectors.map(selector => tableRow.querySelector(selector));
+        this.displayElements = displaySelectors.map(selector => tableRow.querySelector(selector));
 
-    function enableEditing() {
-        displayElements.forEach(el => el.classList.add("hidden"));
-        inputElements.forEach(el => el.classList.remove("hidden"));
-        changeButton.classList.add("hidden");
-        saveButton.classList.remove("hidden");
-        cancelButton.classList.remove("hidden");
-        inputElements[0].focus();
+        this.changeButton.addEventListener("click", this.enableEditing.bind(this));
+        this.cancelButton.addEventListener("click", () => this.disableEditing.bind(this)(false));
 
-        if (onEnable) onEnable(inputElements, displayElements);
-    }
-
-    function disableEditing(confirm) {
-        displayElements.forEach(el => el.classList.remove("hidden"));
-        inputElements.forEach(el => el.classList.add("hidden"));
-        changeButton.classList.remove("hidden");
-        saveButton.classList.add("hidden");
-        cancelButton.classList.add("hidden");
-        errorText.classList.add("hidden");
-
-        if (onDisable) onDisable(confirm, inputElements, displayElements);
-    }
-
-    changeButton.addEventListener("click", enableEditing);
-    cancelButton.addEventListener("click", () => disableEditing(false));
-
-    saveButton.addEventListener("click", async () => {
-        const inputValues = inputElements.map(input => input.value);
-
-        if (validate) {
-            const errorMessage = validate(...inputValues);
-            if (errorMessage) {
-                errorText.textContent = errorMessage;
-                errorText.classList.remove("hidden");
-                return;
+        this.saveButton.addEventListener("click", async () => {
+            const inputValues = this.inputElements.map(input => input.value);
+    
+            if (validate) {
+                const errorMessage = validate(...inputValues);
+                if (errorMessage) {
+                    this.errorText.textContent = errorMessage;
+                    this.errorText.classList.remove("hidden");
+                    return;
+                }
             }
-        }
-
-        const request = prepareRequest(...inputValues);
-
-        await performRequest({
-            editButtonsContainer,
-            buttonsToHide: [saveButton, cancelButton],
-            errorText,
-            fetchUrl,
-            method: "POST",
-            body: request.body,
-            headers: request.headers,
-            errorPrefix,
-            onSuccess: () => disableEditing(true),
+    
+            const request = prepareRequest(...inputValues);
+    
+            await performRequest({
+                editButtonsContainer: this.editButtonsContainer,
+                buttonsToHide: [this.saveButton, this.cancelButton],
+                errorText: this.errorText,
+                fetchUrl,
+                method: "POST",
+                body: request.body,
+                headers: request.headers,
+                errorPrefix,
+                spinnerParent: this.editButtonsContainer,
+                onSuccess: () => this.disableEditing(true),
+            });
         });
-    });
+    }
+
+    enableEditing() {
+        this.displayElements.forEach(el => el.classList.add("hidden"));
+        this.inputElements.forEach(el => el.classList.remove("hidden"));
+        this.changeButton.classList.add("hidden");
+        this.saveButton.classList.remove("hidden");
+        this.cancelButton.classList.remove("hidden");
+        this.inputElements[0].focus();
+
+        if (this.onEnable) this.onEnable(this.inputElements, this.displayElements);
+    }
+
+    disableEditing(confirm) {
+        this.displayElements.forEach(el => el.classList.remove("hidden"));
+        this.inputElements.forEach(el => el.classList.add("hidden"));
+        this.changeButton.classList.remove("hidden");
+        this.saveButton.classList.add("hidden");
+        this.cancelButton.classList.add("hidden");
+        this.errorText.classList.add("hidden");
+
+        if (this.onDisable) this.onDisable(confirm, this.inputElements, this.displayElements);
+    }
 }
 
-function addImageUploadListeners(tableRowId, fetchUrl, errorPrefix) {
-    const tableRow = document.getElementById(tableRowId);
-    const displayImage = tableRow.querySelector(".profileDisplayImage");
-    const editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
-    const changeButton = tableRow.querySelector(".profileEditButton");
-    const imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
-    const errorText = tableRow.querySelector(".profileErrorText");
+class ImageUploadField {
+    constructor(tableRowId, fetchUrl, errorPrefix) {
+        const tableRow = document.getElementById(tableRowId);
+        this.displayImage = tableRow.querySelector(".profileDisplayImage");
+        this.editButtonsContainer = tableRow.querySelector(".profileEditButtonsContainer");
+        this.changeButton = tableRow.querySelector(".profileEditButton");
+        this.imageHiddenInput = tableRow.querySelector(".profileHiddenFileInput");
+        this.errorText = tableRow.querySelector(".profileErrorText");
 
-    changeButton.addEventListener("click", () => imageHiddenInput.click());
+        this.changeButton.addEventListener("click", () => this.imageHiddenInput.click());
 
-    imageHiddenInput.addEventListener("change", async () => {
-        const imageFile = imageHiddenInput.files[0];
-        if (!imageFile) return;
+        this.imageHiddenInput.addEventListener("change", async () => {
+            const imageFile = this.imageHiddenInput.files[0];
+            if (!imageFile) return;
 
-        const formData = new FormData();
-        formData.append("image", imageFile);
+            const formData = new FormData();
+            formData.append("image", imageFile);
 
-        await performRequest({
-            editButtonsContainer,
-            buttonsToHide: [changeButton],
-            errorText,
-            fetchUrl,
-            method: "POST",
-            body: formData,
-            errorPrefix,
-            onSuccess: (responseJson) => {
-                displayImage.src = responseJson.image_url;
-                getUserAvatarElement().src = responseJson.image_url;
-            },
-            onCleanup: () => imageHiddenInput.value = ""
+            await performRequest({
+                editButtonsContainerthis: this.editButtonsContainer,
+                buttonsToHide: [this.changeButton],
+                errorText: this.errorText,
+                fetchUrl,
+                method: "POST",
+                body: formData,
+                errorPrefix,
+                spinnerParent: this.editButtonsContainer,
+                onSuccess: (responseJson) => {
+                    this.displayImage.src = responseJson.image_url;
+                    getUserAvatarElement().src = responseJson.image_url;
+                },
+                onCleanup: () => this.imageHiddenInput.value = ""
+            });
         });
-    });
+    }
 }
 
-createEditableField({
+new EditableField({
     tableRowId: "emailRow",
     fetchUrl: "/change_email",
     errorPrefix: "Изменение email",
@@ -184,7 +192,7 @@ createEditableField({
     }
 });
 
-createEditableField({
+new EditableField({
     tableRowId: "passwordRow",
     fetchUrl: "/change_password",
     errorPrefix: "Изменение пароля",
@@ -201,4 +209,4 @@ createEditableField({
     onDisable: (_, inputs) => inputs.forEach(input => input.value = "")
 });
 
-addImageUploadListeners("avatarRow", "/change_avatar", "Изменение аватара");
+new ImageUploadField("avatarRow", "/change_avatar", "Изменение аватара");
