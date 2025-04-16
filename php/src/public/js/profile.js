@@ -3,6 +3,8 @@ import { getUserAvatarElement } from "./header.js";
 import { Utils } from "./utils.js";
 import { validatePassword } from "./validation.js";
 
+let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 class AbstractField {
     constructor(tableRowId, fetchUrl, errorPrefix) {
         this.fetchUrl = fetchUrl;
@@ -39,6 +41,7 @@ class AbstractField {
         this.errorText.classList.add("hidden");
     
         let response;
+        headers["X-CSRF-Token"] = csrfToken;
         try {
             response = await fetch(this.fetchUrl, { method, body, headers });
         } catch (error) {
