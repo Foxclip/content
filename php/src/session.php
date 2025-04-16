@@ -77,10 +77,10 @@ function get_user(): ?array {
         return $user;
     }
 
-    $sessionInfo = get_session_info();
-    if (!$sessionInfo) {
+    if (!is_logged_in()) {
         return null;
     }
+    $sessionInfo = get_session_info();
 
     $result = execute_sql_query('SELECT * FROM users WHERE id = :id', [
         'id' => $sessionInfo['user_id'],
