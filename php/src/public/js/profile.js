@@ -1,7 +1,7 @@
 import { createSpinner } from "./ui.js";
 import { getUserAvatarElement } from "./header.js";
 import { Utils } from "./utils.js";
-import { validatePassword } from "./validation.js";
+import { validateEmail, validatePassword } from "./validation.js";
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -173,6 +173,11 @@ new TextField({
     fetchUrl: "/change_email",
     errorPrefix: "Изменение email",
     inputSelectors: [".profileTextInput"],
+    validate: (email) => {
+        if (!email) return "Введите email";
+        const error = validateEmail(email);
+        return error;
+    },
     prepareRequest: (email) => ({
         body: email,
         headers: { "Content-Type": "text/plain" }
