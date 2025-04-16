@@ -19,6 +19,10 @@ if (!is_logged_in()) {
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
+if (empty($data)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON']);
+    exit();
+}
 $variableErr = checkVariables($data, ['action', 'postId']);
 if (!empty($variableErr)) {
     echo json_encode(['success' => false, 'message' => $variableErr]);
