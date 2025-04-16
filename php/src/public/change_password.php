@@ -12,6 +12,8 @@ require_once('../session.php');
 require_once('../utils.php');
 require_once('../validation.php');
 
+header('Content-Type: application/json');
+
 if (!is_logged_in()) {
     echo json_encode(['success' => false, 'message' => 'User is not logged in']);
     exit();
