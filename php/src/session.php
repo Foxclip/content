@@ -131,7 +131,10 @@ function set_csrf_token(): void {
 }
 
 function check_csrf_token(): bool {
-    return (isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']);
+    return (
+        isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']
+        || isset($_SERVER['HTTP_X_CSRF_TOKEN']) && $_SERVER['HTTP_X_CSRF_TOKEN'] === $_SESSION['csrf_token']
+    );
 }
 
 function check_password(array $user, string $password): bool {
