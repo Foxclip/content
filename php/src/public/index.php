@@ -95,10 +95,20 @@
             </div>
             <div id="tabContainer">
                 <div class="tabButtonList">
-                    <a href="/"><div class="tabButton <?= PageParameters::$pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
-                    <?php if (is_logged_in()): ?>
-                    <a href="/?type=my_posts"><div class="tabButton <?= PageParameters::$pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
-                    <?php endif; ?>
+                    <?php
+                    function writeTab(string $text, string $href, PageType $pageType): void {
+                        $active = PageParameters::$pageType === $pageType;
+                        $hrefStr = " href=$href";
+                        if ($active) {
+                            $hrefStr = '';
+                        }
+                        echo "<a$hrefStr class=\"tabButton " . ($active ? 'active' : '') . '">' . $text . '</a>';
+                    }
+                    if (is_logged_in()) {
+                        writeTab('Все', '/', PageType::RecentPosts);
+                        writeTab('Мои', '/?type=my_posts', PageType::MyPosts);
+                    }
+                    ?>
                 </div>
                 <div class="tabBodyList">
                     <?php

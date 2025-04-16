@@ -134,8 +134,8 @@ button {
     height: 40px;
     padding: 0px 10px;
     font-size: 18px;
+    text-decoration: none;
     background-color: rgb(240, 240, 240);
-    border: 1px solid black;
     border-radius: 9999px;
     user-select: none;
     cursor: pointer;
@@ -147,10 +147,11 @@ button {
 
 .tabButton.active {
     background-color: rgb(200, 255, 150);
+    cursor: default;
 }
 
 .tabButton:not(.active):hover {
-    background-color: rgba(200, 255, 150, 0.5);
+    background-color: rgba(220, 220, 220);
 }
 
 .tabBody:not(.active) {
