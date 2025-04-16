@@ -21,6 +21,15 @@ try {
 
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
+    if (empty($data)) {
+        echo json_encode(['success' => false, 'message' => 'Invalid JSON']);
+        exit();
+    }
+    $variableErr = checkVariables($data, ['old_password', 'new_password']);
+    if (!empty($variableErr)) {
+        echo json_encode(['success' => false, 'message' => $variableErr]);
+        exit();
+    }
     $old_password = $data['old_password'];
     $new_password = $data['new_password'];
 
