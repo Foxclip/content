@@ -56,26 +56,7 @@ class AbstractField {
             this.errorText.classList.remove("hidden");
         };
     
-        if (response.ok) {
-            let responseJson;
-            try {
-                responseJson = await response.json();
-            } catch (error) {
-                onError(error.message);
-                console.log(`${this.errorPrefix}: ошибка json: ${error.message}`);
-            }
-            if (responseJson.success) {
-                if (onSuccess) onSuccess(responseJson);
-                console.log(`${this.errorPrefix}: успешно`);
-            } else {
-                onError(responseJson.message);
-                console.log(`${this.errorPrefix}: ошибка: ${responseJson.message}`);
-            }
-        } else {
-            let message = `HTTP ${response.status} (${response.statusText})`;
-            onError(message);
-            console.log(`${this.errorPrefix}: ошибка: ${message}`);
-        }
+        Utils.handleResponse(response, onSuccess, onError, this.errorPrefix);
     }
 }
 
