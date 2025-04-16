@@ -27,23 +27,44 @@
         case MyPosts;
     }
 
-    $page = 1;
-    if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
-        $page = intval($_GET['page']);
+    class PageParameters {
+        public static PageType $pageType;
+        public static int $postCount;
+        public static int $pageCount;
+        public static int $page;
+        public static array $posts;
+        public static string $title;
+    };
+
+    function setPageParameters(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $title) {
+        PageParameters::$pageType = $pageType;
+        PageParameters::$postCount = $getPostCountFunc();
+        PageParameters::$pageCount = ceil(PageParameters::$postCount / \Config\max_posts_per_page);
+        if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+            PageParameters::$page = intval($_GET['page']);
+        } else {
+            PageParameters::$page = ceil(PageParameters::$postCount / \Config\max_posts_per_page);
+        }
+        $offset = max(0, PageParameters::$postCount - \Config\max_posts_per_page * PageParameters::$page);
+        PageParameters::$posts = $getPostsFunc($offset, \Config\max_posts_per_page);
+        PageParameters::$title = $title;
     }
-    $offset = ($page - 1) * \Config\max_posts_per_page;
+
     if (!isset($_GET['type'])) {
-        $pageType = PageType::RecentPosts;
-        $posts = get_recent_posts($offset, \Config\max_posts_per_page);
-        $title = 'Все посты';
-        $postCount = get_all_post_count();
+        setPageParameters(
+            PageType::RecentPosts,
+            fn() => get_all_post_count(),
+            fn($offset, $count) => get_recent_posts($offset, $count),
+            'Все посты'
+        );
     } else if (isset($_GET['type']) && $_GET['type'] === 'my_posts') {
-        $pageType = PageType::MyPosts;
-        $posts = get_user_posts(get_user_id(), $offset, \Config\max_posts_per_page);
-        $title = 'Мои посты';
-        $postCount = get_user_post_count();
+        setPageParameters(
+            PageType::MyPosts,
+            fn() => get_user_post_count(get_user_id()),
+            fn($offset, $count) => get_user_posts(get_user_id(), $offset, $count),
+            'Мои посты'
+        );
     }
-    $pageCount = ceil($postCount / \Config\max_posts_per_page);
 
 ?>
 
@@ -65,7 +86,7 @@
     <main>
         <div id="recentPosts">
             <div id="recentPostsTitleContainer">
-                <h1 id="recentPostsTitle"><?= $title ?></h1>
+                <h1 id="recentPostsTitle"><?= PageParameters::$title ?></h1>
                 <?php
                 if (is_logged_in()) {
                     includeFile('../ui/create_post_button.php');
@@ -74,29 +95,29 @@
             </div>
             <div id="tabContainer">
                 <div class="tabButtonList">
-                    <a href="/"><div class="tabButton <?= $pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
+                    <a href="/"><div class="tabButton <?= PageParameters::$pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
                     <?php if (is_logged_in()): ?>
-                    <a href="/?type=my_posts"><div class="tabButton <?= $pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
+                    <a href="/?type=my_posts"><div class="tabButton <?= PageParameters::$pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
                     <?php endif; ?>
                 </div>
                 <div class="tabBodyList">
                     <?php
-                    if ($pageType === PageType::RecentPosts):
+                    if (PageParameters::$pageType === PageType::RecentPosts):
                     ?>
                     <divb class="postList tabBody active">
                         <?php
-                        write_posts($posts);
+                        write_posts(PageParameters::$posts);
                         ?>
                     </div>
                     <?php
                     endif;
                     ?>
                     <?php
-                    if ($pageType === PageType::MyPosts):
+                    if (PageParameters::$pageType === PageType::MyPosts):
                     ?>
                     <div class="postList tabBody active">
                         <?php
-                        write_posts($posts);
+                        write_posts(PageParameters::$posts);
                         ?>
                     </div>
                     <?php
@@ -106,10 +127,10 @@
             </div>
             <div class="paginationContainer">
                 <?php
-                if ($pageCount > 1) {
-                    $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
-                    for ($i = 1; $i <= $pageCount; $i++) {
-                        $isActive = $page === $i;
+                if (PageParameters::$pageCount > 1) {
+                    $pageTypeParamStr = PageParameters::$pageType === PageType::RecentPosts ? null : 'my_posts';
+                    for ($i = PageParameters::$pageCount; $i >= 1; $i--) {
+                        $isActive = PageParameters::$page === $i;
                         $get_parameters = [
                             'type' => $pageTypeParamStr,
                             'page' => $i
