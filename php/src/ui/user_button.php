@@ -12,9 +12,12 @@ $user = get_user();
             <img src="icons/user_pen.png" width="20" height="20">
             <span>Личный кабинет</span>
         </a>
-        <a class="userMenuItem" href="/logout">
+        <a id="logoutButton" class="userMenuItem">
             <img src="icons/logout.png" width="20" height="20">
             <span>Выйти</span>
+            <form action="/logout" method="post">
+                <input type="hidden" name="csrf_token" value="<?=htmlspecialchars($_SESSION['csrf_token'])?>">
+            </form>
         </a>
     </div>
 </div>

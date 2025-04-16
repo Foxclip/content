@@ -10,13 +10,13 @@
         ?>
     </div>
     <div id="headerRightSection">
-        <?php
-        if (is_logged_in()) {
+        <?php 
+        if (is_logged_in()):
             includeFile('../ui/user_button.php');
-        } else {
-            echo '<a id="loginButton" href="/login">Войти</a>';
-        }
+        else:
         ?>
+        <a id="loginButton" href="/login">Войти</a>
+        <?php endif; ?>
     </div>
     <script src="js/header.js" type="module"></script>
 </header>

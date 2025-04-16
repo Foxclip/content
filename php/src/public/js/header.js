@@ -14,3 +14,7 @@ if (userMenuButton !== null && userMenuPopup !== null) {
         }
     });
 }
+
+let logoutButton = document.getElementById("logoutButton");
+let logoutForm = logoutButton.querySelector("form");
+logoutButton.addEventListener("click", () => logoutForm.submit());
