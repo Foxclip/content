@@ -69,6 +69,7 @@ class TextField extends AbstractField {
         fetchUrl,
         errorPrefix,
         inputSelectors,
+        pass,
         validate,
         prepareRequest,
         onEnable,
@@ -92,6 +93,13 @@ class TextField extends AbstractField {
 
         this.saveButton.addEventListener("click", async () => {
             const inputValues = this.inputElements.map(input => input.value);
+
+            if (pass) {
+                if (pass(...inputValues, this.displayElement.textContent)) {
+                    this.disableEditing(true);
+                    return;
+                }
+            }
     
             if (validate) {
                 const errorMessage = validate(...inputValues);
@@ -173,6 +181,7 @@ new TextField({
     fetchUrl: "/change_email",
     errorPrefix: "Изменение email",
     inputSelectors: [".profileTextInput"],
+    pass: (emailNew, emailOld) => emailNew === emailOld,
     validate: (email) => {
         if (!email) return "Введите email";
         const error = validateEmail(email);
