@@ -75,7 +75,9 @@
             <div id="tabContainer">
                 <div class="tabButtonList">
                     <a href="/"><div class="tabButton <?= $pageType === PageType::RecentPosts ? 'active' : '' ?>">Все</div></a>
+                    <?php if (is_logged_in()): ?>
                     <a href="/?type=my_posts"><div class="tabButton <?= $pageType === PageType::MyPosts ? 'active' : '' ?>">Мои</div></a>
+                    <?php endif; ?>
                 </div>
                 <div class="tabBodyList">
                     <?php
