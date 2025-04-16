@@ -6,7 +6,7 @@ if (isset($classes)) {
     }
 }
 ?>
-<div <?= isset($id) ? "id=\"{$id}\"" : '' ?> class="iconButton<?=$classStr?>">
+<a <?= isset($href) ? "href=$href" : '' ?> <?= isset($id) ? "id=$id" : '' ?> class="iconButton<?=$classStr?>">
     <img src="<?=$icon?>" width="20" height="20">
     <span><?=$text?></span>
-</div>
+</a>
