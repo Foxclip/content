@@ -136,7 +136,11 @@
                             'page' => $i
                         ];
                         $queryStr = http_build_query($get_parameters);
-                        echo '<a href="/?' . $queryStr . '"><div class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</div></a>';
+                        $hrefStr = " href=/?" . $queryStr;
+                        if (PageParameters::$page === $i) {
+                            $hrefStr = '';
+                        }
+                        echo '<a' . $hrefStr . ' class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</a>';
                     }
                 }
                 ?>
