@@ -40,7 +40,7 @@ function includeSaveButton(): void {
             'common.css',
             'header.css',
             'footer.css',
-            'profile.css'
+            'edit_profile.css'
         ]
     ]);
 ?>
@@ -119,6 +119,6 @@ function includeSaveButton(): void {
         </div>
     </main>
     <?= includeFile('../ui/footer.php'); ?>
-    <script src="js/profile.js" type="module"></script>
+    <script src="js/edit_profile.js" type="module"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ $user = get_user();
         <span><?=$user['username']?></span>
     </div>
     <div id="userMenuPopup">
-        <a class="userMenuItem" href="/profile">
+        <a class="userMenuItem" href="/edit_profile">
             <img src="icons/user_pen.png" width="20" height="20">
             <span>Личный кабинет</span>
         </a>
