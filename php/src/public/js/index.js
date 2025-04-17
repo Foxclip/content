@@ -1,7 +1,7 @@
 import { postDatetimesToLocalTime } from './post.js';
 import { Utils } from './utils.js';
 
-let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 let likeButtons = document.querySelectorAll(".postLikes");
 
 likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (event) => {

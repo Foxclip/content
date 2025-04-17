@@ -6,7 +6,7 @@ export function getUserAvatarElement() {
     return avatar;
 }
 
-if (userMenuButton !== null && userMenuPopup !== null) {   
+if (userMenuButton && userMenuPopup) {   
     userMenuButton.addEventListener("click", () => userMenuPopup.style.display = userMenuPopup.style.display === "flex" ? "none" : "flex");
     document.addEventListener("click", (event) => {
         if (!userMenuButton.contains(event.target) && !userMenuPopup.contains(event.target)) {
@@ -16,5 +16,7 @@ if (userMenuButton !== null && userMenuPopup !== null) {
 }
 
 let logoutButton = document.getElementById("logoutButton");
-let logoutForm = logoutButton.querySelector("form");
-logoutButton.addEventListener("click", () => logoutForm.submit());
+if (logoutButton) {
+    let logoutForm = logoutButton.querySelector("form");
+    logoutButton.addEventListener("click", () => logoutForm.submit());
+}
