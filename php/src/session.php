@@ -70,10 +70,30 @@ function get_session_info(): ?array {
     return $sessionInfo;
 }
 
+function get_user_by_id(int $id): ?array {
+    
+    static $cache = [];
+    if (isset($cache[$id])) {
+        return $cache[$id];
+    }
+
+    $result = execute_sql_query('SELECT * FROM users WHERE id = :id', [
+        'id' => $id,
+    ]);
+    if (!$result) {
+        return null;
+    }
+    $user = $result[0];
+    $cache[$id] = $user;
+
+    return $user;
+
+}
+
 function get_user(): ?array {
 
     static $user = null;
-    if ($user !== null) {
+    if ($user) {
         return $user;
     }
 
@@ -81,14 +101,10 @@ function get_user(): ?array {
         return null;
     }
     $sessionInfo = get_session_info();
+    $id = $sessionInfo['user_id'];
 
-    $result = execute_sql_query('SELECT * FROM users WHERE id = :id', [
-        'id' => $sessionInfo['user_id'],
-    ]);
-    if (!$result) {
-        return null;
-    }
-    $user = $result[0];
+    $user = get_user_by_id($id);
+
     return $user;
 
 }

@@ -53,7 +53,7 @@ function includeSaveButton(): void {
                 <div id="profileTabList" class="tabButtonList">
                     <div class="tabButton active">Главное</div>
                 </div>
-                <div id="profileMainTab" class="profileTabBody">
+                <div id="profileMainTab" class="profileTabBody card">
                     <table id="profileTable">
                         <tr id="usernameRow">
                             <td><span class="profileLabelText">Логин:</span></td>
