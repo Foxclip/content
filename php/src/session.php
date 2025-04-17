@@ -161,7 +161,7 @@ function redirect_to_login_page(bool $redirect_back_after_login = false): void {
     header('Location: /login');
 }
 
-function set_csrf_token(): void {
+function generate_csrf_token(): void {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 

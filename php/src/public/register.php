@@ -2,7 +2,7 @@
     require_once('../session.php');
     require_once('../utils.php');
 
-    set_csrf_token();
+    generate_csrf_token();
 ?>
 
 <!DOCTYPE html>

@@ -12,7 +12,7 @@ if (!check_csrf_token()) {
     echo "CSRF токен недействителен";
     exit();
 } else {
-    set_csrf_token();
+    generate_csrf_token();
 }
 
 $variableErr = checkVariables($_POST, ['login', 'password']);
