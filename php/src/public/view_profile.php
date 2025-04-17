@@ -3,9 +3,11 @@
 require_once('../session.php');
 require_once('../utils.php');
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $user = get_user_by_id($id);
+$request = $_SERVER['REQUEST_URI'];
+$usernameParts = explode('/', $request);
+if (count($usernameParts) >= 3) {
+    $username = $usernameParts[2];
+    $user = get_user_by_name($username);
 }
 
 ?>
@@ -39,6 +41,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         </div>
     </main>
     <?= includeFile('../ui/footer.php'); ?>
-    <script src="js/edit_profile.js" type="module"></script>
+    <script src="/js/view_profile.js" type="module"></script>
 </body>
 </html>

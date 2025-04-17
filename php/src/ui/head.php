@@ -7,7 +7,7 @@
     <title><?php echo $title; ?></title>
     <?php
     foreach ($styles as $style) {
-        echo "    <link rel=\"stylesheet\" href=\"css/{$style}\" />\n";
+        echo "    <link rel=\"stylesheet\" href=\"/css/{$style}\" />\n";
     }
     ?>
 </head>

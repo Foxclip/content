@@ -18,5 +18,5 @@
         <a id="loginButton" href="/login">Войти</a>
         <?php endif; ?>
     </div>
-    <script src="js/header.js" type="module"></script>
+    <script src="/js/header.js" type="module"></script>
 </header>

@@ -90,6 +90,25 @@ function get_user_by_id(int $id): ?array {
 
 }
 
+function get_user_by_name(string $name): ?array {
+
+    static $cache = [];
+    if (isset($cache[$name])) {
+        return $cache[$name];
+    }
+
+    $result = execute_sql_query('SELECT * FROM users WHERE username = :username', [
+        'username' => $name,
+    ]);
+    if (!$result) {
+        return null;
+    }
+
+    $user = $result[0];
+
+    return $user;
+}
+
 function get_user(): ?array {
 
     static $user = null;
