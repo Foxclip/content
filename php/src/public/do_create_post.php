@@ -10,8 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 if (!check_csrf_token()) {
     echo "CSRF токен недействителен";
     exit();
-} else {
-    generate_csrf_token();
 }
 
 if (!is_logged_in()) {

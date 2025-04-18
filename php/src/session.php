@@ -3,12 +3,23 @@
 require_once "config.php";
 require_once "db.php";
 
+$logged_in = null;
+$sessionInfo = null;
+$user = null;
+
 function login(array $user): void {
     session_regenerate_id(true);
     execute_sql_query('INSERT INTO sessions (token, user_id) VALUES (:token, :user_id)', [
         'token' => session_id(),
         'user_id' => $user['id'],
     ]);
+
+    global $logged_in, $sessionInfo, $user;
+    $logged_in = true;
+    $sessionInfo = get_session_info();
+    $user = get_user();
+
+    generate_csrf_token();
 }
 
 function logout(): void {
@@ -22,13 +33,14 @@ function logout(): void {
 
 function is_logged_in(): bool {
 
-    static $logged_in = null;
+    global $logged_in;
     if ($logged_in !== null) {
         return $logged_in;
     }
 
     function check_logged_in(): bool {
 
+        global $sessionInfo;
         $sessionInfo = get_session_info();
         if (!$sessionInfo) {
             return false;
@@ -55,7 +67,7 @@ function is_logged_in(): bool {
 
 function get_session_info(): ?array {
 
-    static $sessionInfo = null;
+    global $sessionInfo;
     if ($sessionInfo !== null) {
         return $sessionInfo;
     }
@@ -111,7 +123,7 @@ function get_user_by_name(string $name): ?array {
 
 function get_user(): ?array {
 
-    static $user = null;
+    global $user;
     if ($user) {
         return $user;
     }
@@ -128,7 +140,8 @@ function get_user(): ?array {
 
 }
 
-function get_user_id(): ?int {
+function get_user_id(): int {
+    global $user;
     $user = get_user();
     if (!$user) {
         return 0;
@@ -161,14 +174,50 @@ function redirect_to_login_page(bool $redirect_back_after_login = false): void {
     header('Location: /login');
 }
 
+function get_csrf_token_from_db(): ?string {
+    $result = execute_sql_query(
+        'SELECT token
+        FROM csrf_tokens
+        WHERE user_id = :user_id
+        ORDER BY created_at DESC', 
+        [
+        'user_id' => get_user_id(),
+        ]
+    );
+    if (!$result) {
+        return null;
+    }
+    return $result[0]['token'];
+}
+
+function restore_csrf_token(): void {
+    if (!isset($_SESSION['csrf_token'])) {
+        $token = get_csrf_token_from_db();
+        if ($token) {
+            $_SESSION['csrf_token'] = $token;
+        }
+    }
+}
+
+function get_csrf_token(): ?string {
+    restore_csrf_token();
+    return $_SESSION['csrf_token'] ?? null;
+}
+
 function generate_csrf_token(): void {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $token = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token'] = $token;
+    execute_sql_query('INSERT INTO csrf_tokens (token, user_id) VALUES (:token, :user_id)', [
+        'token' => $token,
+        'user_id' => get_user_id(),
+    ]);
 }
 
 function check_csrf_token(): bool {
+    $csrf_token = get_csrf_token();
     return (
-        isset($_POST['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']
-        || isset($_SERVER['HTTP_X_CSRF_TOKEN']) && $_SERVER['HTTP_X_CSRF_TOKEN'] === $_SESSION['csrf_token']
+        isset($_POST['csrf_token']) && $_POST['csrf_token'] === $csrf_token
+        || isset($_SERVER['HTTP_X_CSRF_TOKEN']) && $_SERVER['HTTP_X_CSRF_TOKEN'] === $csrf_token
     );
 }
 
@@ -191,6 +240,7 @@ session_start();
 
 if (is_logged_in()) {
     update_last_activity();
+    restore_csrf_token();
 }
 
 if (isset($_SESSION['login_redirect']) && !in_array($_SERVER['REQUEST_URI'], ['/login', '/do_login'])) {

@@ -1,8 +1,6 @@
 <?php
     require_once('../session.php');
     require_once('../utils.php');
-
-    generate_csrf_token();
 ?>
 
 <!DOCTYPE html>
