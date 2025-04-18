@@ -3,9 +3,11 @@
 require_once "config.php";
 require_once "db.php";
 
-$logged_in = null;
-$sessionInfo = null;
-$user = null;
+class CurrentUser {
+    public static $user = null;
+    public static $logged_in = null;
+    public static $sessionInfo = null;
+}
 
 function login(array $user): void {
     session_regenerate_id(true);
@@ -14,10 +16,9 @@ function login(array $user): void {
         'user_id' => $user['id'],
     ]);
 
-    global $logged_in, $sessionInfo, $user;
-    $logged_in = true;
-    $sessionInfo = get_session_info();
-    $user = get_user();
+    CurrentUser::$user = get_user();
+    CurrentUser::$sessionInfo = get_session_info();
+    CurrentUser::$logged_in = true;
 
     generate_csrf_token();
 }
@@ -31,33 +32,31 @@ function logout(): void {
     ]);
 }
 
-function is_logged_in(): bool {
+function check_logged_in(): bool {
 
-    global $logged_in;
-    if ($logged_in !== null) {
-        return $logged_in;
+    CurrentUser::$sessionInfo = get_session_info();
+    if (!CurrentUser::$sessionInfo) {
+        return false;
     }
 
-    function check_logged_in(): bool {
+    if (CurrentUser::$sessionInfo['logout']) {
+        return false;
+    }
 
-        global $sessionInfo;
-        $sessionInfo = get_session_info();
-        if (!$sessionInfo) {
-            return false;
-        }
+    $last_activity = new DateTime(CurrentUser::$sessionInfo['last_activity']);
+    $now = new DateTime();
+    if ($now->getTimestamp() - $last_activity->getTimestamp() > \Config\logout_after) {
+        return false;
+    }
 
-        if ($sessionInfo['logout']) {
-            return false;
-        }
+    return true;
 
-        $last_activity = new DateTime($sessionInfo['last_activity']);
-        $now = new DateTime();
-        if ($now->getTimestamp() - $last_activity->getTimestamp() > \Config\logout_after) {
-            return false;
-        }
+}
 
-        return true;
+function is_logged_in(): bool {
 
+    if (CurrentUser::$logged_in !== null) {
+        return CurrentUser::$logged_in;
     }
 
     $logged_in = check_logged_in();
@@ -67,9 +66,8 @@ function is_logged_in(): bool {
 
 function get_session_info(): ?array {
 
-    global $sessionInfo;
-    if ($sessionInfo !== null) {
-        return $sessionInfo;
+    if (CurrentUser::$sessionInfo !== null) {
+        return CurrentUser::$sessionInfo;
     }
 
     $result = execute_sql_query('SELECT * FROM sessions WHERE token = :token AND logout = FALSE', [
@@ -78,8 +76,8 @@ function get_session_info(): ?array {
     if (!$result) {
         return null;
     }
-    $sessionInfo = $result[0];
-    return $sessionInfo;
+    CurrentUser::$sessionInfo = $result[0];
+    return CurrentUser::$sessionInfo;
 }
 
 function get_user_by_id(int $id): ?array {
@@ -123,9 +121,8 @@ function get_user_by_name(string $name): ?array {
 
 function get_user(): ?array {
 
-    global $user;
-    if ($user) {
-        return $user;
+    if (CurrentUser::$user) {
+        return CurrentUser::$user;
     }
 
     if (!is_logged_in()) {
@@ -134,14 +131,13 @@ function get_user(): ?array {
     $sessionInfo = get_session_info();
     $id = $sessionInfo['user_id'];
 
-    $user = get_user_by_id($id);
+    CurrentUser::$user = get_user_by_id($id);
 
-    return $user;
+    return CurrentUser::$user;
 
 }
 
 function get_user_id(): int {
-    global $user;
     $user = get_user();
     if (!$user) {
         return 0;
@@ -190,17 +186,18 @@ function get_csrf_token_from_db(): ?string {
     return $result[0]['token'];
 }
 
-function restore_csrf_token(): void {
-    if (!isset($_SESSION['csrf_token'])) {
-        $token = get_csrf_token_from_db();
-        if ($token) {
-            $_SESSION['csrf_token'] = $token;
-        }
+function try_restore_csrf_token(): void {
+    $token = get_csrf_token_from_db();
+    if ($token) {
+        $_SESSION['csrf_token'] = $token;
     }
 }
 
 function get_csrf_token(): ?string {
-    restore_csrf_token();
+    if (isset($_SESSION['csrf_token'])) {
+        return $_SESSION['csrf_token'];
+    }
+    try_restore_csrf_token();
     return $_SESSION['csrf_token'] ?? null;
 }
 
@@ -240,7 +237,9 @@ session_start();
 
 if (is_logged_in()) {
     update_last_activity();
-    restore_csrf_token();
+    if (!isset($_SESSION['csrf_token'])) {
+        try_restore_csrf_token();
+    }
 }
 
 if (isset($_SESSION['login_redirect']) && !in_array($_SERVER['REQUEST_URI'], ['/login', '/do_login'])) {
