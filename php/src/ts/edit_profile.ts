@@ -1,12 +1,18 @@
-import { createSpinner } from "./ui.js";
-import { getUserAvatarElement } from "./header.js";
-import { Utils } from "./utils.js";
-import { validateEmail, validatePassword } from "./validation.js";
+import { createSpinner } from "./ui";
+import { getUserAvatarElement } from "./header";
+import { Utils } from "./utils";
+import { validateEmail, validatePassword } from "./validation";
 
-let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
 class AbstractField {
-    constructor(tableRowId, fetchUrl, errorPrefix) {
+    private readonly fetchUrl: string;
+    private readonly errorPrefix: string;
+    private readonly editButtonsContainer: HTMLDivElement;
+    protected changeButton: HTMLElement;
+    protected errorText: HTMLElement;
+
+    constructor(tableRowId: string, fetchUrl: string, errorPrefix: string) {
         this.fetchUrl = fetchUrl;
         this.errorPrefix = errorPrefix;
         const tableRow = this.getElementById(tableRowId);
@@ -15,14 +21,14 @@ class AbstractField {
         this.errorText = this.querySelector(tableRow, ".profileErrorText");
     }
 
-    getElementById(id) {
+    getElementById(id: string) {
         const element = document.getElementById(id);
         if (!element) throw new Error(`Элемент ${id} не найден`);
         return element;
     }
 
-    querySelector(parent, selector) {
-        const element = parent.querySelector(selector);
+    querySelector<T extends HTMLElement>(parent: HTMLElement, selector: string) {
+        const element = parent.querySelector<T>(selector);
         if (!element) throw new Error(`Элемент ${selector} не найден`);
         return element;
     }
@@ -34,16 +40,27 @@ class AbstractField {
         headers = {},
         onSuccess,
         onCleanup
+    }: {
+        buttonsToHide?: HTMLElement[],
+        method: "GET" | "POST",
+        body?: BodyInit,
+        headers?: Record<string, string>,
+        onSuccess: (response: any) => void,
+        onCleanup?: () => void
     }) {
         const spinner = createSpinner();
         this.editButtonsContainer.appendChild(spinner);
         buttonsToHide.forEach(button => button.classList.add("hidden"));
         this.errorText.classList.add("hidden");
     
-        let response;
-        headers["X-CSRF-Token"] = csrfToken;
+        if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
         try {
-            response = await fetch(this.fetchUrl, { method, body, headers });
+            const response = await fetch(this.fetchUrl, { method, body, headers });
+            let onError = (errorMessage: string) => {
+                this.errorText.textContent = errorMessage;
+                this.errorText.classList.remove("hidden");
+            };
+            Utils.handleResponse(response, onSuccess, onError, this.errorPrefix);
         } catch (error) {
             this.errorText.textContent = `Ошибка сети: ${error}`;
             this.errorText.classList.remove("hidden");
@@ -53,17 +70,20 @@ class AbstractField {
             buttonsToHide.forEach(button => button.classList.remove("hidden"));
             if (onCleanup) onCleanup();
         }
-    
-        let onError = (errorMessage) => {
-            this.errorText.textContent = errorMessage;
-            this.errorText.classList.remove("hidden");
-        };
-    
-        Utils.handleResponse(response, onSuccess, onError, this.errorPrefix);
     }
 }
 
+type onEnableType = (inputs: HTMLInputElement[], display: HTMLElement) => void;
+type onDisableType = (confirm: boolean, inputs: HTMLInputElement[], display: HTMLElement) => void;
+
 class TextField extends AbstractField {
+    private readonly saveButton: HTMLElement;
+    private readonly cancelButton: HTMLElement;
+    private readonly inputElements: HTMLInputElement[];
+    private readonly displayElement: HTMLElement;
+    private readonly onEnable?: onEnableType;
+    private readonly onDisable?: onDisableType;
+
     constructor({
         tableRowId,
         fetchUrl,
@@ -74,6 +94,16 @@ class TextField extends AbstractField {
         prepareRequest,
         onEnable,
         onDisable
+    }: {
+        tableRowId: string,
+        fetchUrl: string,
+        errorPrefix: string,
+        inputSelectors: string[],
+        pass?: (displayValue: string, ...inputValues: string[]) => any,
+        validate?: (...inputValues: string[]) => string | null,
+        prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
+        onEnable?: onEnableType,
+        onDisable?: onDisableType
     }) {
         super(tableRowId, fetchUrl, errorPrefix);
 
@@ -95,7 +125,7 @@ class TextField extends AbstractField {
             const inputValues = this.inputElements.map(input => input.value);
 
             if (pass) {
-                if (pass(...inputValues, this.displayElement.textContent)) {
+                if (pass(this.displayElement.textContent!, ...inputValues)) {
                     this.disableEditing(true);
                     return;
                 }
@@ -133,7 +163,7 @@ class TextField extends AbstractField {
         if (this.onEnable) this.onEnable(this.inputElements, this.displayElement);
     }
 
-    disableEditing(confirm) {
+    disableEditing(confirm: boolean) {
         this.displayElement.classList.remove("hidden");
         this.inputElements.forEach(el => el.classList.add("hidden"));
         this.changeButton.classList.remove("hidden");
@@ -146,7 +176,10 @@ class TextField extends AbstractField {
 }
 
 class ImageUploadField extends AbstractField {
-    constructor(tableRowId, fetchUrl, errorPrefix) {
+    private readonly displayImage: HTMLImageElement;
+    private readonly imageHiddenInput: HTMLInputElement;
+
+    constructor(tableRowId: string, fetchUrl: string, errorPrefix: string) {
         super(tableRowId, fetchUrl, errorPrefix);
 
         const tableRow = this.getElementById(tableRowId);
@@ -156,6 +189,7 @@ class ImageUploadField extends AbstractField {
         this.changeButton.addEventListener("click", () => this.imageHiddenInput.click());
 
         this.imageHiddenInput.addEventListener("change", async () => {
+            if (!this.imageHiddenInput.files) return;
             const imageFile = this.imageHiddenInput.files[0];
             if (!imageFile) return;
 
@@ -181,7 +215,7 @@ new TextField({
     fetchUrl: "/change_email",
     errorPrefix: "Изменение email",
     inputSelectors: [".profileTextInput"],
-    pass: (emailNew, emailOld) => emailNew === emailOld,
+    pass: (emailOld, emailNew) => emailNew === emailOld,
     validate: (email) => {
         if (!email) return "Введите email";
         const error = validateEmail(email);
@@ -191,7 +225,7 @@ new TextField({
         body: email,
         headers: { "Content-Type": "text/plain" }
     }),
-    onEnable: (inputs, display) => inputs[0].value = display.textContent,
+    onEnable: (inputs, display) => inputs[0].value = display.textContent!,
     onDisable: (confirm, inputs, display) => {
         if (confirm) display.textContent = inputs[0].value;
     }

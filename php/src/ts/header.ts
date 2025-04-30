@@ -1,8 +1,8 @@
-let userMenuButton = document.getElementById("userMenuButton");
-let userMenuPopup = document.getElementById("userMenuPopup");
+let userMenuButton = document.getElementById("userMenuButton") as HTMLElement;
+let userMenuPopup = document.getElementById("userMenuPopup") as HTMLElement;
 
 export function getUserAvatarElement() {
-    let avatar = userMenuButton!.querySelector(".avatarImage");
+    let avatar = userMenuButton.querySelector(".avatarImage") as HTMLImageElement;
     return avatar;
 }
 

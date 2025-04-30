@@ -16,6 +16,6 @@ export function createSpinner() {
             ></circle>
         </svg>
     `;
-    let spinner = tempDiv.firstElementChild;
+    let spinner = tempDiv.firstElementChild!;
     return spinner;
 }

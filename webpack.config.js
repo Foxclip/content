@@ -9,7 +9,8 @@ module.exports = (env, argv) => {
             login: './php/src/ts/login.ts',
             register: './php/src/ts/register.ts',
             view_profile: './php/src/ts/view_profile.ts',
-            header: './php/src/ts/header.ts'
+            header: './php/src/ts/header.ts',
+            edit_profile: './php/src/ts/edit_profile.ts'
         },
         module: {
             rules: [
