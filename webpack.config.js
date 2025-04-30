@@ -7,7 +7,8 @@ module.exports = (env, argv) => {
             header: './php/src/ts/header.js',
             create_post: './php/src/ts/create_post.ts',
             login: './php/src/ts/login.ts',
-            view_profile: './php/src/ts/view_profile.ts'
+            view_profile: './php/src/ts/view_profile.ts',
+            header: './php/src/ts/header.ts'
         },
         module: {
             rules: [
