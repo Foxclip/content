@@ -28,7 +28,7 @@ export class Utils {
         if (fraction < 0 || fraction > 1) {
             throw new Error("Fraction must be between 0 and 1");
         }
-        function parseRGB(color) {
+        function parseRGB(color: string) {
             const matches = color.match(/\d+/g);
             if (!matches || matches.length !== 3) {
                 throw new Error("Invalid RGB format");
