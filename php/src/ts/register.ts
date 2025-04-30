@@ -1,18 +1,18 @@
-import { Utils } from './utils.js';
-import { validatePassword } from './validation.js';
+import { Utils } from './utils';
+import { validatePassword } from './validation';
 
-let form = document.getElementById("form");
-let loginInput = document.getElementById("loginInput");
-let emailInput = document.getElementById("emailInput");
-let passwordInput1 = document.getElementById("passwordInput1");
-let passwordInput2 = document.getElementById("passwordInput2");
-let inputs = document.querySelectorAll(".formInput");
-let submitButton = document.getElementById("submitButton");
+let form = document.getElementById("form") as HTMLFormElement;
+let loginInput = document.getElementById("loginInput") as HTMLInputElement;
+let emailInput = document.getElementById("emailInput") as HTMLInputElement;
+let passwordInput1 = document.getElementById("passwordInput1") as HTMLInputElement;
+let passwordInput2 = document.getElementById("passwordInput2") as HTMLInputElement;
+let inputs = document.querySelectorAll<HTMLInputElement>(".formInput");
+let submitButton = document.getElementById("submitButton") as HTMLElement;
 let formInputBorderColor = Utils.getCssVariable("--form-input-border-color");
 let formInputErrorColor = Utils.getCssVariable("--form-input-error-color");
 
-function setInputErrorState(inputElement, isOk, errorText = "") {
-    let errorElement = inputElement.nextElementSibling;
+function setInputErrorState(inputElement: HTMLInputElement, isOk: boolean, errorText = "") {
+    let errorElement = inputElement.nextElementSibling as HTMLElement;
     if (isOk) {
         inputElement.style.borderColor = formInputBorderColor;
         errorElement.style.display = "none";

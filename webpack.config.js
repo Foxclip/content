@@ -7,6 +7,7 @@ module.exports = (env, argv) => {
             header: './php/src/ts/header.js',
             create_post: './php/src/ts/create_post.ts',
             login: './php/src/ts/login.ts',
+            register: './php/src/ts/register.ts',
             view_profile: './php/src/ts/view_profile.ts',
             header: './php/src/ts/header.ts'
         },
