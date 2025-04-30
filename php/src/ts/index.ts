@@ -1,4 +1,4 @@
-import { postDatetimesToLocalTime } from './post.js';
+import { postDatetimesToLocalTime } from './post';
 import { Utils } from './utils';
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
