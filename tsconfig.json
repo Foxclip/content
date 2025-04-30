@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "target": "ES6",
+        "module": "commonjs",
+        "strict": true,
+        "noImplicitAny": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outDir": "./php/src/public/js",
+        "rootDir": "./php/src/ts",
+        "sourceMap": true
+    },
+    "include": [
+        "php/src/ts/**/*"
+    ],
+    "exclude": []
+}
