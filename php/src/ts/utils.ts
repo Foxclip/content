@@ -1,10 +1,10 @@
 export class Utils {
 
-    static mod(a, b) {
+    static mod(a: number, b: number) {
         return ((a % b) + b) % b;
     }
 
-    static formatUTCDateToLocal(utcDateString) {
+    static formatUTCDateToLocal(utcDateString: string) {
         if (!utcDateString.endsWith('Z')) {
             utcDateString += 'Z';
         }
@@ -17,14 +17,14 @@ export class Utils {
             minute: '2-digit',
             second: '2-digit',
             hour12: false
-        };
+        } as Intl.DateTimeFormatOptions;
         const localDateString = utcDate.toLocaleString(undefined, options)
             .replace(/\//g, '.')
             .replace(',', '');
         return localDateString;
     }
 
-    static interpolateRGB(color1, color2, fraction) {
+    static interpolateRGB(color1: string, color2: string, fraction: number) {
         if (fraction < 0 || fraction > 1) {
             throw new Error("Fraction must be between 0 and 1");
         }
@@ -43,16 +43,16 @@ export class Utils {
         return `rgb(${interpolatedR}, ${interpolatedG}, ${interpolatedB})`;
     }
 
-    static getCssVariable(name) {
+    static getCssVariable(name: string) {
         return getComputedStyle(document.documentElement).getPropertyValue(name);
     }
 
-    static async handleResponse(response, onSuccess, onError, errorPrefix) {
+    static async handleResponse(response: Response, onSuccess: Function | null, onError: Function | null, errorPrefix: string) {
         if (response.ok) {
-            let responseJson;
+            let responseJson: any;
             try {
                 responseJson = await response.json();
-            } catch (error) {
+            } catch (error: any) {
                 if (onError) onError(error.message);
                 console.log(`${errorPrefix}: ошибка json: ${error.message}`);
             }

@@ -1,4 +1,4 @@
-import { Utils } from './utils.js';
+import { Utils } from './utils';
 
 export function postDatetimesToLocalTime() {
     let postDatetimes = document.querySelectorAll(".postDatetime");

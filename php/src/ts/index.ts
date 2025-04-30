@@ -1,5 +1,5 @@
 import { postDatetimesToLocalTime } from './post.js';
-import { Utils } from './utils.js';
+import { Utils } from './utils';
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 let likeButtons = document.querySelectorAll<HTMLElement>(".postLikes");
@@ -23,7 +23,7 @@ likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (
 
         await Utils.handleResponse(
             response,
-            (json) => likeButton.querySelector(".postLikesCount")!.textContent = json.like_count,
+            (json: any) => likeButton.querySelector(".postLikesCount")!.textContent = json.like_count,
             null,
             "Кнопка лайка"
         );
