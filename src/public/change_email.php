@@ -7,10 +7,10 @@ if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-require_once('../config.php');
-require_once('../session.php');
-require_once('../utils.php');
-require_once('../validation.php');
+require_once('../php/config.php');
+require_once('../php/session.php');
+require_once('../php/utils.php');
+require_once('../php/validation.php');
 
 header('Content-Type: application/json');
 

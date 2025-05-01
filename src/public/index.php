@@ -1,15 +1,15 @@
 <?php
-    require_once('../config.php');
-    require_once('../session.php');
-    require_once('../utils.php');
-    require_once("../posts.php");
+    require_once('../php/config.php');
+    require_once('../php/session.php');
+    require_once('../php/utils.php');
+    require_once("../php/posts.php");
 
     function write_posts($posts) {
         if (empty($posts)) {
             echo '<div id="noPostsPlaceholder">Пока нет постов</div>';
         }
         foreach ($posts as $post) {
-            includeFile('../ui/post.php', [
+            includeFile('../php/ui/post.php', [
                 'postId' => $post['post_id'],
                 'postAuthorAvatarUrl' => get_user_avatar_url($post['user_id']),
                 'postAuthor' => $post['username'],
@@ -71,7 +71,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../ui/head.php', [
+    includeFile('../php/ui/head.php', [
         'title' => 'Главная',
         'styles' => [
             'common.css',
@@ -82,14 +82,14 @@
     ]);
 ?>
 <body>
-    <?= includeFile('../ui/header.php', ['includeSearchBar' => true]); ?>
+    <?= includeFile('../php/ui/header.php', ['includeSearchBar' => true]); ?>
     <main>
         <div id="recentPosts">
             <div id="recentPostsTitleContainer">
                 <h1 id="recentPostsTitle"><?= PageParameters::$title ?></h1>
                 <?php
                 if (is_logged_in()) {
-                    includeFile('../ui/icon_button.php', [
+                    includeFile('../php/ui/icon_button.php', [
                         'icon' => 'icons/plus.png',
                         'text' => 'Написать',
                         'href' => '/create_post'
@@ -161,7 +161,7 @@
             </div>
         </div>
     </main>
-    <?= includeFile('../ui/footer.php'); ?>
+    <?= includeFile('../php/ui/footer.php'); ?>
     <script src="js/index.js" type="module"></script>
 </body>
 </html>

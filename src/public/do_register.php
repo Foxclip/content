@@ -1,9 +1,9 @@
 <?php
 
-require_once "../db.php";
-require_once "../session.php";
-require_once "../utils.php";
-require_once "../validation.php";
+require_once "../php/db.php";
+require_once "../php/session.php";
+require_once "../php/utils.php";
+require_once "../php/validation.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();

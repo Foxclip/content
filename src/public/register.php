@@ -1,12 +1,12 @@
 <?php
-    require_once('../session.php');
-    require_once('../utils.php');
+    require_once('../php/session.php');
+    require_once('../php/utils.php');
 ?>
 
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../ui/head.php', [
+    includeFile('../php/ui/head.php', [
         'title' => 'Регистрация',
         'styles' => [
             'common.css',
@@ -43,7 +43,7 @@
             </div>
         </form>
     </div>
-    <?php includeFile('../ui/footer.php'); ?>
+    <?php includeFile('../php/ui/footer.php'); ?>
     <script src="js/register.js" type="module"></script>
 </body>
 </html>

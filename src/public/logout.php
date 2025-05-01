@@ -1,6 +1,6 @@
 <?php
 
-require_once '../session.php';
+require_once '../php/session.php';
 
 if (!check_csrf_token()) {
     echo "CSRF токен недействителен";

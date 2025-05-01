@@ -7,7 +7,7 @@ const user = 'root';
 const password = 'root';
 const dbname = 'content';
 
-const sql_dir = __DIR__ . '/sql/';
+const sql_dir = '../sql/';
 const avatars_dir = "avatars/";
 
 const max_posts_per_page = 10;
