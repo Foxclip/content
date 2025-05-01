@@ -7,7 +7,7 @@ $user = get_user();
         <img class="avatarImage" src="<?=get_user_avatar_url()?>" width="30" height="30">
         <span><?=$user['username']?></span>
     </div>
-    <div id="userMenuPopup">
+    <div id="userMenuPopup" class="hidden">
         <a class="userMenuItem" href="/edit_profile">
             <img src="/icons/user_pen.png" width="20" height="20">
             <span>Личный кабинет</span>

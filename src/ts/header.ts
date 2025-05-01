@@ -7,10 +7,12 @@ export function getUserAvatarElement() {
 }
 
 if (userMenuButton && userMenuPopup) {   
-    userMenuButton.addEventListener("click", () => userMenuPopup.style.display = userMenuPopup.style.display === "flex" ? "none" : "flex");
+    userMenuButton.addEventListener("click", () => {
+        userMenuPopup.classList.toggle("hidden");
+    });
     document.addEventListener("click", (event) => {
         if (!userMenuButton.contains(event.target as Node) && !userMenuPopup.contains(event.target as Node)) {
-            userMenuPopup.style.display = "none";
+            userMenuPopup.classList.add("hidden");
         }
     });
 }
