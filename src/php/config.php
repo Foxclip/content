@@ -7,8 +7,11 @@ const user = 'root';
 const password = 'root';
 const dbname = 'content';
 
-const sql_dir = '../sql/';
-const avatars_dir = "avatars/";
+const src_dir = '../..';
+const public_dir = src_dir . '/public';
+const sql_dir = src_dir . '/sql';
+const avatars_dir = public_dir . '/avatars';
+const avatars_url = '/avatars';
 
 const max_posts_per_page = 10;
 

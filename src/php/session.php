@@ -150,8 +150,8 @@ function get_user_avatar_url(?int $id = null): string {
     if ($id) {
         $userId = $id;
     }
-    if (!file_exists("avatars/$userId.png")) {
-        return '/avatars/default.png';
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . "/avatars/$userId.png")) {
+        return "/avatars/default.png";
     }
     return "/avatars/$userId.png";
 }

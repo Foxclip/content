@@ -5,14 +5,14 @@
     <div id="headerCenterSection">
         <?php
         if (isset($includeSearchBar) && $includeSearchBar) {
-            includeFile('../php/ui/searchbar.php');
+            includeFile('../ui/searchbar.php');
         }
         ?>
     </div>
     <div id="headerRightSection">
         <?php 
         if (is_logged_in()):
-            includeFile('../php/ui/user_button.php');
+            includeFile('../ui/user_button.php');
         else:
         ?>
         <a id="loginButton" href="/login">Войти</a>

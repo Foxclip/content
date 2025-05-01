@@ -45,7 +45,7 @@ function execute_sql_query(string $query, array $params = [], QueryParameterType
 }
 
 function execute_sql_script(string $filename, array $params = [], QueryParameterType|array $types = QueryParameterType::String): array {
-    $sql = file_get_contents(\Config\sql_dir . $filename);
+    $sql = file_get_contents(\Config\sql_dir . '/' . $filename);
     $result = execute_sql_query($sql, $params, $types);
     return $result;
 }

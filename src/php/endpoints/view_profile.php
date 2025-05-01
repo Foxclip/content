@@ -1,7 +1,7 @@
 <?php
 
-require_once('../php/session.php');
-require_once('../php/utils.php');
+require_once('../session.php');
+require_once('../utils.php');
 
 $request = $_SERVER['REQUEST_URI'];
 $usernameParts = explode('/', $request);
@@ -15,7 +15,7 @@ if (count($usernameParts) >= 3) {
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../php/ui/head.php', [
+    includeFile('../ui/head.php', [
         'title' => 'Главная',
         'styles' => [
             'common.css',
@@ -26,7 +26,7 @@ if (count($usernameParts) >= 3) {
     ]);
 ?>
 <body>
-    <?= includeFile('../php/ui/header.php'); ?>
+    <?= includeFile('../ui/header.php'); ?>
     <main>
         <div id="profileContainer">
             <?php if (!isset($user)): ?>
@@ -40,7 +40,7 @@ if (count($usernameParts) >= 3) {
             <?php endif; ?>
         </div>
     </main>
-    <?= includeFile('../php/ui/footer.php'); ?>
+    <?= includeFile('../ui/footer.php'); ?>
     <script src="/js/view_profile.js" type="module"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 
-require_once('../php/session.php');
-require_once('../php/utils.php');
+require_once('../session.php');
+require_once('../utils.php');
 
 if (!is_logged_in()) {
     redirect_to_login_page(true);
@@ -9,7 +9,7 @@ if (!is_logged_in()) {
 }
 
 function includeEditButton(): void {
-    includeFile('../php/ui/icon_button.php', [
+    includeFile('../ui/icon_button.php', [
         'icon' => 'icons/pencil.png',
         'text' => 'Изменить',
         'classes' => ['profileEditButton']
@@ -17,12 +17,12 @@ function includeEditButton(): void {
 }
 
 function includeSaveButton(): void {
-    includeFile('../php/ui/icon_button.php', [
+    includeFile('../ui/icon_button.php', [
         'icon' => 'icons/send.png',
         'text' => 'Сохранить',
         'classes' => ['profileSaveButton', 'hidden']
     ]);
-    includeFile('../php/ui/icon_button.php', [
+    includeFile('../ui/icon_button.php', [
         'icon' => 'icons/cross.png',
         'text' => 'Отмена',
         'classes' => ['profileCancelButton', 'hidden']
@@ -34,7 +34,7 @@ function includeSaveButton(): void {
 <!DOCTYPE html>
 <html>
 <?php
-    includeFile('../php/ui/head.php', [
+    includeFile('../ui/head.php', [
         'title' => 'Главная',
         'styles' => [
             'common.css',
@@ -45,7 +45,7 @@ function includeSaveButton(): void {
     ]);
 ?>
 <body>
-    <?= includeFile('../php/ui/header.php'); ?>
+    <?= includeFile('../ui/header.php'); ?>
     <main>
         <div id="profileContainer">
             <h1 id="profileTitle">Профиль</h1>
@@ -118,7 +118,7 @@ function includeSaveButton(): void {
             </div>
         </div>
     </main>
-    <?= includeFile('../php/ui/footer.php'); ?>
+    <?= includeFile('../ui/footer.php'); ?>
     <script src="js/edit_profile.js" type="module"></script>
 </body>
 </html>

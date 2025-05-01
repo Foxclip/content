@@ -1,7 +1,7 @@
 <?php
 
-require_once('../php/session.php');
-require_once('../php/utils.php');
+require_once('../session.php');
+require_once('../utils.php');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
