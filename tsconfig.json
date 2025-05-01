@@ -6,12 +6,12 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "outDir": "./php/src/public/js",
-        "rootDir": "./php/src/ts",
+        "outDir": "./src/public/js",
+        "rootDir": "./src/ts",
         "sourceMap": true
     },
     "include": [
-        "php/src/ts/**/*"
+        "src/ts/**/*"
     ],
     "exclude": []
 }

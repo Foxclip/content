@@ -6,7 +6,7 @@
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:8000",
-            "webRoot": "${workspaceFolder}/php/src/public",
+            "webRoot": "${workspaceFolder}/src/public",
             "preLaunchTask": "npm: build-dev",
             "sourceMaps": true,
             "sourceMapPathOverrides": {
@@ -23,7 +23,7 @@
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:8000",
-            "webRoot": "${workspaceFolder}/php/src/public",
+            "webRoot": "${workspaceFolder}/src/public",
             "preLaunchTask": "npm: build-prod",
             "runtimeArgs": [
                 "--auto-open-devtools-for-tabs"
@@ -35,7 +35,7 @@
             "request": "launch",
             "port": 9003,
             "pathMappings": {
-                "/var/www/html/": "${workspaceRoot}/php/src/"
+                "/var/www/html/": "${workspaceRoot}/src/"
             }
         }
     ]
