@@ -8,3 +8,10 @@
     align-items: center;
     min-height: 400px;
 }
+
+.profileItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+}
