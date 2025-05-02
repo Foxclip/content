@@ -46,4 +46,117 @@ function get_user_post_count(int|null $id = null): int {
     return $result;
 }
 
+enum PageType {
+    case RecentPosts;
+    case MyPosts;
+}
+
+function writeTab(string $text, string $href, bool $active): void {
+    $hrefStr = " href=$href";
+    if ($active) {
+        $hrefStr = '';
+    }
+    echo "<a$hrefStr class=\"tabButton " . ($active ? 'active' : '') . '">' . $text . '</a>';
+}
+
+function write_posts($posts) {
+    if (empty($posts)) {
+        echo '<div class="postsNoPostsPlaceholder">Пока нет постов</div>';
+    }
+    foreach ($posts as $post) {
+        includeFile('../ui/post.php', [
+            'postId' => $post['post_id'],
+            'postAuthorAvatarUrl' => get_user_avatar_url($post['user_id']),
+            'postAuthor' => $post['username'],
+            'postDatetime' => $post['created_at'],
+            'postTitle' => $post['title'],
+            'postContent' => $post['content'],
+            'postLikes' => $post['like_count'],
+            'postLikedByUser' => $post['liked_by_user']
+        ]);
+    }
+}
+
+function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $title) {
+    $postCount = $getPostCountFunc();
+    $pageCount = (int)ceil($postCount / \Config\max_posts_per_page);
+    if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+        $page = intval($_GET['page']);
+    } else {
+        $page = (int)ceil($postCount / \Config\max_posts_per_page);
+    }
+    $offset = max(0, $postCount - \Config\max_posts_per_page * $page);
+    $posts = $getPostsFunc($offset, \Config\max_posts_per_page);
+    $title = $title;
+    ?>
+    <div class="postsPage">
+        <div class="postsTitleContainer">
+            <h1 class="postsTitle"><?= $title ?></h1>
+            <?php
+            if (is_logged_in()) {
+                includeFile('../ui/icon_button.php', [
+                    'icon' => 'icons/plus.png',
+                    'text' => 'Написать',
+                    'href' => '/create_post'
+                ]);
+            }
+            ?>
+        </div>
+        <div class="postsTabContainer">
+            <div class="tabButtonList">
+                <?php
+                if (is_logged_in()) {
+                    writeTab('Все', '/', $pageType === PageType::RecentPosts);
+                    writeTab('Мои', '/?type=my_posts', $pageType === PageType::MyPosts);
+                }
+                ?>
+            </div>
+            <div class="tabBodyList">
+                <?php
+                if ($pageType === PageType::RecentPosts):
+                ?>
+                <divb class="postList tabBody active">
+                    <?php
+                    write_posts($posts);
+                    ?>
+                </div>
+                <?php
+                endif;
+                ?>
+                <?php
+                if ($pageType === PageType::MyPosts):
+                ?>
+                <div class="postList tabBody active">
+                    <?php
+                    write_posts($posts);
+                    ?>
+                </div>
+                <?php
+                endif;
+                ?>
+            </div>
+        </div>
+        <div class="paginationContainer">
+            <?php
+            if ($pageCount > 1) {
+                $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
+                for ($i = $pageCount; $i >= 1; $i--) {
+                    $isActive = $page === $i;
+                    $get_parameters = [
+                        'type' => $pageTypeParamStr,
+                        'page' => $i
+                    ];
+                    $queryStr = http_build_query($get_parameters);
+                    $hrefStr = " href=/?" . $queryStr;
+                    if ($page === $i) {
+                        $hrefStr = '';
+                    }
+                    echo '<a' . $hrefStr . ' class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</a>';
+                }
+            }
+            ?>
+        </div>
+    </div>
+<?php
+}
 ?>
