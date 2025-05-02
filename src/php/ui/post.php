@@ -1,9 +1,9 @@
 <div class="post" data-post-id="<?=$postId?>">
 <div class="postTopPanel">
-    <div class="userNameWithAvatar">
+    <a class="userNameWithAvatar" href="user/<?=$postAuthor?>">
         <img class="avatarImage" src="<?=$postAuthorAvatarUrl?>" width="30" height="30">
         <span class="postAuthor"><?=$postAuthor?></span>
-    </div>
+    </a>
     <span class="postDatetime"><?=$postDatetime?></span>
 </div>
 <div class="postTitleContainer">
