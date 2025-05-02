@@ -30,6 +30,21 @@
             ],
         },
         {
+            "name": "Build Dev and Attach to Chrome",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "urlFilter": "http://localhost:8000/*",
+            "webRoot": "${workspaceFolder}/src/public",
+            "preLaunchTask": "npm: build-dev",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+                "webpack:////*": "/*",
+                "webpack://?:*/*": "${workspaceFolder}/*"
+            },
+        },
+        {
             "name": "Xdebug",
             "type": "php",
             "request": "launch",
