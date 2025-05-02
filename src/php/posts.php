@@ -85,7 +85,7 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
     } else {
         $page = (int)ceil($postCount / \Config\max_posts_per_page);
     }
-    $offset = max(0, $postCount - \Config\max_posts_per_page * $page);
+    $offset = ($pageCount - $page) * \Config\max_posts_per_page;
     $posts = $getPostsFunc($offset, \Config\max_posts_per_page);
     $title = $title;
     ?>
