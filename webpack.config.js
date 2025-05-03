@@ -8,14 +8,14 @@ module.exports = (env, argv) => {
             create_post: './src/ts/create_post.ts',
             login: './src/ts/login.ts',
             register: './src/ts/register.ts',
-            view_profile: './src/ts/view_profile.ts',
+            view_profile: './src/ts/view_profile.tsx',
             header: './src/ts/header.ts',
             edit_profile: './src/ts/edit_profile.ts'
         },
         module: {
             rules: [
                 {
-                    test: /\.ts$/,
+                    test: /\.(ts|tsx)$/,
                     use: 'ts-loader',
                     include: [path.resolve(__dirname, 'src/ts')],
                     exclude: /node_modules/,
@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
             ],
         },
         resolve: {
-            extensions: ['.ts', '.js'],
+            extensions: ['.ts', '.tsx', '.js'],
         },
         devtool: isProduction ? false : 'source-map',
         output: {
