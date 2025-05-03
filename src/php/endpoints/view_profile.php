@@ -35,7 +35,7 @@ if (count($usernameParts) >= 3) {
             <h1 id="profileTitle">Профиль <?= $user['username'] ?></h1>
             <div id="profileContent">
                 <div id="profileCard" class="profileCard card">
-                    <img class="avatarImage" src="<?= get_user_avatar_url() ?>" width="100" height="100">
+                    <img class="avatarImage" src="<?= get_user_avatar_url($user['id']) ?>" width="100" height="100">
                     <div class="profileItem"><?= $user['email'] ?></div>
                 </div>
             </div>
