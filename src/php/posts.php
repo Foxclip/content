@@ -99,26 +99,26 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
                 </div>
             </div>
         </div>
+        <?php if ($pageCount > 1): ?>
         <div class="paginationContainer">
             <?php
-            if ($pageCount > 1) {
-                $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
-                for ($i = $pageCount; $i >= 1; $i--) {
-                    $isActive = $page === $i;
-                    $get_parameters = [
-                        'type' => $pageTypeParamStr,
-                        'page' => $i
-                    ];
-                    $queryStr = http_build_query($get_parameters);
-                    $hrefStr = " href=" . $hrefBase . "?" . $queryStr;
-                    if ($page === $i) {
-                        $hrefStr = '';
-                    }
-                    echo '<a' . $hrefStr . ' class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</a>';
+            $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
+            for ($i = $pageCount; $i >= 1; $i--) {
+                $isActive = $page === $i;
+                $get_parameters = [
+                    'type' => $pageTypeParamStr,
+                    'page' => $i
+                ];
+                $queryStr = http_build_query($get_parameters);
+                $hrefStr = " href=" . $hrefBase . "?" . $queryStr;
+                if ($page === $i) {
+                    $hrefStr = '';
                 }
+                echo '<a' . $hrefStr . ' class="paginationButton ' . ($isActive ? 'active' : '') . '">' . $i . '</a>';
             }
             ?>
         </div>
+        <?php endif; ?>
     </div>
 <?php
 }
