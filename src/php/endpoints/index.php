@@ -43,6 +43,14 @@
                 }
                 ?>
             </div>
+            <div class="tabButtonList justify-center">
+                <?php
+                if (is_logged_in()) {
+                    writeTab('Все', '/', $pageType === PageType::RecentPosts);
+                    writeTab('Мои', '/?type=my_posts', $pageType === PageType::MyPosts);
+                }
+                ?>
+            </div>
             <?php
             if (!isset($_GET['type'])) {
                 writePostPage(

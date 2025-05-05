@@ -91,14 +91,6 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
     ?>
     <div class="postsPage">
         <div class="postsTabContainer">
-            <div class="tabButtonList">
-                <?php
-                if (is_logged_in()) {
-                    writeTab('Все', '/', $pageType === PageType::RecentPosts);
-                    writeTab('Мои', '/?type=my_posts', $pageType === PageType::MyPosts);
-                }
-                ?>
-            </div>
             <div class="tabBodyList">
                 <div class="postList tabBody active">
                     <?php
