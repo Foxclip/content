@@ -49,6 +49,7 @@ function get_user_post_count(int|null $id = null): int {
 enum PageType {
     case RecentPosts;
     case MyPosts;
+    case UserPosts;
 }
 
 function writeTab(string $text, string $href, bool $active): void {
@@ -112,28 +113,11 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
                 ?>
             </div>
             <div class="tabBodyList">
-                <?php
-                if ($pageType === PageType::RecentPosts):
-                ?>
-                <divb class="postList tabBody active">
-                    <?php
-                    write_posts($posts);
-                    ?>
-                </div>
-                <?php
-                endif;
-                ?>
-                <?php
-                if ($pageType === PageType::MyPosts):
-                ?>
                 <div class="postList tabBody active">
                     <?php
                     write_posts($posts);
                     ?>
                 </div>
-                <?php
-                endif;
-                ?>
             </div>
         </div>
         <div class="paginationContainer">
