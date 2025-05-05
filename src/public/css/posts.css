@@ -3,13 +3,6 @@
     color: rgb(0, 0, 0);
 }
 
-.postsTabContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
 .postList {
     display: flex;
     flex-direction: column;

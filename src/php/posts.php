@@ -90,14 +90,10 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
     $posts = $getPostsFunc($offset, \Config\max_posts_per_page);
     ?>
     <div class="postsPage">
-        <div class="postsTabContainer">
-            <div class="tabBodyList">
-                <div class="postList tabBody active">
-                    <?php
-                    write_posts($posts);
-                    ?>
-                </div>
-            </div>
+        <div class="postList">
+            <?php
+            write_posts($posts);
+            ?>
         </div>
         <?php if ($pageCount > 1): ?>
         <div class="paginationContainer">
