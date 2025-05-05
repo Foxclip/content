@@ -96,7 +96,7 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
             <?php
             if (is_logged_in()) {
                 includeFile('../ui/icon_button.php', [
-                    'icon' => 'icons/plus.png',
+                    'icon' => '/icons/plus.png',
                     'text' => 'Написать',
                     'href' => '/create_post'
                 ]);
