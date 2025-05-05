@@ -78,7 +78,7 @@ function write_posts($posts) {
     }
 }
 
-function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $title, string $hrefBase = '/') {
+function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $hrefBase = '/') {
     $postCount = $getPostCountFunc();
     $pageCount = (int)ceil($postCount / \Config\max_posts_per_page);
     if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
@@ -88,21 +88,8 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
     }
     $offset = ($pageCount - $page) * \Config\max_posts_per_page;
     $posts = $getPostsFunc($offset, \Config\max_posts_per_page);
-    $title = $title;
     ?>
     <div class="postsPage">
-        <div class="postsTitleContainer">
-            <h1 class="postsTitle"><?= $title ?></h1>
-            <?php
-            if (is_logged_in()) {
-                includeFile('../ui/icon_button.php', [
-                    'icon' => '/icons/plus.png',
-                    'text' => 'Написать',
-                    'href' => '/create_post'
-                ]);
-            }
-            ?>
-        </div>
         <div class="postsTabContainer">
             <div class="tabButtonList">
                 <?php

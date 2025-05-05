@@ -23,6 +23,10 @@ main {
     width: 100%;
 }
 
+.mainContainer {
+    width: 800px;
+}
+
 a {
     color: rgb(0, 0, 0);
 }
