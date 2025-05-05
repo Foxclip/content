@@ -4,7 +4,7 @@ require_once('../session.php');
 require_once('../utils.php');
 require_once('../posts.php');
 
-$request = $_SERVER['REQUEST_URI'];
+$request = get_base_uri($_SERVER['REQUEST_URI']);
 $usernameParts = explode('/', $request);
 if (count($usernameParts) >= 3) {
     $username = $usernameParts[2];
@@ -46,7 +46,8 @@ if (count($usernameParts) >= 3) {
                         PageType::UserPosts,
                         fn() => get_user_post_count($user['id']),
                         fn($offset, $count) => get_user_posts($user['id'], $offset, $count),
-                        'Посты ' . $user['username']
+                        'Посты ' . $user['username'],
+                        get_base_uri($_SERVER['REQUEST_URI'])
                     );
                     ?>
                 </div>

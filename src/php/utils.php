@@ -17,4 +17,12 @@ function checkVariables(array $array, array $names): string {
     return "";
 }
 
+function get_base_uri(): string {
+    $questionMarkPos = strpos($_SERVER['REQUEST_URI'], '?');
+    if ($questionMarkPos === false) {
+        return $_SERVER['REQUEST_URI'];
+    }
+    return substr($_SERVER['REQUEST_URI'], 0, $questionMarkPos);
+}
+
 ?>

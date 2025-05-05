@@ -78,7 +78,7 @@ function write_posts($posts) {
     }
 }
 
-function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $title) {
+function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $title, string $hrefBase = '/') {
     $postCount = $getPostCountFunc();
     $pageCount = (int)ceil($postCount / \Config\max_posts_per_page);
     if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
@@ -131,7 +131,7 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
                         'page' => $i
                     ];
                     $queryStr = http_build_query($get_parameters);
-                    $hrefStr = " href=/?" . $queryStr;
+                    $hrefStr = " href=" . $hrefBase . "?" . $queryStr;
                     if ($page === $i) {
                         $hrefStr = '';
                     }
