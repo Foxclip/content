@@ -1,4 +1,4 @@
-import { postDatetimesToLocalTime } from "./post";
+import { postDatetimesToLocalTime, setupLikeButtons } from "./post";
 
 declare global {
     interface Window {
@@ -16,9 +16,7 @@ export function getUserAvatarElement() {
     return avatar;
 }
 
-if (typeof window !== "undefined" && !window.__headerInitialized) {
-    window.__headerInitialized = true;
-
+function setupUserMenu() {
     userMenuButton = document.getElementById("userMenuButton");
     userMenuPopup = document.getElementById("userMenuPopup");
 
@@ -39,6 +37,12 @@ if (typeof window !== "undefined" && !window.__headerInitialized) {
         if (!logoutForm) throw new Error("Logout form not found");
         logoutButton.addEventListener("click", () => logoutForm.submit());
     }
+}
 
+if (typeof window !== "undefined" && !window.__headerInitialized) {
+    window.__headerInitialized = true;
+
+    setupUserMenu();
     postDatetimesToLocalTime();
+    setupLikeButtons();
 }
