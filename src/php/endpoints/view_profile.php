@@ -46,7 +46,6 @@ if (count($usernameParts) >= 3) {
                     PageType::UserPosts,
                     fn() => get_user_post_count($user['id']),
                     fn($offset, $count) => get_user_posts($user['id'], $offset, $count),
-                    'Посты ' . $user['username'],
                     get_base_uri($_SERVER['REQUEST_URI'])
                 );
                 ?>
