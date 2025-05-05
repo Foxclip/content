@@ -1,3 +1,5 @@
+import { postDatetimesToLocalTime } from "./post";
+
 declare global {
     interface Window {
         __headerInitialized?: boolean;
@@ -37,4 +39,6 @@ if (typeof window !== "undefined" && !window.__headerInitialized) {
         if (!logoutForm) throw new Error("Logout form not found");
         logoutButton.addEventListener("click", () => logoutForm.submit());
     }
+
+    postDatetimesToLocalTime();
 }

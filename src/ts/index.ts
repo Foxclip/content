@@ -1,4 +1,3 @@
-import { postDatetimesToLocalTime } from './post';
 import { Utils } from './utils';
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -33,5 +32,3 @@ likeButtons.forEach((likeButton) => likeButton.addEventListener("click", async (
     }
 
 }));
-
-postDatetimesToLocalTime();
