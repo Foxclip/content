@@ -78,7 +78,7 @@ function write_posts($posts) {
     }
 }
 
-function writePostPage(PageType $pageType, callable $getPostCountFunc, callable $getPostsFunc, string $hrefBase = '/') {
+function writePostPage(callable $getPostCountFunc, callable $getPostsFunc, string $hrefBase = '/', ?string $typeParamStr = null) {
     $postCount = $getPostCountFunc();
     $pageCount = (int)ceil($postCount / \Config\max_posts_per_page);
     if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
@@ -98,11 +98,10 @@ function writePostPage(PageType $pageType, callable $getPostCountFunc, callable 
         <?php if ($pageCount > 1): ?>
         <div class="paginationContainer">
             <?php
-            $pageTypeParamStr = $pageType === PageType::RecentPosts ? null : 'my_posts';
             for ($i = $pageCount; $i >= 1; $i--) {
                 $isActive = $page === $i;
                 $get_parameters = [
-                    'type' => $pageTypeParamStr,
+                    'type' => $typeParamStr,
                     'page' => $i
                 ];
                 $queryStr = http_build_query($get_parameters);

@@ -62,10 +62,10 @@ if (isset($_GET['type']) && $_GET['type'] === 'posts') {
                 <?php elseif ($pageType === UserPageType::UserPosts): ?>
                 <?php
                 writePostPage(
-                    PageType::UserPosts,
                     fn() => get_user_post_count($user['id']),
                     fn($offset, $count) => get_user_posts($user['id'], $offset, $count),
-                    get_base_uri($_SERVER['REQUEST_URI'])
+                    get_base_uri($_SERVER['REQUEST_URI']),
+                    'posts'
                 );
                 ?>
                 <?php endif; ?>

@@ -54,15 +54,15 @@
             <?php
             if (!isset($_GET['type'])) {
                 writePostPage(
-                    PageType::RecentPosts,
                     fn() => get_all_post_count(),
                     fn($offset, $count) => get_recent_posts($offset, $count),
                 );
             } else if (isset($_GET['type']) && $_GET['type'] === 'my_posts') {
                 writePostPage(
-                    PageType::MyPosts,
                     fn() => get_user_post_count(get_user_id()),
                     fn($offset, $count) => get_user_posts(get_user_id(), $offset, $count),
+                    '/',
+                    'my_posts',
                 );
             }
             ?>
