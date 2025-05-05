@@ -4,11 +4,23 @@ require_once('../session.php');
 require_once('../utils.php');
 require_once('../posts.php');
 
-$request = get_base_uri($_SERVER['REQUEST_URI']);
-$usernameParts = explode('/', $request);
+enum UserPageType {
+    case UserProfile;
+    case UserPosts;
+}
+
+$baseUri = get_base_uri($_SERVER['REQUEST_URI']);
+$usernameParts = explode('/', $baseUri);
 if (count($usernameParts) >= 3) {
     $username = $usernameParts[2];
     $user = get_user_by_name($username);
+}
+
+$pageType = UserPageType::UserProfile;
+$pageTitle = 'Профиль ' . $username;
+if (isset($_GET['type']) && $_GET['type'] === 'posts') {
+    $pageType = UserPageType::UserPosts;
+    $pageTitle = 'Посты ' . $username;
 }
 
 ?>
@@ -17,7 +29,7 @@ if (count($usernameParts) >= 3) {
 <html>
 <?php
     includeFile('../ui/head.php', [
-        'title' => 'Главная',
+        'title' => $pageTitle,
         'styles' => [
             'common.css',
             'header.css',
@@ -35,12 +47,19 @@ if (count($usernameParts) >= 3) {
                 <h1>Пользователь не найден</h1>
             <?php else: ?>
             <div id="profileContent">
-                <h1 id="profileTitle">Профиль <?= $user['username'] ?></h1>
+                <h1 id="profileTitle"><?= $pageTitle ?></h1>
+                <div class="tabButtonList">
+                    <?php
+                    writeTab('Профиль', $baseUri, $pageType === UserPageType::UserProfile);
+                    writeTab('Посты', $baseUri . '?type=posts', $pageType === UserPageType::UserPosts);
+                    ?>
+                </div>
+                <?php if ($pageType === UserPageType::UserProfile): ?>
                 <div id="profileCard" class="profileCard card">
                     <img class="avatarImage" src="<?= get_user_avatar_url($user['id']) ?>" width="100" height="100">
                     <div class="profileItem"><?= $user['email'] ?></div>
                 </div>
-                <h1>Посты <?= $user['username'] ?></h1>
+                <?php elseif ($pageType === UserPageType::UserPosts): ?>
                 <?php
                 writePostPage(
                     PageType::UserPosts,
@@ -49,6 +68,7 @@ if (count($usernameParts) >= 3) {
                     get_base_uri($_SERVER['REQUEST_URI'])
                 );
                 ?>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
         </div>
