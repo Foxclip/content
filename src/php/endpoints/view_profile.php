@@ -40,17 +40,16 @@ if (count($usernameParts) >= 3) {
                     <img class="avatarImage" src="<?= get_user_avatar_url($user['id']) ?>" width="100" height="100">
                     <div class="profileItem"><?= $user['email'] ?></div>
                 </div>
-                <div>
-                    <?php
-                    writePostPage(
-                        PageType::UserPosts,
-                        fn() => get_user_post_count($user['id']),
-                        fn($offset, $count) => get_user_posts($user['id'], $offset, $count),
-                        'Посты ' . $user['username'],
-                        get_base_uri($_SERVER['REQUEST_URI'])
-                    );
-                    ?>
-                </div>
+                <h1>Посты <?= $user['username'] ?></h1>
+                <?php
+                writePostPage(
+                    PageType::UserPosts,
+                    fn() => get_user_post_count($user['id']),
+                    fn($offset, $count) => get_user_posts($user['id'], $offset, $count),
+                    'Посты ' . $user['username'],
+                    get_base_uri($_SERVER['REQUEST_URI'])
+                );
+                ?>
             </div>
             <?php endif; ?>
         </div>
