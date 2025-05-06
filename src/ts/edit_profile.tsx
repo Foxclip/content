@@ -112,6 +112,7 @@ function TextField(props: {
     }
 
     function enableSaving() {
+        setError(() => "");
         setFieldState(() => FieldState.Saving);
     }
 
@@ -121,18 +122,25 @@ function TextField(props: {
         } else {
             setInputValue(displayedValue);
         }
+        setError(() => "");
         setFieldState(() => FieldState.Normal);
     }
 
     async function saveButtonClick() {
         enableSaving();
         const request = props.prepareRequest(inputValue);
+
+        function handleError(errorMessage: string) {
+            setError(errorMessage);
+            enableEditing();
+        }
+
         if (csrfToken) request.headers["X-CSRF-Token"] = csrfToken;
         try {
             const response = await fetch(props.fetchUrl, { method: "POST", body: request.body, headers: request.headers });
-            Utils.handleResponse(response, props.errorPrefix, () => disableEditing(true));
+            await Utils.handleResponse(response, props.errorPrefix, () => disableEditing(true), handleError);
         } catch (error: any) {
-            setError(error.message);
+            handleError(error.message);
         }
     }
 
@@ -143,7 +151,7 @@ function TextField(props: {
                 <div className="profileErrorContainer">
                     {fieldState === FieldState.Normal ? <span className="profileDisplayText">{displayedValue}</span> : null}
                     {fieldState !== FieldState.Normal ? <input className="profileTextInput" type={inputType} value={inputValue} onChange={(e) => setInputValue(() => e.target.value)} /> : null}
-                    {error ? <span className="profileErrorText"></span> : null}
+                    {error ? <span className="profileErrorText">{error}</span> : null}
                 </div>
             </td>
             <td>
