@@ -46,7 +46,7 @@ function includeSaveButton(): void {
 ?>
 <body>
     <?= includeFile('../ui/header.php'); ?>
-    <main>
+    <main id="root">
         <div id="profileContainer">
             <h1 id="profileTitle">Профиль</h1>
             <div id="profileContent">
