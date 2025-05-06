@@ -153,7 +153,11 @@ function TextField(props: {
 
         if (csrfToken) request.headers["X-CSRF-Token"] = csrfToken;
         try {
-            const response = await fetch(props.fetchUrl, { method: "POST", body: request.body, headers: request.headers });
+            const response = await fetch(props.fetchUrl, {
+                method: "POST",
+                body: request.body,
+                headers: request.headers
+            });
             await Utils.handleResponse(response, props.errorPrefix, () => disableEditing(true), handleError);
         } catch (error: any) {
             handleError(error.message);
@@ -165,8 +169,18 @@ function TextField(props: {
             <td><span className="profileLabelText">{props.labelText}:</span></td>
             <td>
                 <div className="profileErrorContainer">
-                    {fieldState === FieldState.Normal ? <span className="profileDisplayText">{displayedValue}</span> : null}
-                    {fieldState !== FieldState.Normal ? <input className="profileTextInput" type={inputType} value={inputValue} onChange={(e) => setInputValue(() => e.target.value)} /> : null}
+                    {fieldState === FieldState.Normal ?
+                        <span
+                            className="profileDisplayText">{displayedValue}
+                        </span>
+                        : null}
+                    {fieldState !== FieldState.Normal ?
+                        <input className="profileTextInput" 
+                            type={inputType}
+                            value={inputValue}
+                            onChange={(e) => setInputValue(() => e.target.value)}
+                        />
+                        : null}
                     {error ? <span className="profileErrorText">{error}</span> : null}
                 </div>
             </td>
