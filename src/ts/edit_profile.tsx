@@ -55,9 +55,9 @@ function Spinner(props: { radius: number, factor: number }) {
                 r={props.radius}
                 fill="none" 
                 stroke="red"
-                stroke-width="5" 
-                stroke-dasharray={[2 * Math.PI * props.radius * props.factor, 2 * Math.PI * props.radius * (1 - props.factor)]}
-                stroke-linecap="round"
+                strokeWidth="5" 
+                strokeDasharray={`${2 * Math.PI * props.radius * props.factor} ${2 * Math.PI * props.radius * (1 - props.factor)}`}
+                strokeLinecap="round"
             ></circle>
         </svg>
     );
@@ -111,6 +111,10 @@ function TextField(props: {
         setFieldState(() => FieldState.Editing);
     }
 
+    function enableSaving() {
+        setFieldState(() => FieldState.Saving);
+    }
+
     function disableEditing(confirm: boolean) {
         if (confirm) {
             setDisplayedValue(inputValue);
@@ -121,8 +125,8 @@ function TextField(props: {
     }
 
     async function saveButtonClick() {
+        enableSaving();
         const request = props.prepareRequest(inputValue);
-
         if (csrfToken) request.headers["X-CSRF-Token"] = csrfToken;
         try {
             const response = await fetch(props.fetchUrl, { method: "POST", body: request.body, headers: request.headers });
