@@ -56,7 +56,10 @@ function Spinner(props: { radius: number, factor: number }) {
                 fill="none" 
                 stroke="red"
                 strokeWidth="5" 
-                strokeDasharray={`${2 * Math.PI * props.radius * props.factor} ${2 * Math.PI * props.radius * (1 - props.factor)}`}
+                strokeDasharray={
+                    `${2 * Math.PI * props.radius * props.factor}`
+                    + `${2 * Math.PI * props.radius * (1 - props.factor)}`
+                }
                 strokeLinecap="round"
             ></circle>
         </svg>
@@ -158,7 +161,12 @@ function TextField(props: {
                 body: request.body,
                 headers: request.headers
             });
-            await Utils.handleResponse(response, props.errorPrefix, () => disableEditing(true), handleError);
+            await Utils.handleResponse({
+                response,
+                errorPrefix: props.errorPrefix,
+                onSuccess: () => disableEditing(true),
+                onError: handleError
+            });
         } catch (error: any) {
             handleError(error.message);
         }
