@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
+const initialData = JSON.parse(document.getElementById('initial-data')!.textContent!);
+
 function getUsername(): string {
     return "User";
 }
@@ -113,8 +115,8 @@ function Main() {
                     <div id="profileMainTab" className="profileTabBody card">
                         <table id="profileTable">
                             <tbody>
-                                <LabelField labelText="Логин" displayText={getUsername()} />
-                                <TextField labelText="Email" displayText={getEmail()} />
+                                <LabelField labelText="Логин" displayText={initialData.username} />
+                                <TextField labelText="Email" displayText={initialData.email} inputType="email" />
                             </tbody>
                         </table>
                     </div>
