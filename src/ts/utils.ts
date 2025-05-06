@@ -47,7 +47,7 @@ export class Utils {
         return getComputedStyle(document.documentElement).getPropertyValue(name);
     }
 
-    static async handleResponse(response: Response, onSuccess: Function | null, onError: Function | null, errorPrefix: string) {
+    static async handleResponse(response: Response, errorPrefix: string, onSuccess?: (response: any) => void, onError?: (errorMessage: string) => void) {
         if (response.ok) {
             let responseJson: any;
             try {

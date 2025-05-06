@@ -31,9 +31,8 @@ export function setupLikeButtons() {
 
             await Utils.handleResponse(
                 response,
+                "Кнопка лайка",
                 (json: any) => likeButton.querySelector(".postLikesCount")!.textContent = json.like_count,
-                null,
-                "Кнопка лайка"
             );
         } catch (error) {
             console.log(`Кнопка лайка: ${error}`);

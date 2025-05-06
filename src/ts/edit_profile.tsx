@@ -1,34 +1,21 @@
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { Utils } from './utils';
+import { validateEmail } from './validation';
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 const initialData = JSON.parse(document.getElementById('initial-data')!.textContent!);
-
-function getUsername(): string {
-    return "User";
-}
-
-function getEmail(): string {
-    return "user@example.com";
-}
 
 function TabButton(props: { children: React.ReactNode }) {
     return <div className="tabButton active">{props.children}</div>
 }
 
-function AbstractField(props: { children: React.ReactNode }) {
-    const fetchUrl = useRef(null);
-    const errorPrefix = useRef(null);
-    return <>{props.children}</>;
-}
-
 function LabelField(props: { labelText: string, displayText: string  }) {
     return (
-        <AbstractField>
-            <tr>
-                <td><span className="profileLabelText">{props.labelText}:</span></td>
-                <td><span className="profileDisplayText">{props.displayText}</span></td>
-            </tr>
-        </AbstractField>
+        <tr>
+            <td><span className="profileLabelText">{props.labelText}:</span></td>
+            <td><span className="profileDisplayText">{props.displayText}</span></td>
+        </tr>
     );
 }
 
@@ -59,48 +46,114 @@ function CancelButton(props: { onClick: () => void }) {
     );
 }
 
-function TextField(props: { labelText: string, displayText: string, inputType?: string }) {
-    const inputType = props.inputType || "text";
-    const [editMode, setEditMode] = useState(false);
-    const [error, setError] = useState("");
-
-    function enableEditing() {
-        setEditMode(true);
-    }
-
-    function disableEditing(confirm: boolean) {
-        setEditMode(false);
-    }
-
+function Spinner(props: { radius: number, factor: number }) {
     return (
-        <AbstractField>
-            <tr>
-                <td><span className="profileLabelText">{props.labelText}:</span></td>
-                <td>
-                    <div className="profileErrorContainer">
-                        {!editMode ? <span className="profileDisplayText">{props.displayText}</span> : null}
-                        {editMode ? <input className="profileTextInput" type={inputType}/> : null}
-                        {error ? <span className="profileErrorText hidden"></span> : null}
-                    </div>
-                </td>
-                <td>
-                    <div className="profileEditButtonsContainer">
-                        {!editMode
-                        ?
-                        <EditButton onClick={() => enableEditing()} />
-                        :
-                        <>
-                            <SaveButton onClick={() => disableEditing(true)} />
-                            <CancelButton onClick={() => disableEditing(false)} />
-                        </>}
-                    </div>
-                </td>
-            </tr>
-        </AbstractField>
+        <svg className="spinner" viewBox="0 0 100 100">
+            <circle 
+                cx="50" 
+                cy="50" 
+                r={props.radius}
+                fill="none" 
+                stroke="red"
+                stroke-width="5" 
+                stroke-dasharray={[2 * Math.PI * props.radius * props.factor, 2 * Math.PI * props.radius * (1 - props.factor)]}
+                stroke-linecap="round"
+            ></circle>
+        </svg>
     );
 }
 
-function ImageUploadField() {
+function EditButtons(props: {
+    fieldState: FieldState,
+    editButtonClick: () => void,
+    cancelButtonClick: () => void,
+    saveButtonClick: () => void
+}) {
+    if (props.fieldState === FieldState.Normal) {
+        return (
+            <EditButton onClick={() => props.editButtonClick()} />
+        );
+    } else if (props.fieldState === FieldState.Editing) {
+        return (
+            <>
+                <SaveButton onClick={() => props.saveButtonClick()} />
+                <CancelButton onClick={() => props.cancelButtonClick()} />
+            </>
+        );
+    } else if (props.fieldState === FieldState.Saving) {
+        return (
+            <Spinner radius={30} factor={2/3} />
+        );
+    }
+}
+
+enum FieldState {
+    Normal,
+    Editing,
+    Saving
+}
+
+function TextField(props: {
+    fetchUrl: string,
+    errorPrefix: string,
+    labelText: string,
+    initialValue: string,
+    inputType?: string,
+    prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
+}) {
+    const inputType = props.inputType || "text";
+    const [fieldState, setFieldState] = useState(FieldState.Normal);
+    const [displayedValue, setDisplayedValue] = useState(props.initialValue);
+    const [inputValue, setInputValue] = useState(props.initialValue);
+    const [error, setError] = useState("");
+
+    function enableEditing() {
+        setFieldState(() => FieldState.Editing);
+    }
+
+    function disableEditing(confirm: boolean) {
+        if (confirm) {
+            setDisplayedValue(inputValue);
+        } else {
+            setInputValue(displayedValue);
+        }
+        setFieldState(() => FieldState.Normal);
+    }
+
+    async function saveButtonClick() {
+        const request = props.prepareRequest(inputValue);
+
+        if (csrfToken) request.headers["X-CSRF-Token"] = csrfToken;
+        try {
+            const response = await fetch(props.fetchUrl, { method: "POST", body: request.body, headers: request.headers });
+            Utils.handleResponse(response, props.errorPrefix, () => disableEditing(true));
+        } catch (error: any) {
+            setError(error.message);
+        }
+    }
+
+    return (
+        <tr>
+            <td><span className="profileLabelText">{props.labelText}:</span></td>
+            <td>
+                <div className="profileErrorContainer">
+                    {fieldState === FieldState.Normal ? <span className="profileDisplayText">{displayedValue}</span> : null}
+                    {fieldState !== FieldState.Normal ? <input className="profileTextInput" type={inputType} value={inputValue} onChange={(e) => setInputValue(() => e.target.value)} /> : null}
+                    {error ? <span className="profileErrorText"></span> : null}
+                </div>
+            </td>
+            <td>
+                <div className="profileEditButtonsContainer">
+                    <EditButtons
+                        fieldState={fieldState}
+                        editButtonClick={enableEditing}
+                        cancelButtonClick={() => disableEditing(false)}
+                        saveButtonClick={saveButtonClick}
+                    />
+                </div>
+            </td>
+        </tr>
+    );
 }
 
 function Main() {
@@ -116,7 +169,17 @@ function Main() {
                         <table id="profileTable">
                             <tbody>
                                 <LabelField labelText="Логин" displayText={initialData.username} />
-                                <TextField labelText="Email" displayText={initialData.email} inputType="email" />
+                                <TextField
+                                    fetchUrl="/change_email"
+                                    errorPrefix="Изменение email"
+                                    labelText="Email"
+                                    initialValue={initialData.email}
+                                    inputType="email"
+                                    prepareRequest={(email) => ({
+                                        body: email,
+                                        headers: { "Content-Type": "text/plain" }
+                                    })}
+                                />
                             </tbody>
                         </table>
                     </div>

@@ -60,7 +60,7 @@ class AbstractField {
                 this.errorText.textContent = errorMessage;
                 this.errorText.classList.remove("hidden");
             };
-            Utils.handleResponse(response, onSuccess, onError, this.errorPrefix);
+            Utils.handleResponse(response, this.errorPrefix, onSuccess, onError);
         } catch (error) {
             this.errorText.textContent = `Ошибка сети: ${error}`;
             this.errorText.classList.remove("hidden");
