@@ -99,6 +99,8 @@ function TextField(props: {
     labelText: string,
     initialValue: string,
     inputType?: string,
+    pass?: (displayValue: string, ...inputValues: string[]) => any,
+    validate?: (...inputValues: string[]) => string | null,
     prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
 }) {
     const inputType = props.inputType || "text";
@@ -127,6 +129,20 @@ function TextField(props: {
     }
 
     async function saveButtonClick() {
+        if (props.pass) {
+            if (props.pass(displayedValue, inputValue)) {
+                disableEditing(true);
+                return;
+            }
+        }
+        if (props.validate) {
+            const errorMessage = props.validate(inputValue);
+            if (errorMessage) {
+                setError(errorMessage);
+                return;
+            }
+        }
+
         enableSaving();
         const request = props.prepareRequest(inputValue);
 
@@ -187,6 +203,12 @@ function Main() {
                                     labelText="Email"
                                     initialValue={initialData.email}
                                     inputType="email"
+                                    pass={(emailOld, emailNew) => emailNew === emailOld}
+                                    validate={(email) => {
+                                        if (!email) return "Введите email";
+                                        const error = validateEmail(email);
+                                        return error;
+                                    }}
                                     prepareRequest={(email) => ({
                                         body: email,
                                         headers: { "Content-Type": "text/plain" }
