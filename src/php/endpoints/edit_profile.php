@@ -33,7 +33,8 @@ function get_initial_data(): array {
     $user = get_user();
     return [
         'username' => $user['username'],
-        'email' => $user['email']
+        'email' => $user['email'],
+        'avatar_url' => get_user_avatar_url()
     ];
 }
 

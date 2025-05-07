@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Utils } from './utils';
 import { validateEmail, validatePassword } from './validation';
+import { getUserAvatarElement } from './header';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 const initialData = JSON.parse(document.getElementById('initial-data')!.textContent!);
@@ -46,19 +47,21 @@ function CancelButton(props: { onClick: () => void }) {
     );
 }
 
-function Spinner(props: { radius: number, factor: number }) {
+function Spinner(props: { radius?: number, factor?: number }) {
+    const radius = props.radius ?? 30;
+    const factor = props.factor ?? (2 / 3);
     return (
         <svg className="spinner" viewBox="0 0 100 100">
             <circle 
                 cx="50" 
                 cy="50" 
-                r={props.radius}
+                r={radius}
                 fill="none" 
                 stroke="red"
                 strokeWidth="5" 
                 strokeDasharray={
-                    `${2 * Math.PI * props.radius * props.factor}`
-                    + `${2 * Math.PI * props.radius * (1 - props.factor)}`
+                    `${2 * Math.PI * radius * factor}`
+                    + `${2 * Math.PI * radius * (1 - factor)}`
                 }
                 strokeLinecap="round"
             ></circle>
@@ -85,7 +88,7 @@ function EditButtons(props: {
         );
     } else if (props.fieldState === FieldState.Saving) {
         return (
-            <Spinner radius={30} factor={2/3} />
+            <Spinner />
         );
     }
 }
@@ -213,11 +216,12 @@ function TextField(props: {
             <td><span className="profileLabelText">{props.labelText}:</span></td>
             <td>
                 <div className="profileErrorContainer">
-                    {fieldState === FieldState.Normal ?
-                        <span
+                    {fieldState === FieldState.Normal
+                        ? <span
                             className="profileDisplayText">{props.displayPlaceholder ? props.displayPlaceholder : displayedValue}
                         </span>
-                        : null}
+                        : null
+                    }
                     {fieldState !== FieldState.Normal ? inputsWithListeners : null}
                     {error ? <span className="profileErrorText">{error}</span> : null}
                 </div>
@@ -230,6 +234,91 @@ function TextField(props: {
                         cancelButtonClick={() => disableEditing(false)}
                         saveButtonClick={saveButtonClick}
                     />
+                </div>
+            </td>
+        </tr>
+    );
+}
+
+function ImageUploadField(props: {
+    labelText?: string,
+    errorPrefix: string,
+    fetchUrl: string,
+}) {
+    const displayImageRef = useRef<HTMLImageElement>(null);
+    const imageHiddenInputRef = useRef<HTMLInputElement>(null);
+
+    const [fieldState, setFieldState] = useState(FieldState.Normal);
+    const [error, setError] = useState("");
+
+    function setStateNormal() {
+        setFieldState(FieldState.Normal);
+    }
+
+    function setStateSaving() {
+        setFieldState(FieldState.Saving);
+    }
+
+    async function onImageChange() {
+        const imageHiddenInput = imageHiddenInputRef.current!;
+        if (!imageHiddenInput.files) return;
+        const imageFile = imageHiddenInput.files[0];
+        if (!imageFile) return;
+
+        const formData = new FormData();
+        formData.append("image", imageFile);
+
+        function handleError(errorMessage: string) {
+            setError(errorMessage);
+        }
+
+        setStateSaving();
+        try {
+            const response = await fetch(props.fetchUrl, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    ...(csrfToken && { "X-CSRF-Token": csrfToken }),
+                }
+            });
+            await Utils.handleResponse({
+                response,
+                errorPrefix: props.errorPrefix,
+                onSuccess: (responseJson) => {
+                    displayImageRef.current!.src = responseJson.image_url;
+                    getUserAvatarElement().src = responseJson.image_url;
+                }
+            });
+        } catch (error: any) {
+            handleError(error.message);
+        } finally {
+            imageHiddenInputRef.current!.value = "";
+            setStateNormal();
+        }
+    }
+    
+    return (
+        <tr>
+            <td><span className="profileLabelText">{props.labelText}</span></td>
+            <td>
+                <img className="profileDisplayImage avatarImage" src={initialData.avatar_url} width="40" height="40"/>
+            </td>
+            <td>
+                <div className="profileErrorContainer">
+                    <div className="profileEditButtonsContainer">
+                        {fieldState === FieldState.Normal
+                            ? <EditButton onClick={() => { imageHiddenInputRef.current?.click(); }} />
+                            : <Spinner />
+                        }
+                        <input
+                            ref={imageHiddenInputRef}
+                            className="profileHiddenFileInput hidden"
+                            type="file"
+                            accept="image/jpeg, image/png"
+                            onChange={onImageChange}
+                        />
+                    </div>
+                    <span className="profileErrorText hidden">{error}</span>
                 </div>
             </td>
         </tr>
@@ -296,6 +385,11 @@ function Main() {
                                     <input className="profileTextInput" type="password" name="old_password" placeholder="Старый пароль"/>
                                     <input className="profileTextInput" type="password" name="new_password" placeholder="Новый пароль"/>
                                 </TextField>
+                                <ImageUploadField
+                                    labelText="Аватар"
+                                    errorPrefix="Изменение аватара"
+                                    fetchUrl="/change_avatar"
+                                />
                             </tbody>
                         </table>
                     </div>
