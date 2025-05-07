@@ -105,6 +105,19 @@ function TextField(props: {
     pass?: (displayValue: string, ...inputValues: string[]) => any,
     validate?: (...inputValues: string[]) => string | null,
     prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
+    onEnable?: (params: {
+        displayValue: string,
+        inputValues: string[],
+        setDisplayedValue: React.Dispatch<React.SetStateAction<string>>,
+        setInputValues: React.Dispatch<React.SetStateAction<string[]>>,
+    }) => void,
+    onDisable?: (params: {
+        confirm: boolean,
+        displayValue: string,
+        inputValues: string[],
+        setDisplayedValue: React.Dispatch<React.SetStateAction<string>>,
+        setInputValues: React.Dispatch<React.SetStateAction<string[]>>,
+    }) => void,
     children: ReactInputElement | ReactInputElement[],
 }) {
     const childrenArray = React.Children.toArray(props.children) as ReactInputElement[];
@@ -116,6 +129,14 @@ function TextField(props: {
     const [error, setError] = useState("");
 
     function enableEditing() {
+        if (props.onEnable) {
+            props.onEnable({
+                displayValue: displayedValue,
+                inputValues,
+                setDisplayedValue,
+                setInputValues,
+            });
+        }
         setFieldState(() => FieldState.Editing);
     }
 
@@ -125,10 +146,14 @@ function TextField(props: {
     }
 
     function disableEditing(confirm: boolean) {
-        if (confirm) {
-            setDisplayedValue(inputValues[0]);
-        } else {
-            setInputValues([displayedValue]);
+        if (props.onDisable) {
+            props.onDisable({
+                confirm,
+                displayValue: displayedValue,
+                inputValues: inputValues,
+                setDisplayedValue,
+                setInputValues,
+            });
         }
         setError(() => "");
         setFieldState(() => FieldState.Normal);
@@ -237,6 +262,13 @@ function Main() {
                                         body: email,
                                         headers: { "Content-Type": "text/plain" }
                                     })}
+                                    onDisable={({confirm, displayValue, inputValues, setDisplayedValue, setInputValues}) => {
+                                        if (confirm) {
+                                            setDisplayedValue(() => inputValues[0]);
+                                        } else {
+                                            setInputValues(() => [displayValue]);
+                                        }
+                                    }}
                                 >
                                     <input className="profileTextInput" 
                                         type="email"
