@@ -96,20 +96,23 @@ enum FieldState {
     Saving
 }
 
+type ReactInputElement = React.ReactElement<React.InputHTMLAttributes<HTMLInputElement>>;
+
 function TextField(props: {
     fetchUrl: string,
     errorPrefix: string,
     labelText: string,
-    initialValue: string,
-    inputType?: string,
     pass?: (displayValue: string, ...inputValues: string[]) => any,
     validate?: (...inputValues: string[]) => string | null,
     prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
+    children: ReactInputElement | ReactInputElement[],
 }) {
-    const inputType = props.inputType || "text";
+    const childrenArray = React.Children.toArray(props.children) as ReactInputElement[];
+    const initialValues = childrenArray.map((child) => child.props.value) as string[];
+
     const [fieldState, setFieldState] = useState(FieldState.Normal);
-    const [displayedValue, setDisplayedValue] = useState(props.initialValue);
-    const [inputValue, setInputValue] = useState(props.initialValue);
+    const [displayedValue, setDisplayedValue] = useState(initialValues[0]);
+    const [inputValues, setInputValues] = useState<string[]>(initialValues);
     const [error, setError] = useState("");
 
     function enableEditing() {
@@ -123,9 +126,9 @@ function TextField(props: {
 
     function disableEditing(confirm: boolean) {
         if (confirm) {
-            setDisplayedValue(inputValue);
+            setDisplayedValue(inputValues[0]);
         } else {
-            setInputValue(displayedValue);
+            setInputValues([displayedValue]);
         }
         setError(() => "");
         setFieldState(() => FieldState.Normal);
@@ -133,13 +136,13 @@ function TextField(props: {
 
     async function saveButtonClick() {
         if (props.pass) {
-            if (props.pass(displayedValue, inputValue)) {
+            if (props.pass(displayedValue, ...inputValues)) {
                 disableEditing(true);
                 return;
             }
         }
         if (props.validate) {
-            const errorMessage = props.validate(inputValue);
+            const errorMessage = props.validate(...inputValues);
             if (errorMessage) {
                 setError(errorMessage);
                 return;
@@ -147,7 +150,7 @@ function TextField(props: {
         }
 
         enableSaving();
-        const request = props.prepareRequest(inputValue);
+        const request = props.prepareRequest(...inputValues);
 
         function handleError(errorMessage: string) {
             setError(errorMessage);
@@ -172,6 +175,13 @@ function TextField(props: {
         }
     }
 
+    const inputsWithListeners = React.Children.map(props.children, (element: ReactInputElement, index: number) => {
+        return React.cloneElement(element, {
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => setInputValues(() => Utils.updateItem(inputValues, index, e.target.value)),
+            value: inputValues[index]
+        });
+    });
+
     return (
         <tr>
             <td><span className="profileLabelText">{props.labelText}:</span></td>
@@ -182,13 +192,7 @@ function TextField(props: {
                             className="profileDisplayText">{displayedValue}
                         </span>
                         : null}
-                    {fieldState !== FieldState.Normal ?
-                        <input className="profileTextInput" 
-                            type={inputType}
-                            value={inputValue}
-                            onChange={(e) => setInputValue(() => e.target.value)}
-                        />
-                        : null}
+                    {fieldState !== FieldState.Normal ? inputsWithListeners : null}
                     {error ? <span className="profileErrorText">{error}</span> : null}
                 </div>
             </td>
@@ -223,8 +227,6 @@ function Main() {
                                     fetchUrl="/change_email"
                                     errorPrefix="Изменение email"
                                     labelText="Email"
-                                    initialValue={initialData.email}
-                                    inputType="email"
                                     pass={(emailOld, emailNew) => emailNew === emailOld}
                                     validate={(email) => {
                                         if (!email) return "Введите email";
@@ -235,7 +237,12 @@ function Main() {
                                         body: email,
                                         headers: { "Content-Type": "text/plain" }
                                     })}
-                                />
+                                >
+                                    <input className="profileTextInput" 
+                                        type="email"
+                                        value={initialData.email}
+                                    />
+                                </TextField>
                             </tbody>
                         </table>
                     </div>

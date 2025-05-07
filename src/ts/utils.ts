@@ -80,4 +80,10 @@ export class Utils {
         }
     }
 
+    static updateItem<T>(items: T[], itemIndex: number, newItem: T): T[] {
+        const newItems = [...items];
+        newItems[itemIndex] = newItem;
+        return newItems;
+    }
+
 }
