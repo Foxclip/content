@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Utils } from './utils';
-import { validateEmail } from './validation';
+import { validateEmail, validatePassword } from './validation';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 const initialData = JSON.parse(document.getElementById('initial-data')!.textContent!);
@@ -99,9 +99,10 @@ enum FieldState {
 type ReactInputElement = React.ReactElement<React.InputHTMLAttributes<HTMLInputElement>>;
 
 function TextField(props: {
-    fetchUrl: string,
-    errorPrefix: string,
     labelText: string,
+    errorPrefix: string,
+    fetchUrl: string,
+    displayPlaceholder?: string,
     pass?: (displayValue: string, ...inputValues: string[]) => any,
     validate?: (...inputValues: string[]) => string | null,
     prepareRequest: (...inputValues: string[]) => { body: string, headers: Record<string, string> },
@@ -214,7 +215,7 @@ function TextField(props: {
                 <div className="profileErrorContainer">
                     {fieldState === FieldState.Normal ?
                         <span
-                            className="profileDisplayText">{displayedValue}
+                            className="profileDisplayText">{props.displayPlaceholder ? props.displayPlaceholder : displayedValue}
                         </span>
                         : null}
                     {fieldState !== FieldState.Normal ? inputsWithListeners : null}
@@ -249,9 +250,9 @@ function Main() {
                             <tbody>
                                 <LabelField labelText="Логин" displayText={initialData.username} />
                                 <TextField
-                                    fetchUrl="/change_email"
-                                    errorPrefix="Изменение email"
                                     labelText="Email"
+                                    errorPrefix="Изменение email"
+                                    fetchUrl="/change_email"
                                     pass={(emailOld, emailNew) => emailNew === emailOld}
                                     validate={(email) => {
                                         if (!email) return "Введите email";
@@ -274,6 +275,26 @@ function Main() {
                                         type="email"
                                         value={initialData.email}
                                     />
+                                </TextField>
+                                <TextField
+                                    labelText="Пароль"
+                                    errorPrefix={"Изменение пароля"}
+                                    fetchUrl={"/change_password"}
+                                    displayPlaceholder={"******"}
+                                    validate={(oldPass, newPass) => {
+                                        const error = validatePassword(newPass);
+                                        return error || (oldPass === newPass ? "Пароли совпадают" : null);
+                                    }}
+                                    prepareRequest={(oldPass, newPass) => ({
+                                        body: JSON.stringify({ old_password: oldPass, new_password: newPass }),
+                                        headers: { "Content-Type": "application/json" }
+                                    })}
+                                    onDisable={({setInputValues}) => {
+                                        setInputValues(() => ["", ""]);
+                                    }}
+                                >
+                                    <input className="profileTextInput" type="password" name="old_password" placeholder="Старый пароль"/>
+                                    <input className="profileTextInput" type="password" name="new_password" placeholder="Новый пароль"/>
                                 </TextField>
                             </tbody>
                         </table>
