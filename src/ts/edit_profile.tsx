@@ -53,15 +53,14 @@ function Spinner(props: { radius?: number, factor?: number }) {
     return (
         <svg className="spinner" viewBox="0 0 100 100">
             <circle 
-                cx="50" 
-                cy="50" 
+                cx="50"
+                cy="50"
                 r={radius}
-                fill="none" 
+                fill="none"
                 stroke="red"
-                strokeWidth="5" 
+                strokeWidth="5"
                 strokeDasharray={
-                    `${2 * Math.PI * radius * factor}`
-                    + `${2 * Math.PI * radius * (1 - factor)}`
+                    `${2 * Math.PI * radius * factor} ${2 * Math.PI * radius * (1 - factor)}`
                 }
                 strokeLinecap="round"
             ></circle>
