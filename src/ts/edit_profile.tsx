@@ -244,9 +244,9 @@ function ImageUploadField(props: {
     errorPrefix: string,
     fetchUrl: string,
 }) {
-    const displayImageRef = useRef<HTMLImageElement>(null);
     const imageHiddenInputRef = useRef<HTMLInputElement>(null);
 
+    const [avatar_url, setAvatarUrl] = useState<string>(initialData.avatar_url);
     const [fieldState, setFieldState] = useState(FieldState.Normal);
     const [error, setError] = useState("");
 
@@ -284,8 +284,9 @@ function ImageUploadField(props: {
                 response,
                 errorPrefix: props.errorPrefix,
                 onSuccess: (responseJson) => {
-                    displayImageRef.current!.src = responseJson.image_url;
-                    getUserAvatarElement().src = responseJson.image_url;
+                    const imageUrl = `${responseJson.image_url}?t=${Date.now()}`
+                    setAvatarUrl(imageUrl);
+                    getUserAvatarElement().src = imageUrl;
                 }
             });
         } catch (error: any) {
@@ -300,7 +301,7 @@ function ImageUploadField(props: {
         <tr>
             <td><span className="profileLabelText">{props.labelText}</span></td>
             <td>
-                <img className="profileDisplayImage avatarImage" src={initialData.avatar_url} width="40" height="40"/>
+                <img className="profileDisplayImage avatarImage" src={avatar_url} width="40" height="40"/>
             </td>
             <td>
                 <div className="profileErrorContainer">
