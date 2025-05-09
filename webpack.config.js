@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
             register: './src/ts/register.ts',
             view_profile: './src/ts/view_profile.tsx',
             header: './src/ts/header.ts',
-            edit_profile: './src/ts/edit_profile.ts'
+            edit_profile: './src/ts/edit_profile.tsx'
         },
         module: {
             rules: [

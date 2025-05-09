@@ -47,7 +47,17 @@ export class Utils {
         return getComputedStyle(document.documentElement).getPropertyValue(name);
     }
 
-    static async handleResponse(response: Response, onSuccess: Function | null, onError: Function | null, errorPrefix: string) {
+    static async handleResponse({
+        response,
+        errorPrefix,
+        onSuccess,
+        onError,
+    }: {
+        response: Response,
+        errorPrefix: string,
+        onSuccess?: (response: any) => void,
+        onError?: (errorMessage: string) => void,
+    }) {
         if (response.ok) {
             let responseJson: any;
             try {
@@ -68,6 +78,12 @@ export class Utils {
             if (onError) onError(message);
             console.log(`${errorPrefix}: ошибка: ${message}`);
         }
+    }
+
+    static updateItem<T>(items: T[], itemIndex: number, newItem: T): T[] {
+        const newItems = [...items];
+        newItems[itemIndex] = newItem;
+        return newItems;
     }
 
 }

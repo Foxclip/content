@@ -29,6 +29,15 @@ function includeSaveButton(): void {
     ]);
 }
 
+function get_initial_data(): array {
+    $user = get_user();
+    return [
+        'username' => $user['username'],
+        'email' => $user['email'],
+        'avatar_url' => get_user_avatar_url()
+    ];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +55,10 @@ function includeSaveButton(): void {
 ?>
 <body>
     <?= includeFile('../ui/header.php'); ?>
-    <main>
+    <script id="initial-data" type="application/json">
+        <?php echo json_encode(get_initial_data(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>
+    </script>
+    <main id="root">
         <div id="profileContainer">
             <h1 id="profileTitle">Профиль</h1>
             <div id="profileContent">

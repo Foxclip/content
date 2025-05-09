@@ -29,12 +29,11 @@ export function setupLikeButtons() {
                 })
             });
 
-            await Utils.handleResponse(
+            await Utils.handleResponse({
                 response,
-                (json: any) => likeButton.querySelector(".postLikesCount")!.textContent = json.like_count,
-                null,
-                "Кнопка лайка"
-            );
+                errorPrefix: "Кнопка лайка",
+                onSuccess: (json: any) => likeButton.querySelector(".postLikesCount")!.textContent = json.like_count,
+            });
         } catch (error) {
             console.log(`Кнопка лайка: ${error}`);
             likeButton.classList.toggle("active");
